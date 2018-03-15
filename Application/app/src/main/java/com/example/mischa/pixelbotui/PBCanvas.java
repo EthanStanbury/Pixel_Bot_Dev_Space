@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +27,6 @@ public class PBCanvas extends View {
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
     int newColour = Color.TRANSPARENT;
-    Button bClear;
-    Button bRed;
     Rect top;
     Rect bottom;
     Pixel rRed; // #EE4266
@@ -38,6 +37,9 @@ public class PBCanvas extends View {
     Pixel rPurple; // #540D6E
     //Rect rPink;
     Pixel rColourPicked;
+    public Pixel test = new Pixel(Color.TRANSPARENT);
+    int[] saveState = new int[noOfSquares];
+    int[] restoreState;
 
     Pixel[] colours = new Pixel[5];
     ArrayList<Pixel> coloured = new ArrayList<>();
@@ -207,5 +209,19 @@ public class PBCanvas extends View {
         }
         postInvalidate();
         return true;
+    }
+
+    public int[] getSavedState() {
+        for (int i = 0; i < grid.length; i++) {
+            saveState[i] = grid[i].colour;
+        }
+        return saveState;
+    }
+
+    public void giveRestoreState(int[] state) {
+        for (int i = 0; i < grid.length; i++) {
+            grid[i].colour = state[i];
+        }
+        postInvalidate();
     }
 }
