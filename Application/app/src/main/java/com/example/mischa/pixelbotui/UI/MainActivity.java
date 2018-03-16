@@ -1,8 +1,10 @@
-package com.example.mischa.pixelbotui;
+package com.example.mischa.pixelbotui.UI;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+
+import com.example.mischa.pixelbotui.Swarm.SwarmBuild;
 
 public class MainActivity extends Activity {
 
@@ -32,5 +34,6 @@ public class MainActivity extends Activity {
             restoreState[i] = state.getInt("" + i);
         }
         canvas.giveRestoreState(restoreState);
+
     }
 }
