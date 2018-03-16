@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mischa.pixelbotui.MainActivity">
+    tools:context="com.example.mischa.pixelbotui.UI.MainActivity">
 
-    <com.example.mischa.pixelbotui.Pixel
+    <com.example.mischa.pixelbotui.UI.Pixel
         android:layout_width="300dp"
         android:layout_height="300dp"
         tools:layout_editor_absoluteX="42dp"

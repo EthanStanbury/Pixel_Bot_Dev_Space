@@ -1,14 +1,12 @@
-package com.example.mischa.pixelbotui;
+package com.example.mischa.pixelbotui.UI;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Random;
