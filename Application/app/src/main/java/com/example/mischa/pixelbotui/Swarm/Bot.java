@@ -1,7 +1,7 @@
 package com.example.mischa.pixelbotui.Swarm;
 
 import android.graphics.Color;
-import android.graphics.Point;
+import android.graphics.Point; // Refer to: https://developer.android.com/reference/android/graphics/Point.html
 
 /**
  * Created by Ethan on 16/03/2018.

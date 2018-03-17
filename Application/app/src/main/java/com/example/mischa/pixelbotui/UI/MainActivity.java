@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import com.example.mischa.pixelbotui.Swarm.SwarmBuild;
+import com.example.mischa.pixelbotui.Swarm.Bot;
 
 public class MainActivity extends Activity {
 
