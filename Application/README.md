@@ -14,9 +14,9 @@ The drawing app is created by Mischa Rippon.
 The codes in this repository are not open to public. Relevant stakeholders may access to the source codes.
 
 ### Contents
-1. [Requirements: software](#Requirements: software)
+1. [Requirements: software](#Requirements-software)
 2. [Testing](#Testing)
-2. [Basic Usage](#Basic Usage)
+2. [Basic Usage](#Basic-Usage)
 
 ### Requirements: software
 1. There is not requirement for specific operation systems. Common operation systems are macOS (10.10 and above), Windows 8/10, Ubuntu, etc.
