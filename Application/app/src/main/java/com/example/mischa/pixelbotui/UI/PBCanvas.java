@@ -21,43 +21,35 @@ import java.util.Random;
 public class PBCanvas extends View {
 
     Paint paint;
-    Pixel[] grid;
-    int xDimension = 10;
-    int yDimension = 10;
+    Pixel[] grid;  //the grid of squares
+    int xDimension = 10; // horizontal axis
+    int yDimension = 10; // vertical axis
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
     int newColour = Color.TRANSPARENT;
-    Rect top;
-    Rect bottom;
+
+    Rect top;  //grey bar #1
+    Rect bottom; //grey bar #2
     Pixel rRed; // #EE4266
-    //Rect rOrange;
     Pixel rYellow; // #FFD23F
     Pixel rGreen; // #0EAD69
     Pixel rBlue; //#3BCEAC
     Pixel rPurple; // #540D6E
     Rect erase; // eraser, transparent
-    //Rect rPink;
-    Pixel rColourPicked;
-    public Pixel test = new Pixel(Color.TRANSPARENT);
+    Pixel rColourPicked; // Current colour
     int[] saveState = new int[noOfSquares];
     int[] restoreState;
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
     Pixel[] colours = new Pixel[6]; // changed from 5 to 6, after adding an eraser
-    ArrayList<Pixel> coloured = new ArrayList<>();
-
-
-    //    int noOfBots = 4;
-    Random random = new Random();
-    int red, green, blue;
-//    Pixel monitor = new Pixel(Color.BLACK);
-
+//    ArrayList<Pixel> coloured = new ArrayList<>();
 
     public PBCanvas(Context context) {
         super(context);
         paint = new Paint();
         grid = new Pixel[noOfSquares];
+
         for (int i = 0; i < noOfSquares; i++) {
             grid[i] = new Pixel(Color.TRANSPARENT);
         }
@@ -76,7 +68,6 @@ public class PBCanvas extends View {
         colours[2] = rGreen;
         colours[3] = rBlue;
         colours[4] = rPurple;
-        //colours[5] = rErase;
 
     }
 
@@ -96,12 +87,15 @@ public class PBCanvas extends View {
         postInvalidate();
     }
 
+    /** Every time the screen is drawn, this is called */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         paint.setStrokeWidth(5);
 
+        /** This is for if the screen is landscape, basically */
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimension/yDimension) {
+            // Set all the positions of the rectangles on the screen
             top.set(0,0,200,canvas.getHeight());
             bottom.set(canvas.getWidth() - 200,0,canvas.getWidth(),canvas.getHeight());
             rRed.rect.set(40, (canvas.getHeight()/7) - 60, 160, (canvas.getHeight()/7) + 60);
@@ -109,15 +103,12 @@ public class PBCanvas extends View {
             rGreen.rect.set(40, 3 * (canvas.getHeight()/7) - 60, 160, 3 * (canvas.getHeight()/7) + 60);
             rBlue.rect.set(40, 4 * (canvas.getHeight()/7) - 60, 160, 4 * (canvas.getHeight()/7) + 60);
             rPurple.rect.set(40, 5 * (canvas.getHeight()/7) - 60, 160, 5 * (canvas.getHeight()/7) + 60);
-            //rErase.rect.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
             erase.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
             eraser.setBounds(erase);
+
+            // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getHeight() - 200)/yDimension;
             excessSpace = canvas.getWidth() - (xDimension * squareWidth);
-            //bRed.setX(0);
-            //bRed.setY(200);
-            //bClear.setX(0);
-            //bClear.setY(400);
             for (int i = 0; i < yDimension; i++) {
                 for (int j = 0; j < xDimension; j++) {
                     grid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
@@ -126,7 +117,10 @@ public class PBCanvas extends View {
                             100 + i * squareWidth + squareWidth);
                 }
             }
-        } else {
+        }
+        /** This is for if the screen is portrait */
+        else {
+            // Set all the positions of the rectangles on the screen
             top.set(0,0,canvas.getWidth(),200);
             bottom.set(0,canvas.getHeight() - 200,canvas.getWidth(),canvas.getHeight());
             rRed.rect.set(canvas.getWidth()/7 - 60, 40, canvas.getWidth()/7 + 60, 160);
@@ -134,9 +128,10 @@ public class PBCanvas extends View {
             rGreen.rect.set(3 * (canvas.getWidth()/7) - 60, 40, 3 * (canvas.getWidth()/7) + 60, 160);
             rBlue.rect.set(4 * (canvas.getWidth()/7) - 60, 40, 4 * (canvas.getWidth()/7) + 60, 160);
             rPurple.rect.set(5 * (canvas.getWidth()/7) - 60, 40, 5 * (canvas.getWidth()/7) + 60, 160);
-            //rErase.rect.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
             erase.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
             eraser.setBounds(erase);
+
+            // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimension;
             excessSpace = canvas.getHeight() - (yDimension * squareWidth);
             for (int i = 0; i < yDimension; i++) {
@@ -148,6 +143,8 @@ public class PBCanvas extends View {
                 }
             }
         }
+
+        // Draw the top and bottom rectangles, as well as the colour selected rectangle
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(Color.DKGRAY);
         canvas.drawRect(top, paint);
@@ -155,23 +152,12 @@ public class PBCanvas extends View {
         paint.setColor(rColourPicked.colour);
         canvas.drawRect(rColourPicked.rect, paint);
         eraser.draw(canvas);
-        for (int i = 0; i < colours.length-1; i++) {
+        for (int i = 0; i < colours.length - 1; i++) {
             paint.setColor(colours[i].colour);
             canvas.drawRect(colours[i].rect, paint);
         }
 
-/*        if (canvas.getWidth() > canvas.getHeight()) monitor.colour = Color.RED;
-        if (canvas.getWidth() < canvas.getHeight()) monitor.colour = Color.GREEN;
-        paint.setColor(monitor.colour);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        monitor.rect.set(0, canvas.getHeight()/2,50,canvas.getHeight()/2 + 50);
-        canvas.drawRect(monitor.rect, paint);
-        paint.setTextSize(100);
-        Float scale = (float) canvas.getWidth()/canvas.getHeight();
-        int height = canvas.getHeight();
-        int width = canvas.getWidth();
-        canvas.drawText("" + scale + ", " + height + ", " + width + ", " + squareWidth, 200, 200, paint);*/
-
+        // Drawing all the Pixels
         for (int i = 0; i < grid.length; i++) {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(grid[i].colour);
@@ -191,40 +177,38 @@ public class PBCanvas extends View {
         int yTouch = (int) e.getY();
 
         switch (e.getAction()) {
+            // For a single press
             case MotionEvent.ACTION_DOWN:
                 for (int i = 0; i < colours.length-1; i++) {
+                    //Change the paint colour
                     if (colours[i].rect.contains(xTouch, yTouch)) {
                         newColour = colours[i].colour;
                         rColourPicked.rect.set(colours[i].rect.left - 8, colours[i].rect.top - 8, colours[i].rect.right + 8, colours[i].rect.bottom + 8);
                     }
                 }
+                // Clear
                 if (erase.contains(xTouch,yTouch)) {
                     clear();
-                    //rColourPicked.rect.set(colours[i].rect.left - 8, colours[i].rect.top - 8, colours[i].rect.right + 8, colours[i].rect.bottom + 8);
+                    rColourPicked.rect.set(erase.left - 8, erase.top - 8, erase.right + 8, erase.bottom + 8);
                 }
+                // Colour the pressed rectangle
                 for (int i = 0; i < noOfSquares; i++) {
                     if (grid[i].rect.contains(xTouch,yTouch)) {
                         grid[i].colour = newColour;
                     }
                 }
                 break;
-
+            // For a swipe
             case MotionEvent.ACTION_MOVE:
+                // Colour the rectangles it passes through
                 for (int i = 0; i < noOfSquares; i++) {
                     if (grid[i].rect.contains(xTouch,yTouch)) {
                         grid[i].colour = newColour;
-                        /*if (!isIn(grid[i],coloured)) {
-                            coloured.add(grid[i]);
-                        }*/
-                        /*red = random.nextInt();
-                        green = random.nextInt();
-                        blue = random.nextInt();
-                        grid[i].colour = Color.rgb(0, 0, 0);*/
                     }
                 }
                 break;
         }
-        postInvalidate();
+        postInvalidate(); //Redraw
         return true;
     }
 

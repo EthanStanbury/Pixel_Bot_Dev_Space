@@ -20,21 +20,24 @@ public class MainActivity extends Activity {
         setContentView(canvas);
     }
 
+    // Save the state of the grid in the Bundle (similar to HashMap)
     @Override
     protected void onSaveInstanceState (Bundle state) {
         saveState = canvas.getSavedState();
         for (int i = 0; i < saveState.length; i++) {
             state.putInt("" + i, saveState[i]);
         }
+        state.putInt("colour", canvas.newColour);
     }
 
-    @Override
+    // Get the saved state of the grid from the Bundle
     protected void onRestoreInstanceState (Bundle state) {
         restoreState = new int[state.size()];
         for (int i = 0; i < state.size(); i++) {
             restoreState[i] = state.getInt("" + i);
         }
         canvas.giveRestoreState(restoreState);
+        canvas.newColour = state.getInt("colour");
 
     }
 }
