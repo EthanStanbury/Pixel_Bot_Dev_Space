@@ -3,6 +3,7 @@ package com.example.mischa.pixelbotui.UI;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.mischa.pixelbotui.Swarm.Bot;
 

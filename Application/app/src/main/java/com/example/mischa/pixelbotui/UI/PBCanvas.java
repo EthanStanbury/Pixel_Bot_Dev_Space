@@ -5,8 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.mischa.pixelbotui.R;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -33,13 +36,15 @@ public class PBCanvas extends View {
     Pixel rGreen; // #0EAD69
     Pixel rBlue; //#3BCEAC
     Pixel rPurple; // #540D6E
+    Rect erase; // eraser, transparent
     //Rect rPink;
     Pixel rColourPicked;
     public Pixel test = new Pixel(Color.TRANSPARENT);
     int[] saveState = new int[noOfSquares];
     int[] restoreState;
+    Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
-    Pixel[] colours = new Pixel[5];
+    Pixel[] colours = new Pixel[6]; // changed from 5 to 6, after adding an eraser
     ArrayList<Pixel> coloured = new ArrayList<>();
 
 
@@ -58,6 +63,7 @@ public class PBCanvas extends View {
         }
         top = new Rect();
         bottom = new Rect();
+        erase = new Rect();
         rRed = new Pixel(Color.parseColor("#EE4266"));
         rYellow = new Pixel(Color.parseColor("#FFD23F"));
         rGreen = new Pixel(Color.parseColor("#0EAD69"));
@@ -70,6 +76,8 @@ public class PBCanvas extends View {
         colours[2] = rGreen;
         colours[3] = rBlue;
         colours[4] = rPurple;
+        //colours[5] = rErase;
+
     }
 
     public boolean isIn(Pixel p, ArrayList<Pixel> list) {
@@ -96,11 +104,14 @@ public class PBCanvas extends View {
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimension/yDimension) {
             top.set(0,0,200,canvas.getHeight());
             bottom.set(canvas.getWidth() - 200,0,canvas.getWidth(),canvas.getHeight());
-            rRed.rect.set(25, (canvas.getHeight()/6) - 75, 175, (canvas.getHeight()/6) + 75);
-            rYellow.rect.set(25, 2 * (canvas.getHeight()/6) - 75, 175, 2 * (canvas.getHeight()/6) + 75);
-            rGreen.rect.set(25, 3 * (canvas.getHeight()/6) - 75, 175, 3 * (canvas.getHeight()/6) + 75);
-            rBlue.rect.set(25, 4 * (canvas.getHeight()/6) - 75, 175, 4 * (canvas.getHeight()/6) + 75);
-            rPurple.rect.set(25, 5 * (canvas.getHeight()/6) - 75, 175, 5 * (canvas.getHeight()/6) + 75);
+            rRed.rect.set(40, (canvas.getHeight()/7) - 60, 160, (canvas.getHeight()/7) + 60);
+            rYellow.rect.set(40, 2 * (canvas.getHeight()/7) - 60, 160, 2 * (canvas.getHeight()/7) + 60);
+            rGreen.rect.set(40, 3 * (canvas.getHeight()/7) - 60, 160, 3 * (canvas.getHeight()/7) + 60);
+            rBlue.rect.set(40, 4 * (canvas.getHeight()/7) - 60, 160, 4 * (canvas.getHeight()/7) + 60);
+            rPurple.rect.set(40, 5 * (canvas.getHeight()/7) - 60, 160, 5 * (canvas.getHeight()/7) + 60);
+            //rErase.rect.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
+            erase.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
+            eraser.setBounds(erase);
             squareWidth = (canvas.getHeight() - 200)/yDimension;
             excessSpace = canvas.getWidth() - (xDimension * squareWidth);
             //bRed.setX(0);
@@ -118,11 +129,14 @@ public class PBCanvas extends View {
         } else {
             top.set(0,0,canvas.getWidth(),200);
             bottom.set(0,canvas.getHeight() - 200,canvas.getWidth(),canvas.getHeight());
-            rRed.rect.set(canvas.getWidth()/6 - 75, 25, canvas.getWidth()/6 + 75, 175);
-            rYellow.rect.set( 2 * (canvas.getWidth()/6) - 75, 25, 2 * (canvas.getWidth()/6) + 75, 175);
-            rGreen.rect.set(3 * (canvas.getWidth()/6) - 75, 25, 3 * (canvas.getWidth()/6) + 75, 175);
-            rBlue.rect.set(4 * (canvas.getWidth()/6) - 75, 25, 4 * (canvas.getWidth()/6) + 75, 175);
-            rPurple.rect.set(5 * (canvas.getWidth()/6) - 75, 25, 5 * (canvas.getWidth()/6) + 75, 175);
+            rRed.rect.set(canvas.getWidth()/7 - 60, 40, canvas.getWidth()/7 + 60, 160);
+            rYellow.rect.set( 2 * (canvas.getWidth()/7) - 60, 40, 2 * (canvas.getWidth()/7) + 60, 160);
+            rGreen.rect.set(3 * (canvas.getWidth()/7) - 60, 40, 3 * (canvas.getWidth()/7) + 60, 160);
+            rBlue.rect.set(4 * (canvas.getWidth()/7) - 60, 40, 4 * (canvas.getWidth()/7) + 60, 160);
+            rPurple.rect.set(5 * (canvas.getWidth()/7) - 60, 40, 5 * (canvas.getWidth()/7) + 60, 160);
+            //rErase.rect.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
+            erase.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
+            eraser.setBounds(erase);
             squareWidth = (canvas.getWidth() - 200)/xDimension;
             excessSpace = canvas.getHeight() - (yDimension * squareWidth);
             for (int i = 0; i < yDimension; i++) {
@@ -140,7 +154,8 @@ public class PBCanvas extends View {
         canvas.drawRect(bottom, paint);
         paint.setColor(rColourPicked.colour);
         canvas.drawRect(rColourPicked.rect, paint);
-        for (int i = 0; i < colours.length; i++) {
+        eraser.draw(canvas);
+        for (int i = 0; i < colours.length-1; i++) {
             paint.setColor(colours[i].colour);
             canvas.drawRect(colours[i].rect, paint);
         }
@@ -177,11 +192,15 @@ public class PBCanvas extends View {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                for (int i = 0; i < colours.length; i++) {
+                for (int i = 0; i < colours.length-1; i++) {
                     if (colours[i].rect.contains(xTouch, yTouch)) {
                         newColour = colours[i].colour;
                         rColourPicked.rect.set(colours[i].rect.left - 8, colours[i].rect.top - 8, colours[i].rect.right + 8, colours[i].rect.bottom + 8);
                     }
+                }
+                if (erase.contains(xTouch,yTouch)) {
+                    clear();
+                    //rColourPicked.rect.set(colours[i].rect.left - 8, colours[i].rect.top - 8, colours[i].rect.right + 8, colours[i].rect.bottom + 8);
                 }
                 for (int i = 0; i < noOfSquares; i++) {
                     if (grid[i].rect.contains(xTouch,yTouch)) {
@@ -221,5 +240,10 @@ public class PBCanvas extends View {
             grid[i].colour = state[i];
         }
         postInvalidate();
+    }
+    /** Called when the user touches the button */
+    public void reset(View view) {
+        // Do something in response to button click
+        clear();
     }
 }
