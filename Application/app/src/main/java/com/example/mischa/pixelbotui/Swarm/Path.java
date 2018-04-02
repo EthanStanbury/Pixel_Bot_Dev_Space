@@ -12,31 +12,31 @@ import android.graphics.Point;
 // Daniel: I think this should just stay as a custom type and Bot class should deal with all the communications.
 class Path {
     // Store all the coordinates the bot will visit and all the corresponding directions it takes.
-    List<Point> currentPathList;
-    List<String> currentMoveSequence;
+    List<Point> CurrentPathList;
+    List<String> CurrentMoveSequence;
 
     // Code to run on class instantiation. The currentPosition must be inserted in order for a new instance to be created.
     Path(Point currentPosition) {
-        this.currentPathList = new ArrayList<>();
-        this.currentPathList.add(currentPosition); // Add current position to the known path history.
-        this.currentMoveSequence = new ArrayList<>();
+        this.CurrentPathList = new ArrayList<>();
+        this.CurrentPathList.add(currentPosition); // Add current position to the known path history.
+        this.CurrentMoveSequence = new ArrayList<>();
     }
 
     // Return currently stored path list in the instance.
     public List<Point> returnPathList() {
-        return this.currentPathList;
+        return this.CurrentPathList;
     }
 
     // Return currently stored move sequence in the instance.
     public List<String> returnMoveSequence() {
-        return this.currentMoveSequence;
+        return this.CurrentMoveSequence;
     }
 
     // Add the provided direction, but only accept appropriate values. Accepts U, D, L and R as directions,
     // calculates and stores the resulting position of moving in certain direction.
     public void appendDirection(String direction) {
         // Get last known bot position in the list.
-        Point tempPoint = this.currentPathList.get(this.currentPathList.size() - 1);
+        Point tempPoint = this.CurrentPathList.get(this.CurrentPathList.size() - 1);
 
         // Depending on inputted direction, perform specific offsets to the last known position.
         switch (direction) {
@@ -57,7 +57,7 @@ class Path {
         }
 
         // Add all new values to the corresponding Lists.
-        this.currentPathList.add(tempPoint);
-        this.currentMoveSequence.add(direction);
+        this.CurrentPathList.add(tempPoint);
+        this.CurrentMoveSequence.add(direction);
     }
 }
