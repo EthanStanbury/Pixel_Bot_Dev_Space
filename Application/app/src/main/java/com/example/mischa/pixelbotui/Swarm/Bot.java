@@ -28,6 +28,11 @@ public class Bot {
         return IsBotMoving() && IsBotInPic();
 
     }
+
+    public Point getLocation(){
+        return this.Location;
+    }
+
     //This function will need data from the board
     private boolean IsBotMoving(){
       return true;

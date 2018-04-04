@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Swarm {
 
-    public ArrayList<Bot> SwarmList = new ArrayList();
+    public ArrayList<Bot> SwarmList = new ArrayList<>();
 // Creates swarms by amount and by their colour, colour is currently not a feature. However creating with it in mind
     // Swarms can be created in multiple colours but in other methods, but each 'Swarm' is one colour
 

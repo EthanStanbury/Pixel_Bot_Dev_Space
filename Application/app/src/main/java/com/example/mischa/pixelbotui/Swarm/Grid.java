@@ -1,7 +1,13 @@
 package com.example.mischa.pixelbotui.Swarm;
 
+import android.graphics.Point;
+
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Created by Daniel on 16/03/2018.
+ */
 
 // This class represents the virtual grid. It also represents as the 'problem' for the A* to solve.
 public class Grid {
@@ -10,6 +16,7 @@ public class Grid {
     // Possible values of the grid are: E (empty), B (bot) and D (destination).
     String[][] Grid;
     int[] Dimensions;
+    ArrayList<Bot> Bots;
 
     Grid(int width, int height) {
         this.Dimensions = new int[2];
@@ -24,16 +31,21 @@ public class Grid {
                 this.Grid[i][j] = "E";
         }
 
+        // Init the bots array
+        this.Bots = new ArrayList<>();
+
     }
 
-    public void addBotToGrid(int x, int y) {
-        if (this.Grid[x][y].equals("E"))
-            throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
+    public void addBot(Bot bot) {
+        Point botCoord = bot.getLocation();
+        if (!this.Grid[botCoord.x][botCoord.y].equals("E"))
+            throw new IllegalStateException("Position at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
-        this.Grid[x][y] = "B";
+        this.Grid[botCoord.x][botCoord.y] = "B";
+        this.Bots.add(bot);
     }
 
-    public void addDestinationToGrid(int x, int y) {
+    public void addDestination(int x, int y) {
         if (!this.Grid[x][y].equals("E"))
             throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
 
@@ -46,7 +58,7 @@ public class Grid {
     }
 
     // Not implemented yet.
-    public List returnPossibleMoves() {
+    public List returnPossibleMoves(Bot bot) {
         return new ArrayList();
     }
 
