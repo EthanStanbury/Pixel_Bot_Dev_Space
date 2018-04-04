@@ -61,5 +61,8 @@ public class Grid {
     public List returnPossibleMoves(Bot bot) {
         return new ArrayList();
     }
+    public void updateBoard(List instructions) {
+
+    }
 
 }
