@@ -16,18 +16,26 @@ import java.util.ArrayList;
 public class Swarm {
 
     public ArrayList<Bot> SwarmList = new ArrayList<>();
+    Grid BotGrid;
 // Creates swarms by amount and by their colour, colour is currently not a feature. However creating with it in mind
     // Swarms can be created in multiple colours but in other methods, but each 'Swarm' is one colour
 
-    Swarm(int SwarmAmount, Color SwarmColour){
+    Swarm(int SwarmAmount, Color SwarmColour, int gridWidth, int gridHeight){
+        BotGrid = new Grid(gridWidth, gridHeight);
 
         for(int i = 0; i <= SwarmAmount; i++){
             Point DefaultLoc = new Point(0,0);
-            Bot Add = new Bot(SwarmColour, DefaultLoc);
+            Bot Add = new Bot(i, SwarmColour, DefaultLoc);
             SwarmList.add(Add);
+            BotGrid.addBot(Add);
         }
+    }
 
-
+    public void addDestinationsToGrid(int x, int y) {
+        this.BotGrid.addDestination(x, y);
+    }
+    // When the type of output of the pathfinding algorithm has been determined, I will change it from 'void'.
+    public void solveGrid() {
 
     }
 }

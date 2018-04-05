@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Daniel on 16/03/2018.
+ * Created by Daniel on 02/04/2018.
  */
 
 // This class represents the virtual grid. It also represents as the 'problem' for the A* to solve.
