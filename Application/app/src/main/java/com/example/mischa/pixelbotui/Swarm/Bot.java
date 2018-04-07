@@ -35,10 +35,6 @@ public class Bot {
 
     }
 
-    public Point getLocation(){
-        return this.Location;
-    }
-
     // Not complete yet, as it is lacking some basic boundary checks.
     public void moveBot(String dir) {
         // Get last known bot position in the list.
