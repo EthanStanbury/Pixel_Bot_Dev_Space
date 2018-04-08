@@ -76,7 +76,8 @@ public class Grid {
 
     // Not implemented yet.
     public List returnPossibleMoves(Bot bot) {
-        return new ArrayList();
+        List<Node> temp = new ArrayList<>();
+        return temp;
     }
     public void updateBoard(List instructions) {
 

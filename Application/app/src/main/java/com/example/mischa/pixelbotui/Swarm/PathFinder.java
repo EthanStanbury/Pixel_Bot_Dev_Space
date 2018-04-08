@@ -10,6 +10,9 @@ import java.util.TreeSet;
 
 /**
  * Created by Daniel on 06/04/2018.
+ * The design of this A* search algorithm has been influenced by the Wikipedia page:
+ * https://en.wikipedia.org/wiki/A*_search_algorithm
+ * I've also used the knowledge gained from my COMP3620 Python AI assignment.
  */
 
 // Not completely sure how to implement it yet, but I have a decent idea. I will update this code very soon.
@@ -43,7 +46,32 @@ public class PathFinder {
         HashMap<Point, Integer> g_values = new HashMap<>();
         g_values.put(currentNode.Coord, 0);
 
+        while (frontier.size() > 0) {
+            currentNode = get_lowest_f_node(frontier, f_values);
 
+            for (Object successor_node : Problem.returnPossibleMoves(CurrentBot)) {
+
+                if (false) {
+
+                }
+            }
+        }
+    }
+
+    Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
+        int current_f_value = 999999;
+        int index_to_remove = 0;
+        Node node_to_return = new Node();
+        for (int i = 0; i < frontier.size(); i ++) {
+            Node checkNode = frontier.get(i);
+            if (f_values.get(checkNode.Coord) < current_f_value) {
+                current_f_value = f_values.get(checkNode.Coord);
+                node_to_return = checkNode;
+                index_to_remove = i;
+            }
+        }
+        frontier.remove(index_to_remove);
+        return node_to_return;
     }
 
     // This calculates the Manhattan distance from given position to the target destination.
@@ -57,6 +85,8 @@ class Node {
     Point Coord;
     String Action;
     int Cost;
+
+    Node() {}
 
     Node(Point coord, String action, int cost) {
         Coord = coord;
