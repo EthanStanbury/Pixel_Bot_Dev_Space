@@ -24,7 +24,8 @@ public class Grid {
     private int[] Dimensions;
     private ArrayList<Bot> Bots;
     private ArrayList<Point> Destinations;
-    private HashMap<Bot, Point> BotDestPairs;
+
+    public HashMap<Bot, Point> BotDestPairs;
 
     public Grid(int width, int height) {
         Dimensions = new int[2];

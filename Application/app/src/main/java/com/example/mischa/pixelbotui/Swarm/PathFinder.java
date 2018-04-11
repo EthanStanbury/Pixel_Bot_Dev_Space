@@ -18,15 +18,13 @@ import java.util.TreeSet;
 
 // Not completely sure how to implement it yet, but I have a decent idea. I will update this code very soon.
 public class PathFinder {
-    private Grid Problem;
-    private Point CurrentDest;
+    private static Grid Problem;
+    private static Point CurrentDest;
 
-    PathFinder(Grid grid) {
-        Problem = grid;
-    }
-
-    public HashMap<String, List<String>> getSolutions(HashMap<Bot, Point> BotDestPairs) {
+    public static HashMap<String, List<String>> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs
+        HashMap<Bot, Point> BotDestPairs = problem.BotDestPairs;
+
         HashMap<String, List<String>> allBotsSolutions = new HashMap<>();
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
             Bot bot = pair.getKey();
@@ -37,7 +35,7 @@ public class PathFinder {
         return allBotsSolutions;
     }
 
-    private List<String> solve(Bot bot) {
+    private static List<String> solve(Bot bot) {
         // Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
 
         // Create the initial node
@@ -88,7 +86,7 @@ public class PathFinder {
         return null;
     }
 
-    private Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
+    private static Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
         int current_f_value = 999999;
         int index_to_remove = 0;
         Node node_to_return = new Node();
@@ -105,11 +103,11 @@ public class PathFinder {
     }
 
     // This calculates the Manhattan distance from given position to the target destination.
-    private Integer heuristic(Point pos) {
+    private static Integer heuristic(Point pos) {
         return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
     }
 
-    private List<String> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+    private static List<String> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
         List<String> sequence = new ArrayList<>();
 
         // PLEASE CHECK THAT THIS WORKS
