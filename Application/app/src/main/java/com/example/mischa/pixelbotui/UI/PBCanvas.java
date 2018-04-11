@@ -21,7 +21,7 @@ import java.util.Random;
 public class PBCanvas extends View {
 
     Paint paint;
-    Pixel[] uiGrid;  //the grid of squares
+    public static Pixel[] uiGrid;  //the grid of squares
     public static int xDimension = 15; // horizontal axis
     public static int yDimension = 15; // vertical axis
     int excessSpace;
@@ -31,17 +31,17 @@ public class PBCanvas extends View {
 
     Rect top;  //grey bar #1
     Rect bottom; //grey bar #2
-    Pixel rRed; // #EE4266
-    Pixel rYellow; // #FFD23F
-    Pixel rGreen; // #0EAD69
-    Pixel rBlue; //#3BCEAC
-    Pixel rPurple; // #540D6E
+    LayoutItem rRed; // #EE4266
+    LayoutItem rYellow; // #FFD23F
+    LayoutItem rGreen; // #0EAD69
+    LayoutItem rBlue; //#3BCEAC
+    LayoutItem rPurple; // #540D6E
     Rect erase; // eraser, transparent
-    Pixel rColourPicked; // Current colour
+    LayoutItem rColourPicked; // Current colour
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
-    Pixel[] colours = new Pixel[6]; // changed from 5 to 6, after adding an eraser
+    LayoutItem[] colours = new LayoutItem[6]; // changed from 5 to 6, after adding an eraser
 //    ArrayList<Pixel> coloured = new ArrayList<>();
 
     public PBCanvas(Context context) {
@@ -55,12 +55,12 @@ public class PBCanvas extends View {
         top = new Rect();
         bottom = new Rect();
         erase = new Rect();
-        rRed = new Pixel(Color.parseColor("#EE4266"));
-        rYellow = new Pixel(Color.parseColor("#FFD23F"));
-        rGreen = new Pixel(Color.parseColor("#0EAD69"));
-        rBlue = new Pixel(Color.parseColor("#3BCEAC"));
-        rPurple = new Pixel(Color.parseColor("#540D6E"));
-        rColourPicked = new Pixel(Color.WHITE);
+        rRed = new LayoutItem(Color.parseColor("#EE4266"));
+        rYellow = new LayoutItem(Color.parseColor("#FFD23F"));
+        rGreen = new LayoutItem(Color.parseColor("#0EAD69"));
+        rBlue = new LayoutItem(Color.parseColor("#3BCEAC"));
+        rPurple = new LayoutItem(Color.parseColor("#540D6E"));
+        rColourPicked = new LayoutItem(Color.WHITE);
         rColourPicked.rect.set(0,0,0,0);
         colours[0] = rRed;
         colours[1] = rYellow;
