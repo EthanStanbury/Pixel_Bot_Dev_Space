@@ -3,19 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Application.iml" filepath="$PROJECT_DIR$/Application.iml" />
-<<<<<<< HEAD
-      <module fileurl="file://C:\Users\User\Documents\GitHub\Pixel_Bot_Dev_Space\Application\Application.iml" filepath="C:\Users\User\Documents\GitHub\Pixel_Bot_Dev_Space\Application\Application.iml" />
-      <module fileurl="file://C:\Users\Mischa\Documents\GitHub\Pixel-bots-ANU\App Files\Pixel-bots-ANU.iml" filepath="C:\Users\Mischa\Documents\GitHub\Pixel-bots-ANU\App Files\Pixel-bots-ANU.iml" />
-      <module fileurl="file://C:\Users\Mischa\Documents\GitHub\Pixel-bots-ANU\PixelBotUI.iml" filepath="C:\Users\Mischa\Documents\GitHub\Pixel-bots-ANU\PixelBotUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\User\Documents\GitHub\Pixel_Bot_Dev_Space\Application\app\app.iml" filepath="C:\Users\User\Documents\GitHub\Pixel_Bot_Dev_Space\Application\app\app.iml" />
-      <module fileurl="file://C:\Users\Mischa\Documents\GitHub\app\app.iml" filepath="C:\Users\Mischa\Documents\GitHub\app\app.iml" />
-=======
-      <module fileurl="file://C:/Users/Mischa/Documents/GitHub/Pixel-bots-ANU/App Files/Pixel-bots-ANU.iml" filepath="C:/Users/Mischa/Documents/GitHub/Pixel-bots-ANU/App Files/Pixel-bots-ANU.iml" />
-      <module fileurl="file://C:/Users/Mischa/Documents/GitHub/Pixel-bots-ANU/PixelBotUI.iml" filepath="C:/Users/Mischa/Documents/GitHub/Pixel-bots-ANU/PixelBotUI.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:/Users/Mischa/Documents/GitHub/app/app.iml" filepath="C:/Users/Mischa/Documents/GitHub/app/app.iml" />
->>>>>>> 76030e299ba18d740a9118ce0f847077b0aca6e7
     </modules>
   </component>
 </project>

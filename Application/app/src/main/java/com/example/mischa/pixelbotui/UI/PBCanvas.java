@@ -21,9 +21,9 @@ import java.util.Random;
 public class PBCanvas extends View {
 
     Paint paint;
-    Pixel[] grid;  //the grid of squares
-    int xDimension = 10; // horizontal axis
-    int yDimension = 10; // vertical axis
+    Pixel[] uiGrid;  //the grid of squares
+    public static int xDimension = 15; // horizontal axis
+    public static int yDimension = 15; // vertical axis
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
@@ -39,7 +39,6 @@ public class PBCanvas extends View {
     Rect erase; // eraser, transparent
     Pixel rColourPicked; // Current colour
     int[] saveState = new int[noOfSquares];
-    int[] restoreState;
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
     Pixel[] colours = new Pixel[6]; // changed from 5 to 6, after adding an eraser
@@ -48,10 +47,10 @@ public class PBCanvas extends View {
     public PBCanvas(Context context) {
         super(context);
         paint = new Paint();
-        grid = new Pixel[noOfSquares];
+        uiGrid = new Pixel[noOfSquares];
 
         for (int i = 0; i < noOfSquares; i++) {
-            grid[i] = new Pixel(Color.TRANSPARENT);
+            uiGrid[i] = new Pixel(Color.TRANSPARENT);
         }
         top = new Rect();
         bottom = new Rect();
@@ -73,7 +72,7 @@ public class PBCanvas extends View {
 
     public boolean isIn(Pixel p, ArrayList<Pixel> list) {
         for (int i = 0; i < list.size(); i++) {
-            if (grid[i].equals(p)) {
+            if (uiGrid[i].equals(p)) {
                 return true;
             }
         }
@@ -81,8 +80,8 @@ public class PBCanvas extends View {
     }
 
     public void clear() {
-        for (int i = 0; i < grid.length; i++) {
-            grid[i].colour = Color.TRANSPARENT;
+        for (int i = 0; i < uiGrid.length; i++) {
+            uiGrid[i].colour = Color.TRANSPARENT;
         }
         postInvalidate();
     }
@@ -111,10 +110,10 @@ public class PBCanvas extends View {
             excessSpace = canvas.getWidth() - (xDimension * squareWidth);
             for (int i = 0; i < yDimension; i++) {
                 for (int j = 0; j < xDimension; j++) {
-                    grid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
+                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
                             100 + i * squareWidth,
                             (excessSpace / 2) + (j * squareWidth) + squareWidth,
-                            100 + i * squareWidth + squareWidth);
+                            100 + (i * squareWidth) + squareWidth);
                 }
             }
         }
@@ -136,9 +135,9 @@ public class PBCanvas extends View {
             excessSpace = canvas.getHeight() - (yDimension * squareWidth);
             for (int i = 0; i < yDimension; i++) {
                 for (int j = 0; j < xDimension; j++) {
-                    grid[i * xDimension + j].rect.set(100 + j * squareWidth,
+                    uiGrid[i * xDimension + j].rect.set(100 + j * squareWidth,
                             (excessSpace / 2) + (i * squareWidth),
-                            100 + j * squareWidth + squareWidth,
+                            100 + (j * squareWidth) + squareWidth,
                             (excessSpace / 2) + (i * squareWidth) + squareWidth);
                 }
             }
@@ -158,14 +157,19 @@ public class PBCanvas extends View {
         }
 
         // Drawing all the Pixels
-        for (int i = 0; i < grid.length; i++) {
+        for (int i = 0; i < uiGrid.length; i++) {
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(grid[i].colour);
-            canvas.drawRect(grid[i].rect, paint);
+            paint.setColor(uiGrid[i].colour);
+            canvas.drawRect(uiGrid[i].rect, paint);
+            if (i == 17) {
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(Color.YELLOW);
+                canvas.drawRect(uiGrid[i].rect, paint);
+            }
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
-            canvas.drawRect(grid[i].rect, paint);
+            canvas.drawRect(uiGrid[i].rect, paint);
 
         }
 
@@ -193,8 +197,8 @@ public class PBCanvas extends View {
                 }
                 // Colour the pressed rectangle
                 for (int i = 0; i < noOfSquares; i++) {
-                    if (grid[i].rect.contains(xTouch,yTouch)) {
-                        grid[i].colour = newColour;
+                    if (uiGrid[i].rect.contains(xTouch,yTouch)) {
+                        uiGrid[i].colour = newColour;
                     }
                 }
                 break;
@@ -202,8 +206,8 @@ public class PBCanvas extends View {
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
                 for (int i = 0; i < noOfSquares; i++) {
-                    if (grid[i].rect.contains(xTouch,yTouch)) {
-                        grid[i].colour = newColour;
+                    if (uiGrid[i].rect.contains(xTouch,yTouch)) {
+                        uiGrid[i].colour = newColour;
                     }
                 }
                 break;
@@ -213,15 +217,15 @@ public class PBCanvas extends View {
     }
 
     public int[] getSavedState() {
-        for (int i = 0; i < grid.length; i++) {
-            saveState[i] = grid[i].colour;
+        for (int i = 0; i < uiGrid.length; i++) {
+            saveState[i] = uiGrid[i].colour;
         }
         return saveState;
     }
 
     public void giveRestoreState(int[] state) {
-        for (int i = 0; i < grid.length; i++) {
-            grid[i].colour = state[i];
+        for (int i = 0; i < uiGrid.length; i++) {
+            uiGrid[i].colour = state[i];
         }
         postInvalidate();
     }
