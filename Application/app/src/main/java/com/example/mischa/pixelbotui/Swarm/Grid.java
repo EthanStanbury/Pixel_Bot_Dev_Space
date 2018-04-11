@@ -20,11 +20,11 @@ public class Grid {
 
     // Grid is defined when the class is instantiated.
     // Possible values of the grid are: E (empty), B (bot) and D (destination).
-    Position[][] Grid;
-    int[] Dimensions;
-    ArrayList<Bot> Bots;
-    ArrayList<Point> Destinations;
-    HashMap<Bot, Point> BotDestPairs;
+    private Position[][] Grid;
+    private int[] Dimensions;
+    private ArrayList<Bot> Bots;
+    private ArrayList<Point> Destinations;
+    private HashMap<Bot, Point> BotDestPairs;
 
     public Grid(int width, int height) {
         Dimensions = new int[2];
@@ -39,8 +39,9 @@ public class Grid {
                 this.Grid[i][j] = new Position();
         }
 
-        // Init the bots array
+        // Init the array arrays
         Bots = new ArrayList<>();
+        Destinations = new ArrayList<>();
 
     }
 
@@ -85,6 +86,8 @@ public class Grid {
 
     // Not implemented yet.
     public List returnPossibleMoves(Point coord) {
+
+
 
         List<Node> temp = new ArrayList<>();
         return temp;

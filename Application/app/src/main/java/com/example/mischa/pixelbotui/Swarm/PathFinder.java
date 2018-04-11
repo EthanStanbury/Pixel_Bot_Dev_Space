@@ -25,6 +25,7 @@ public class PathFinder {
         Problem = grid;
     }
 
+    // Change this so that it outputs a Hashmap <BotID, MoveSequence>.
     public List<String> solve(Bot bot) {
         Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
         CurrentDest = Problem.getDestForBot(CurrentBot);
