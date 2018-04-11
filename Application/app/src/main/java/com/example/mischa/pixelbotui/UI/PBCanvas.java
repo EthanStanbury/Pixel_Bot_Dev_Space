@@ -42,6 +42,7 @@ public class PBCanvas extends View {
     LayoutItem rPurple; // #540D6E
     LayoutItem erase; // eraser, transparent
     LayoutItem rColourPicked; // Current colour
+    LayoutItem eraseBG;
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
@@ -55,7 +56,7 @@ public class PBCanvas extends View {
         uiGrid = new Pixel[noOfSquares];
 
         BotAmounts.put(Color.BLACK, 1);
-        // This needs to be called after all the bots are added to intialize the swarm
+        // This needs to be called after all the bots are added to initialize the swarm
         SwarmAdapter.SwarmCreate(BotAmounts);
 
 
@@ -65,7 +66,7 @@ public class PBCanvas extends View {
         }
         top = new LayoutItem(Color.DKGRAY);
         bottom = new LayoutItem(Color.DKGRAY);
-        erase = new LayoutItem(Color.LTGRAY);
+        erase = new LayoutItem(Color.TRANSPARENT);
         rRed = new LayoutItem(Color.parseColor("#EE4266"));
         rYellow = new LayoutItem(Color.parseColor("#FFD23F"));
         rGreen = new LayoutItem(Color.parseColor("#0EAD69"));
@@ -73,6 +74,7 @@ public class PBCanvas extends View {
         rPurple = new LayoutItem(Color.parseColor("#540D6E"));
         rColourPicked = new LayoutItem(Color.WHITE);
         rColourPicked.rect.set(0,0,0,0);
+        eraseBG = new LayoutItem(Color.GRAY);
 
         LayoutItemList.add(top);
         LayoutItemList.add(bottom);
@@ -83,6 +85,7 @@ public class PBCanvas extends View {
         LayoutItemList.add(rBlue);
         LayoutItemList.add(rPurple);
         LayoutItemList.add(rColourPicked);
+        LayoutItemList.add(eraseBG);
 
         ClickableItems.add(erase);
         ClickableItems.add(rRed);
@@ -93,18 +96,9 @@ public class PBCanvas extends View {
 
     }
 
-    public boolean isIn(Pixel p, ArrayList<Pixel> list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (uiGrid[i].equals(p)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void clear() {
-        for (int i = 0; i < uiGrid.length; i++) {
-            uiGrid[i].colour = Color.TRANSPARENT;
+        for (Pixel p : uiGrid) {
+            p.colour = Color.TRANSPARENT;
         }
         postInvalidate();
     }
@@ -126,7 +120,8 @@ public class PBCanvas extends View {
             rBlue.rect.set(40, 4 * (canvas.getHeight()/7) - 60, 160, 4 * (canvas.getHeight()/7) + 60);
             rPurple.rect.set(40, 5 * (canvas.getHeight()/7) - 60, 160, 5 * (canvas.getHeight()/7) + 60);
             erase.rect.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
-            eraser.setBounds(erase.rect);
+            eraser.setBounds(erase.rect.left + 4, erase.rect.top - 4, erase.rect.right - 4, erase.rect.bottom + 4);
+            eraseBG.rect.set(erase.rect);
 
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getHeight() - 200)/yDimension;
@@ -153,6 +148,7 @@ public class PBCanvas extends View {
             rPurple.rect.set(5 * (canvas.getWidth()/7) - 60, 40, 5 * (canvas.getWidth()/7) + 60, 160);
             erase.rect.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
             eraser.setBounds(erase.rect);
+            eraseBG.rect.set(erase.rect);
 
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimension;
@@ -168,22 +164,22 @@ public class PBCanvas extends View {
             }
         }
 
-        // Draw the top and bottom rectangles, as well as the colour selected rectangle
-        eraser.draw(canvas);
+        // Draw all of the LayoutItems
         for (int i = 0; i < LayoutItemList.size(); i++) {
             paint.setColor(LayoutItemList.get(i).colour);
             canvas.drawRect(LayoutItemList.get(i).rect, paint);
         }
+        eraser.draw(canvas);
 
         // Drawing all the Pixels
-        for (int i = 0; i < uiGrid.length; i++) {
+        for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(uiGrid[i].colour);
-            canvas.drawRect(uiGrid[i].rect, paint);
+            paint.setColor(p.colour);
+            canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
-            canvas.drawRect(uiGrid[i].rect, paint);
+            canvas.drawRect(p.rect, paint);
 
         }
 
@@ -198,7 +194,7 @@ public class PBCanvas extends View {
             // For a single press
             case MotionEvent.ACTION_DOWN:
                 for (int i = 0; i < ClickableItems.size(); i++) {
-                    //Change the paint colour, set eraser, etc
+                    //Change the paint colour
                     if (ClickableItems.get(i).rect.contains(xTouch, yTouch)) {
                         newColour = ClickableItems.get(i).colour;
                         rColourPicked.rect.set(ClickableItems.get(i).rect.left - 8, ClickableItems.get(i).rect.top - 8, ClickableItems.get(i).rect.right + 8, ClickableItems.get(i).rect.bottom + 8);
@@ -219,6 +215,10 @@ public class PBCanvas extends View {
                         uiGrid[i].colour = newColour;
                     }
                 }
+                break;
+
+            case MotionEvent.ACTION_UP:
+
                 break;
         }
         postInvalidate(); //Redraw

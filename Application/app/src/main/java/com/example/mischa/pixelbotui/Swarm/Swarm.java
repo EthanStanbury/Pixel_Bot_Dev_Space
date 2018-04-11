@@ -37,7 +37,7 @@ public class Swarm {
     }
 
     public void addDestinationsToGrid(int x, int y) {
-        this.BotGrid.addDestination(x, y);
+        //this.BotGrid.addDestination(x, y);
     }
     // When the type of output of the pathfinding algorithm has been determined, I will change it from 'void'.
     public void solveGrid() {

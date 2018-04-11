@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         canvas = new PBCanvas(this);
-        canvas.setBackgroundColor(Color.LTGRAY);
+        canvas.setBackgroundColor(Color.GRAY);
         setContentView(canvas);
 
 

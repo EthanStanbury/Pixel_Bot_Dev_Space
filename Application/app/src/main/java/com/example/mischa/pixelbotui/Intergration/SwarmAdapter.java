@@ -15,7 +15,7 @@ public class SwarmAdapter {
 
     public static void SwarmCreate(HashMap<Integer, Integer> intialSwarm){
         Swarm add = new Swarm(intialSwarm);
-        WholeSwarm.add(add)
+        WholeSwarm.add(add);
 
     }
 }
