@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
             state.putInt("" + i, saveState[i]);
         }
         state.putInt("colour", canvas.newColour);
+        state.putInt("whiteBox", canvas.whiteBox);
     }
 
     // Get the saved state of the grid from the Bundle
@@ -46,6 +47,7 @@ public class MainActivity extends Activity {
         }
         canvas.giveRestoreState(restoreState);
         canvas.newColour = state.getInt("colour");
+        canvas.whiteBox = state.getInt("whiteBox");
 
     }
 }
