@@ -3,6 +3,7 @@ package com.example.mischa.pixelbotui.Swarm;
 import android.graphics.Point;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -17,16 +18,15 @@ import java.util.TreeSet;
 
 // Not completely sure how to implement it yet, but I have a decent idea. I will update this code very soon.
 public class PathFinder {
-    Grid Problem;
-    Bot CurrentBot; // Denotes the current bot the A* is solving the path for.
-    Point CurrentDest;
+    private Grid Problem;
+    private Point CurrentDest;
 
     PathFinder(Grid grid) {
         Problem = grid;
     }
 
-    public void solve(Bot bot) {
-        CurrentBot = bot;
+    public List<String> solve(Bot bot) {
+        Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
         CurrentDest = Problem.getDestForBot(CurrentBot);
 
         // Create the initial node
@@ -48,14 +48,33 @@ public class PathFinder {
 
         while (frontier.size() > 0) {
             currentNode = get_lowest_f_node(frontier, f_values);
+            List<Node> successorNodes = Problem.returnPossibleMoves(currentNode.Coord);
+            for (int possMoveIndex = 0; possMoveIndex < successorNodes.size(); possMoveIndex++) {
+                Node succNode = successorNodes.get(possMoveIndex);
+                if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
+                    if (currentNode.Coord == CurrentDest) {
+                        back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, currentNode.Action));
+                        return derive_move_seq(CurrentBot.Location, succNode.Coord, back_track);
+                    }
 
-            for (Object successor_node : Problem.returnPossibleMoves(CurrentBot)) {
+                    frontier.add(succNode);
+                    explored.add(succNode.Coord);
 
-                if (false) {
+                    Integer temp_g_value = g_values.get(currentNode.Coord) + succNode.Cost;
 
+                    if (!g_values.containsKey(succNode.Coord))
+                        g_values.put(succNode.Coord, 999999);
+
+                    if (temp_g_value < g_values.get(succNode.Coord)) {
+                        back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
+
+                        g_values.put(succNode.Coord, temp_g_value);
+                        f_values.put(succNode.Coord, (g_values.get(succNode.Coord) + heuristic(succNode.Coord)));
+                    }
                 }
             }
         }
+        return null;
     }
 
     Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
@@ -77,6 +96,22 @@ public class PathFinder {
     // This calculates the Manhattan distance from given position to the target destination.
     Integer heuristic(Point pos) {
         return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
+    }
+
+    List<String> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+        List<String> sequence = new ArrayList<>();
+
+        // PLEASE CHECK THAT THIS WORKS
+        while (!state_coord.equals(initial_coord)) {
+            BackTrack prev = back_track.get(state_coord);
+            state_coord = prev.Coord;
+            sequence.add(prev.Action);
+        }
+
+        // Is copying necessary the sequence list necessary?
+        List<String> sequence_reverse = sequence.subList(0, sequence.size());
+        Collections.reverse(sequence_reverse);
+        return sequence_reverse;
     }
 
 }

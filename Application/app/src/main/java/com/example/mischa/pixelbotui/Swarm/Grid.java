@@ -75,7 +75,8 @@ public class Grid {
     }
 
     // Not implemented yet.
-    public List returnPossibleMoves(Bot bot) {
+    public List returnPossibleMoves(Point coord) {
+
         List<Node> temp = new ArrayList<>();
         return temp;
     }
