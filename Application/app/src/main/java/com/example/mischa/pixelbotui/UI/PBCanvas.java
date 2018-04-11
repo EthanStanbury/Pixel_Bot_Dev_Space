@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.R;
 import com.example.mischa.pixelbotui.Swarm.Swarm;
 
@@ -44,15 +45,9 @@ public class PBCanvas extends View {
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
-<<<<<<< HEAD
     ArrayList<LayoutItem> LayoutItemList = new ArrayList<>();
     ArrayList<LayoutItem> ClickableItems = new ArrayList<>();
-=======
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
-
-    LayoutItem[] colours = new LayoutItem[6]; // changed from 5 to 6, after adding an eraser
-//    ArrayList<Pixel> coloured = new ArrayList<>();
->>>>>>> 9c8100308297f0f1fd86fc91baab466ab1d3474b
 
     public PBCanvas(Context context) {
         super(context);
@@ -61,7 +56,7 @@ public class PBCanvas extends View {
 
         BotAmounts.put(Color.BLACK, 1);
         // This needs to be called after all the bots are added to intialize the swarm
-        Swarm.SwarmCreate(BotAmounts);
+        SwarmAdapter.SwarmCreate(BotAmounts);
 
 
 
@@ -202,17 +197,12 @@ public class PBCanvas extends View {
         switch (e.getAction()) {
             // For a single press
             case MotionEvent.ACTION_DOWN:
-                for (int i = 0; i < colours.length-1; i++) {
-                    //Change the paint colour
-                    if (colours[i].rect.contains(xTouch, yTouch)) {
-                        newColour = colours[i].colour;
-                        rColourPicked.rect.set(colours[i].rect.left - 8, colours[i].rect.top - 8, colours[i].rect.right + 8, colours[i].rect.bottom + 8);
+                for (int i = 0; i < ClickableItems.size(); i++) {
+                    //Change the paint colour, set eraser, etc
+                    if (ClickableItems.get(i).rect.contains(xTouch, yTouch)) {
+                        newColour = ClickableItems.get(i).colour;
+                        rColourPicked.rect.set(ClickableItems.get(i).rect.left - 8, ClickableItems.get(i).rect.top - 8, ClickableItems.get(i).rect.right + 8, ClickableItems.get(i).rect.bottom + 8);
                     }
-                }
-                // Clear
-                if (erase.contains(xTouch,yTouch)) {
-                    newColour = Color.TRANSPARENT;
-                    rColourPicked.rect.set(erase.left - 8, erase.top - 8, erase.right + 8, erase.bottom + 8);
                 }
                 // Colour the pressed rectangle
                 for (int i = 0; i < noOfSquares; i++) {
