@@ -25,13 +25,23 @@ public class PathFinder {
         Problem = grid;
     }
 
-    // Change this so that it outputs a Hashmap <BotID, MoveSequence>.
-    public List<String> solve(Bot bot) {
-        Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
-        CurrentDest = Problem.getDestForBot(CurrentBot);
+    public HashMap<String, List<String>> getSolutions(HashMap<Bot, Point> BotDestPairs) {
+        // For every bot in the bot -> dest pairs
+        HashMap<String, List<String>> allBotsSolutions = new HashMap<>();
+        for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
+            Bot bot = pair.getKey();
+            CurrentDest = pair.getValue();
+            allBotsSolutions.put(bot.BotID, solve(bot));
+        }
+
+        return allBotsSolutions;
+    }
+
+    private List<String> solve(Bot bot) {
+        // Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
 
         // Create the initial node
-        Node currentNode = new Node(CurrentBot.Location, "N/A", 0);
+        Node currentNode = new Node(bot.Location, "N/A", 0);
 
         List<Node> frontier = new ArrayList<>();
         frontier.add(currentNode);
@@ -55,7 +65,7 @@ public class PathFinder {
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
                     if (currentNode.Coord == CurrentDest) {
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, currentNode.Action));
-                        return derive_move_seq(CurrentBot.Location, succNode.Coord, back_track);
+                        return derive_move_seq(bot.Location, succNode.Coord, back_track);
                     }
 
                     frontier.add(succNode);
@@ -78,7 +88,7 @@ public class PathFinder {
         return null;
     }
 
-    Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
+    private Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
         int current_f_value = 999999;
         int index_to_remove = 0;
         Node node_to_return = new Node();
@@ -95,11 +105,11 @@ public class PathFinder {
     }
 
     // This calculates the Manhattan distance from given position to the target destination.
-    Integer heuristic(Point pos) {
+    private Integer heuristic(Point pos) {
         return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
     }
 
-    List<String> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+    private List<String> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
         List<String> sequence = new ArrayList<>();
 
         // PLEASE CHECK THAT THIS WORKS
