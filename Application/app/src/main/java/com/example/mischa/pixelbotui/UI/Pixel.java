@@ -20,10 +20,10 @@ import java.util.jar.Attributes;
 
 public class Pixel {
 
-    int colour;
-    Rect rect;
-    Boolean taken;
-    Point location;
+    public int colour;
+    public Rect rect;
+    public Boolean taken;
+    public Point location;
 
     public Pixel (int colour, Point location) {
 

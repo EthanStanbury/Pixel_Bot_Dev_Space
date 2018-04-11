@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.mischa.pixelbotui.R;
+import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,10 @@ public class PBCanvas extends View {
         uiGrid = new Pixel[noOfSquares];
 
         BotAmounts.put(Color.BLACK, 1);
+        // This needs to be called after all the bots are added to intialize the swarm
+        Swarm.SwarmCreate(BotAmounts);
+
+
 
         for (int i = 0; i < noOfSquares; i++) {
             uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));

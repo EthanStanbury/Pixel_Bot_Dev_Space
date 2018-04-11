@@ -6,6 +6,7 @@ import android.location.Location;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Ethan on 16/03/2018.
@@ -15,7 +16,8 @@ import java.util.ArrayList;
 
 public class Swarm {
 
-    public ArrayList<Bot> SwarmList = new ArrayList<>();
+    public ArrayList<Bot> SwarmList;
+
     Grid BotGrid;
 // Creates swarms by amount and by their colour, colour is currently not a feature. However creating with it in mind
     // Swarms can be created in multiple colours but in other methods, but each 'Swarm' is one colour
@@ -24,14 +26,13 @@ public class Swarm {
     // This is up to what mischa thinks is best but it could be an array of what colour and how many of that colour. The rest of the swarm can be created here
     // This function needs to create the swarm. And in the doing this everytime a new colour is selected it needs to create a new array and add it to wholeswarm. 
     //It should switch on colour and create a unique id for each bot, which will then be placed in it's swarm
-    Swarm(int SwarmAmount, Color SwarmColour, int gridWidth, int gridHeight){
-        BotGrid = new Grid(gridWidth, gridHeight);
+    public Swarm(HashMap<Integer, Integer> BotAmount){
 
-        for(int i = 0; i <= SwarmAmount; i++){
-            Point DefaultLoc = new Point(0,0);
-            Bot Add = new Bot(i, SwarmColour, DefaultLoc);
-            SwarmList.add(Add);
-            BotGrid.addBot(Add);
+
+
+        for(int i = 0; i <= BotAmount.size(); i++){
+
+
         }
     }
 
