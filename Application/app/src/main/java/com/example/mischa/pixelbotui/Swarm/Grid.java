@@ -21,7 +21,7 @@ public class Grid {
     ArrayList<Point> Destinations;
     HashMap<Bot, Point> BotDestPairs;
 
-    Grid(int width, int height) {
+    public Grid(int width, int height) {
         this.Dimensions = new int[2];
         this.Dimensions[0] = width;
         this.Dimensions[1] = height;

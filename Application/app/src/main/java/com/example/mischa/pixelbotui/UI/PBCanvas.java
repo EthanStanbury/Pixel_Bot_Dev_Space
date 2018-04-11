@@ -13,6 +13,7 @@ import android.view.View;
 import com.example.mischa.pixelbotui.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -42,6 +43,8 @@ public class PBCanvas extends View {
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
+    public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
+
     LayoutItem[] colours = new LayoutItem[6]; // changed from 5 to 6, after adding an eraser
 //    ArrayList<Pixel> coloured = new ArrayList<>();
 
@@ -49,6 +52,8 @@ public class PBCanvas extends View {
         super(context);
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
+
+        BotAmounts.put(Color.BLACK, 1);
 
         for (int i = 0; i < noOfSquares; i++) {
             uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));
