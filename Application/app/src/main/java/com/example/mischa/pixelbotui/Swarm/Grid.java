@@ -2,6 +2,8 @@ package com.example.mischa.pixelbotui.Swarm;
 
 import android.graphics.Point;
 
+import com.example.mischa.pixelbotui.UI.Pixel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +50,10 @@ public class Grid {
         this.Bots.add(bot);
     }
 
-    public void addDestination(int x, int y) {
+    public void addDestination(Pixel pixel) {
+        int x = pixel.location.x;
+        int y = pixel.location.y;
+        
         if (!this.Grid[x][y].equals("E"))
             throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
 
