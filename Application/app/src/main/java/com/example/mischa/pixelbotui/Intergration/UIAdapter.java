@@ -21,7 +21,7 @@ public class UIAdapter {
 
 
 
-    public void createGridWpixel(){
+    public static void createGridWpixel(){
 
         for (Pixel p : PBCanvas.uiGrid) {
             if(p.colour != Color.TRANSPARENT){
@@ -31,26 +31,6 @@ public class UIAdapter {
 
     }
 
-     public HashMap<Integer, Integer> CreateGridBots(){
-        return PBCanvas.BotAmounts;
-    }
-
-//    private ArrayList<ArrayList<LayoutItem>> GetuiGrid(){
-//
-//        ArrayList<ArrayList<LayoutItem>> returnArray = new ArrayList<>();
-//
-//            for (int i = 0; i < PBCanvas.xDimension; i++){
-//                ArrayList<LayoutItem> add = new ArrayList<>();
-//                int index = i;
-//                for(int x = 0; x < PBCanvas.yDimension; x++){
-//                    add.add(PBCanvas.uiGrid[index]);
-//                    index += PBCanvas.xDimension;
-//                }
-//                returnArray.add(add);
-//            }
-//
-//        return  returnArray;
-//    }
 
 
 }
