@@ -7,17 +7,27 @@ import android.view.View;
 
 import com.example.mischa.pixelbotui.Swarm.Bot;
 
+import java.util.HashMap;
+
 public class MainActivity extends Activity {
 
     PBCanvas canvas;
     int[] saveState;
     int[] restoreState;
+    public static  HashMap<Integer, Integer> BotAmounts = new HashMap<>();
+
+
+    public static HashMap<Integer, Integer> BotAmounts(){
+        return  BotAmounts;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         canvas = new PBCanvas(this);
         canvas.setBackgroundColor(Color.GRAY);
         setContentView(canvas);
+        BotAmounts.put(Color.BLACK, 1);
+
     }
 
     // Save the state of the grid in the Bundle (similar to HashMap)

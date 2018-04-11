@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -21,10 +22,16 @@ public class Pixel {
 
     int colour;
     Rect rect;
+    Boolean taken;
+    Point location;
 
-    public Pixel (int colour) {
+    public Pixel (int colour, Point location) {
+
         this.colour = colour;
         this.rect = new Rect();
+        this.taken = Boolean.FALSE;
+        this.location = location;
+
     }
     // This is the testing things that I might need later, they are put in onDraw.
     /*        if (canvas.getWidth() > canvas.getHeight()) monitor.colour = Color.RED;
