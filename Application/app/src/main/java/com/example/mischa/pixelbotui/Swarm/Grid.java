@@ -1,5 +1,6 @@
 package com.example.mischa.pixelbotui.Swarm;
 
+import android.graphics.Color;
 import android.graphics.Point;
 
 import com.example.mischa.pixelbotui.UI.Pixel;
@@ -7,6 +8,8 @@ import com.example.mischa.pixelbotui.UI.Pixel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.example.mischa.pixelbotui.Swarm.Type.*;
 
 /**
  * Created by Daniel on 02/04/2018.
@@ -17,54 +20,55 @@ public class Grid {
 
     // Grid is defined when the class is instantiated.
     // Possible values of the grid are: E (empty), B (bot) and D (destination).
-    String[][] Grid;
+    Position[][] Grid;
     int[] Dimensions;
     ArrayList<Bot> Bots;
     ArrayList<Point> Destinations;
     HashMap<Bot, Point> BotDestPairs;
 
     public Grid(int width, int height) {
-        this.Dimensions = new int[2];
-        this.Dimensions[0] = width;
-        this.Dimensions[1] = height;
+        Dimensions = new int[2];
+        Dimensions[0] = width;
+        Dimensions[1] = height;
 
         // Setup an empty grid with dimensions defined above.
-        this.Grid = new String[width][height];
+        Grid = new Position[width][height];
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++)
-                this.Grid[i][j] = "E";
+                this.Grid[i][j] = new Position();
         }
 
         // Init the bots array
-        this.Bots = new ArrayList<>();
+        Bots = new ArrayList<>();
 
     }
 
     public void addBot(Bot bot) {
         Point botCoord = bot.Location;
-        if (!this.Grid[botCoord.x][botCoord.y].equals("E"))
+        if (this.Grid[botCoord.x][botCoord.y].Type != EMPTY)
             throw new IllegalStateException("Position at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
-        this.Grid[botCoord.x][botCoord.y] = "B";
-        this.Bots.add(bot);
+        Grid[botCoord.x][botCoord.y].Type = BOT;
+        Bots.add(bot);
     }
 
     public void addDestination(Pixel pixel) {
         int x = pixel.location.x;
         int y = pixel.location.y;
-        
-        if (!this.Grid[x][y].equals("E"))
+
+        if (this.Grid[x][y].Type != EMPTY)
             throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
 
-        this.Grid[x][y] = "D";
+        Grid[x][y].Type = DESTINATION;
+        Grid[x][y].Colour = pixel.colour;
         Point addToDestination = new Point(x, y);
         Destinations.add(addToDestination);
     }
 
     // May be completely redundant depending on implementation.
     public void resetAtCoord(int x, int y) {
-        this.Grid[x][y] = "E";
+        Grid[x][y].Type = EMPTY;
     }
 
     // As of right now, it only maps the first bot with first inputted destination.
@@ -89,4 +93,19 @@ public class Grid {
 
     }
 
+}
+
+class Position {
+    Type Type = EMPTY;
+    int Colour = Color.TRANSPARENT;
+
+    Position() {}
+}
+
+// Each points on the grid will only ever have 3 different states:
+// either it is empty, has a bot or is a destination.
+enum Type {
+    EMPTY,
+    BOT,
+    DESTINATION
 }
