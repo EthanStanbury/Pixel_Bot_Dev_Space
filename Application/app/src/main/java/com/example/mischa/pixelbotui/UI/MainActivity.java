@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         canvas = new PBCanvas(this);
-        canvas.setBackgroundColor(Color.GRAY);
+        canvas.setBackgroundColor(Color.LTGRAY);
         setContentView(canvas);
         BotAmounts.put(Color.BLACK, 1);
 

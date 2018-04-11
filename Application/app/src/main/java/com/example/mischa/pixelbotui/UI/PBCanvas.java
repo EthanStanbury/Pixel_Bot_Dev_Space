@@ -30,20 +30,20 @@ public class PBCanvas extends View {
     int squareWidth;
     int newColour = Color.TRANSPARENT;
 
-    Rect top;  //grey bar #1
-    Rect bottom; //grey bar #2
+    LayoutItem top;  //grey bar #1
+    LayoutItem bottom; //grey bar #2
     LayoutItem rRed; // #EE4266
     LayoutItem rYellow; // #FFD23F
     LayoutItem rGreen; // #0EAD69
     LayoutItem rBlue; //#3BCEAC
     LayoutItem rPurple; // #540D6E
-    Rect erase; // eraser, transparent
+    LayoutItem erase; // eraser, transparent
     LayoutItem rColourPicked; // Current colour
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
-    LayoutItem[] colours = new LayoutItem[6]; // changed from 5 to 6, after adding an eraser
-//    ArrayList<Pixel> coloured = new ArrayList<>();
+    ArrayList<LayoutItem> LayoutItemList = new ArrayList<>();
+    ArrayList<LayoutItem> ClickableItems = new ArrayList<>();
 
     public PBCanvas(Context context) {
         super(context);
@@ -53,9 +53,9 @@ public class PBCanvas extends View {
         for (int i = 0; i < noOfSquares; i++) {
             uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));
         }
-        top = new Rect();
-        bottom = new Rect();
-        erase = new Rect();
+        top = new LayoutItem(Color.DKGRAY);
+        bottom = new LayoutItem(Color.DKGRAY);
+        erase = new LayoutItem(Color.LTGRAY);
         rRed = new LayoutItem(Color.parseColor("#EE4266"));
         rYellow = new LayoutItem(Color.parseColor("#FFD23F"));
         rGreen = new LayoutItem(Color.parseColor("#0EAD69"));
@@ -63,11 +63,23 @@ public class PBCanvas extends View {
         rPurple = new LayoutItem(Color.parseColor("#540D6E"));
         rColourPicked = new LayoutItem(Color.WHITE);
         rColourPicked.rect.set(0,0,0,0);
-        colours[0] = rRed;
-        colours[1] = rYellow;
-        colours[2] = rGreen;
-        colours[3] = rBlue;
-        colours[4] = rPurple;
+
+        LayoutItemList.add(top);
+        LayoutItemList.add(bottom);
+        LayoutItemList.add(erase);
+        LayoutItemList.add(rRed);
+        LayoutItemList.add(rYellow);
+        LayoutItemList.add(rGreen);
+        LayoutItemList.add(rBlue);
+        LayoutItemList.add(rPurple);
+        LayoutItemList.add(rColourPicked);
+
+        ClickableItems.add(erase);
+        ClickableItems.add(rRed);
+        ClickableItems.add(rYellow);
+        ClickableItems.add(rGreen);
+        ClickableItems.add(rBlue);
+        ClickableItems.add(rPurple);
 
     }
 
@@ -96,15 +108,15 @@ public class PBCanvas extends View {
         /** This is for if the screen is landscape, basically */
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimension/yDimension) {
             // Set all the positions of the rectangles on the screen
-            top.set(0,0,200,canvas.getHeight());
-            bottom.set(canvas.getWidth() - 200,0,canvas.getWidth(),canvas.getHeight());
+            top.rect.set(0,0,200,canvas.getHeight());
+            bottom.rect.set(canvas.getWidth() - 200,0,canvas.getWidth(),canvas.getHeight());
             rRed.rect.set(40, (canvas.getHeight()/7) - 60, 160, (canvas.getHeight()/7) + 60);
             rYellow.rect.set(40, 2 * (canvas.getHeight()/7) - 60, 160, 2 * (canvas.getHeight()/7) + 60);
             rGreen.rect.set(40, 3 * (canvas.getHeight()/7) - 60, 160, 3 * (canvas.getHeight()/7) + 60);
             rBlue.rect.set(40, 4 * (canvas.getHeight()/7) - 60, 160, 4 * (canvas.getHeight()/7) + 60);
             rPurple.rect.set(40, 5 * (canvas.getHeight()/7) - 60, 160, 5 * (canvas.getHeight()/7) + 60);
-            erase.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
-            eraser.setBounds(erase);
+            erase.rect.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
+            eraser.setBounds(erase.rect);
 
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getHeight() - 200)/yDimension;
@@ -122,15 +134,15 @@ public class PBCanvas extends View {
         /** This is for if the screen is portrait */
         else {
             // Set all the positions of the rectangles on the screen
-            top.set(0,0,canvas.getWidth(),200);
-            bottom.set(0,canvas.getHeight() - 200,canvas.getWidth(),canvas.getHeight());
+            top.rect.set(0,0,canvas.getWidth(),200);
+            bottom.rect.set(0,canvas.getHeight() - 200,canvas.getWidth(),canvas.getHeight());
             rRed.rect.set(canvas.getWidth()/7 - 60, 40, canvas.getWidth()/7 + 60, 160);
             rYellow.rect.set( 2 * (canvas.getWidth()/7) - 60, 40, 2 * (canvas.getWidth()/7) + 60, 160);
             rGreen.rect.set(3 * (canvas.getWidth()/7) - 60, 40, 3 * (canvas.getWidth()/7) + 60, 160);
             rBlue.rect.set(4 * (canvas.getWidth()/7) - 60, 40, 4 * (canvas.getWidth()/7) + 60, 160);
             rPurple.rect.set(5 * (canvas.getWidth()/7) - 60, 40, 5 * (canvas.getWidth()/7) + 60, 160);
-            erase.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
-            eraser.setBounds(erase);
+            erase.rect.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
+            eraser.setBounds(erase.rect);
 
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimension;
@@ -147,16 +159,10 @@ public class PBCanvas extends View {
         }
 
         // Draw the top and bottom rectangles, as well as the colour selected rectangle
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(Color.DKGRAY);
-        canvas.drawRect(top, paint);
-        canvas.drawRect(bottom, paint);
-        paint.setColor(rColourPicked.colour);
-        canvas.drawRect(rColourPicked.rect, paint);
         eraser.draw(canvas);
-        for (int i = 0; i < colours.length - 1; i++) {
-            paint.setColor(colours[i].colour);
-            canvas.drawRect(colours[i].rect, paint);
+        for (int i = 0; i < LayoutItemList.size(); i++) {
+            paint.setColor(LayoutItemList.get(i).colour);
+            canvas.drawRect(LayoutItemList.get(i).rect, paint);
         }
 
         // Drawing all the Pixels
@@ -190,7 +196,7 @@ public class PBCanvas extends View {
                 }
                 // Clear
                 if (erase.contains(xTouch,yTouch)) {
-                    clear();
+                    newColour = Color.TRANSPARENT;
                     rColourPicked.rect.set(erase.left - 8, erase.top - 8, erase.right + 8, erase.bottom + 8);
                 }
                 // Colour the pressed rectangle
