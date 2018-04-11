@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,19 +28,21 @@ public class Swarm {
     // This is up to what mischa thinks is best but it could be an array of what colour and how many of that colour. The rest of the swarm can be created here
     // This function needs to create the swarm. And in the doing this everytime a new colour is selected it needs to create a new array and add it to wholeswarm. 
     //It should switch on colour and create a unique id for each bot, which will then be placed in it's swarm
-    public Swarm(HashMap<Integer, Integer> BotAmount){
+    public Swarm(HashMap.Entry<Integer, Integer> entry){
+        Point defaultLocation = new Point(0, 0);
+
+            for (int i = 0; i < entry.getValue(); i++){
+                String id = (entry.getKey()).toString() + i;
+                Bot add = new Bot(id, entry.getKey(), defaultLocation);
+                SwarmList.add(add);
+                UIAdapter.destinationGrid.addBot(add);
+            }
 
 
 
-        for(int i = 0; i <= BotAmount.size(); i++){
-
-
-        }
     }
 
-    public void addDestinationsToGrid(int x, int y) {
-        //this.BotGrid.addDestination(x, y);
-    }
+
     // When the type of output of the pathfinding algorithm has been determined, I will change it from 'void'.
     public void solveGrid() {
 
