@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
@@ -22,8 +23,8 @@ public class PBCanvas extends View {
 
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
-    public static int xDimension = 15; // horizontal axis
-    public static int yDimension = 15; // vertical axis
+    public static int xDimension = 16; // horizontal axis
+    public static int yDimension = 48; // vertical axis
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
@@ -50,7 +51,7 @@ public class PBCanvas extends View {
         uiGrid = new Pixel[noOfSquares];
 
         for (int i = 0; i < noOfSquares; i++) {
-            uiGrid[i] = new Pixel(Color.TRANSPARENT);
+            uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));
         }
         top = new Rect();
         bottom = new Rect();
@@ -114,6 +115,7 @@ public class PBCanvas extends View {
                             100 + i * squareWidth,
                             (excessSpace / 2) + (j * squareWidth) + squareWidth,
                             100 + (i * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
         }
@@ -139,6 +141,7 @@ public class PBCanvas extends View {
                             (excessSpace / 2) + (i * squareWidth),
                             100 + (j * squareWidth) + squareWidth,
                             (excessSpace / 2) + (i * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
         }
@@ -161,11 +164,6 @@ public class PBCanvas extends View {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(uiGrid[i].colour);
             canvas.drawRect(uiGrid[i].rect, paint);
-            if (i == 17) {
-                paint.setStyle(Paint.Style.FILL);
-                paint.setColor(Color.YELLOW);
-                canvas.drawRect(uiGrid[i].rect, paint);
-            }
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
