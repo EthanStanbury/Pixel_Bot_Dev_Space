@@ -14,8 +14,11 @@ public class SwarmAdapter {
     public static ArrayList<Swarm> WholeSwarm = new ArrayList<>();
 
     public static void SwarmCreate(HashMap<Integer, Integer> intialSwarm){
-        Swarm add = new Swarm(intialSwarm);
-        WholeSwarm.add(add);
+        for (HashMap.Entry<Integer, Integer> entry : intialSwarm.entrySet()) {
+            Swarm add = new Swarm(entry);
+            WholeSwarm.add(add);
+        }
+
 
     }
 }
