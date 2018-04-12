@@ -226,7 +226,12 @@ public class PBCanvas extends View {
                         uiGrid[i].colour = newColour;
                     }
                 }
-                if (rClear.rect.contains(xTouch, yTouch)) clear();
+                if (rClear.rect.contains(xTouch, yTouch)) {
+                    clear();
+                }
+                if (rSubmit.rect.contains(xTouch, yTouch)) {
+                    /** ETHAN WRITE CODE HERE */
+                }
                 break;
             // For a swipe
             case MotionEvent.ACTION_MOVE:
@@ -236,10 +241,6 @@ public class PBCanvas extends View {
                         uiGrid[i].colour = newColour;
                     }
                 }
-                break;
-
-            case MotionEvent.ACTION_UP:
-
                 break;
         }
         postInvalidate(); //Redraw
