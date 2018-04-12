@@ -27,7 +27,7 @@ public class Simulation extends View {
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
             //paint.setColor(p.colour);
-            paint.setColor(Color.CYAN);
+            paint.setColor(Color.TRANSPARENT);
             canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);

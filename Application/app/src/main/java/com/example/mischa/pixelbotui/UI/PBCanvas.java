@@ -199,7 +199,7 @@ public class PBCanvas extends View {
 
         paint.setTextSize(50);
         paint.setColor(Color.WHITE);
-        canvas.drawText("fuccboi", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+        canvas.drawText("sout", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
 
     }
 
