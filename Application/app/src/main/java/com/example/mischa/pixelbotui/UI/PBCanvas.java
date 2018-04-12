@@ -230,7 +230,6 @@ public class PBCanvas extends View {
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     Intent intent = new Intent(context, SimActivity.class);
-                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
                 break;
