@@ -2,7 +2,6 @@ package com.example.mischa.pixelbotui.Swarm;
 
 import android.graphics.Point;
 
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,7 +25,8 @@ public class PathFinder {
 
     public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs
-        HashMap<Bot, Point> BotDestPairs = problem.BotDestPairs;
+        Problem = problem;
+        HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
 
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
