@@ -53,8 +53,8 @@ public class Grid {
 
     public void addBot(Bot bot) {
         Point botCoord = bot.Location;
-        if (this.Grid[botCoord.x][botCoord.y].Type != EMPTY)
-            throw new IllegalStateException("Position at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
+        // if (this.Grid[botCoord.x][botCoord.y].Type != EMPTY)
+        //    throw new IllegalStateException("Position at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
         Grid[botCoord.x][botCoord.y].Type = BOT;
         Bots.add(bot);
@@ -64,8 +64,8 @@ public class Grid {
         int x = pixel.location.x;
         int y = pixel.location.y;
 
-        if (this.Grid[x][y].Type != EMPTY)
-            throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
+        // if (this.Grid[x][y].Type != EMPTY)
+        //    throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
 
         Grid[x][y].Type = DESTINATION;
         Grid[x][y].Colour = pixel.colour;
