@@ -10,10 +10,12 @@ public class SimBot {
 
     Pixel pixel;
     String ID;
-    Point defaultPoint = new Point(0,0);
+    Point defaultPoint = new Point(0,1);
+    String path;
 
-    public SimBot(int color, String ID) {
+    public SimBot(int color, String ID, String path) {
         this.pixel = new Pixel(color, defaultPoint);
         this.ID = ID;
+        this.path = path;
     }
 }

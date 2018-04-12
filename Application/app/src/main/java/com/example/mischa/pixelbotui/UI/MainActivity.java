@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 
         BotAmounts.put(Color.BLACK, 1);
         // This needs to be called after all the bots are added to initialize the swarm
-        SwarmAdapter.SwarmCreate(BotAmounts);
+        //SwarmAdapter.SwarmCreate(BotAmounts);
 
 
     }
