@@ -34,6 +34,8 @@ public class PBCanvas extends View {
     int newColour = Color.TRANSPARENT;
     int whiteBox;
 
+
+
     LayoutItem top;  //grey bar #1
     LayoutItem bottom; //grey bar #2
     LayoutItem rRed; // #EE4266
@@ -202,6 +204,10 @@ public class PBCanvas extends View {
             canvas.drawRect(uiGrid[i].rect, paint);
         }
 
+        paint.setTextSize();
+        paint.setColor();
+        canvas.drawText();
+
     }
 
     @Override
@@ -230,7 +236,7 @@ public class PBCanvas extends View {
                     clear();
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
-                    /** ETHAN WRITE CODE HERE FUCCBOI */
+
                 }
                 break;
             // For a swipe
