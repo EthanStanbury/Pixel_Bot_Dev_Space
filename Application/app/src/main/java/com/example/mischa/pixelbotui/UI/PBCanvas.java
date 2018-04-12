@@ -32,7 +32,6 @@ public class PBCanvas extends View {
     int newColour = Color.TRANSPARENT;
     int whiteBox;
 
-    Intent intent = new Intent();
     Context context;
 
     LayoutItem top;  //grey bar #1
@@ -55,7 +54,7 @@ public class PBCanvas extends View {
 
     public PBCanvas(Context context) {
         super(context);
-        //this.context = context;
+        this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
 
@@ -231,7 +230,7 @@ public class PBCanvas extends View {
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     Intent intent = new Intent(context, SimActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
                 break;
