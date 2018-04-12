@@ -37,8 +37,13 @@ public class Grid {
         Grid = new Position[width][height];
 
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++) {
                 this.Grid[i][j] = new Position();
+                if (checkOutsideBoundary(i, j)) {
+                    this.Grid[i][j].Type = OFF_GRID;
+                }
+
+            }
         }
 
         // Init the array arrays
@@ -107,6 +112,10 @@ public class Grid {
     }
     public void updateBoard(List instructions) {
 
+    }
+
+    private boolean checkOutsideBoundary(int x, int y) {
+        return (x == 0 || y == 0) || (x == (Dimensions[0] - 1) || y == (Dimensions[1] - 1));
     }
 
     private Point translateMove(Point coord, Direction dir) {
