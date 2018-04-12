@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 
+import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 
 import java.lang.reflect.Array;
@@ -20,13 +21,13 @@ public class Swarm {
 
     public ArrayList<Bot> SwarmList;
 
-    Grid BotGrid;
+
 // Creates swarms by amount and by their colour, colour is currently not a feature. However creating with it in mind
     // Swarms can be created in multiple colours but in other methods, but each 'Swarm' is one colour
  // This needs to be called by Mischa's app
     // Mischa's app needs to have someone input in the type of bots that are available, this will have to be before app is used
     // This is up to what mischa thinks is best but it could be an array of what colour and how many of that colour. The rest of the swarm can be created here
-    // This function needs to create the swarm. And in the doing this everytime a new colour is selected it needs to create a new array and add it to wholeswarm. 
+    // This function needs to create the swarm. And in the doing this every time a new colour is selected it needs to create a new array and add it to wholeswarm.
     //It should switch on colour and create a unique id for each bot, which will then be placed in it's swarm
     public Swarm(HashMap.Entry<Integer, Integer> entry){
         Point defaultLocation = new Point(0, 0);
