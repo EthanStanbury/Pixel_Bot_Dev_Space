@@ -32,7 +32,8 @@ public class PBCanvas extends View {
     int newColour = Color.TRANSPARENT;
     int whiteBox;
 
-    Intent intent = new Intent();
+    //Intent intent = new Intent();
+    Context context;
 
     LayoutItem top;  //grey bar #1
     LayoutItem bottom; //grey bar #2
@@ -55,6 +56,7 @@ public class PBCanvas extends View {
 
     public PBCanvas(Context context) {
         super(context);
+        this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
 
@@ -192,14 +194,14 @@ public class PBCanvas extends View {
         canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
 
         // Drawing all the Pixels
-        for (int i = 0; i < uiGrid.length; i++) {
+        for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(uiGrid[i].colour);
-            canvas.drawRect(uiGrid[i].rect, paint);
+            paint.setColor(p.colour);
+            canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
-            canvas.drawRect(uiGrid[i].rect, paint);
+            canvas.drawRect(p.rect, paint);
         }
 
         paint.setTextSize(50);
@@ -234,7 +236,9 @@ public class PBCanvas extends View {
                     clear();
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
-
+                    Intent intent = new Intent(context, SimActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
                 break;
             // For a swipe
