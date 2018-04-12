@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Swarm.Bot;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class MainActivity extends Activity {
     PBCanvas canvas;
     int[] saveState;
     int[] restoreState;
+    public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
 
 
 
@@ -23,6 +25,10 @@ public class MainActivity extends Activity {
         canvas = new PBCanvas(this);
         canvas.setBackgroundColor(Color.GRAY);
         setContentView(canvas);
+
+        BotAmounts.put(Color.BLACK, 1);
+        // This needs to be called after all the bots are added to initialize the swarm
+        SwarmAdapter.SwarmCreate(BotAmounts);
 
 
     }
