@@ -47,9 +47,14 @@ public class PathFinder {
 
         List<Node> frontier = new ArrayList<>();
         frontier.add(currentNode);
+        //Trying to make a new Array list that has unique elements
+        ArrayList<Point> explored = new ArrayList<>();
+        for (int i = 0; i< explored.size() && (!explored.get(i).equals(currentNode.Coord)); i++){
+            if (i == explored.size()-1){
+                explored.add(currentNode.Coord);
+            }
+        }
 
-        Set<Point> explored = new HashSet<>();
-        explored.add(currentNode.Coord);
 
         HashMap<Point, BackTrack> back_track = new HashMap<>();
 
