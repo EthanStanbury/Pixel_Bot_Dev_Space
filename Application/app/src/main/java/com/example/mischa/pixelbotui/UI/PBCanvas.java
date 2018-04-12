@@ -13,6 +13,7 @@ import android.view.View;
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
+import com.example.mischa.pixelbotui.Swarm.Grid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -229,6 +230,9 @@ public class PBCanvas extends View {
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     Intent intent = new Intent(context, SimActivity.class);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    UIAdapter.createGridWpixel();
+                    SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+                    Grid.mapBotToDest();
                     context.startActivity(intent);
                 }
                 break;

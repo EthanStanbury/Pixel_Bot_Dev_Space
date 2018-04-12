@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 public class SwarmAdapter {
 
+
+
     public static ArrayList<Swarm> WholeSwarm = new ArrayList<>();
 
     public static void SwarmCreate(HashMap<Integer, Integer> initialSwarm){

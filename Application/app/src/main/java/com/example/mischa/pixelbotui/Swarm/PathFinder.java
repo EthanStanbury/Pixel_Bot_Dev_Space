@@ -5,6 +5,7 @@ import android.graphics.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -47,7 +48,7 @@ public class PathFinder {
         List<Node> frontier = new ArrayList<>();
         frontier.add(currentNode);
 
-        Set<Point> explored = new TreeSet<>();
+        Set<Point> explored = new HashSet<>();
         explored.add(currentNode.Coord);
 
         HashMap<Point, BackTrack> back_track = new HashMap<>();

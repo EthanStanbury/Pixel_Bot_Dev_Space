@@ -5,9 +5,18 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.view.View;
 
+import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+import com.example.mischa.pixelbotui.Swarm.Direction;
+import com.example.mischa.pixelbotui.Swarm.Grid;
+import com.example.mischa.pixelbotui.Swarm.PathFinder;
+import com.example.mischa.pixelbotui.Swarm.Swarm;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
 
@@ -16,6 +25,8 @@ import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
  */
 
 public class Simulation extends View {
+
+
 
     Paint paint = new Paint();
 
@@ -37,9 +48,21 @@ public class Simulation extends View {
             canvas.drawRect(p.rect, paint);
         }
 
-//        paint.setTextSize(50);
-//        paint.setColor(Color.WHITE);
-//        canvas.drawText(UIAdapter.destinationGrid.Bots.get(0).BotID + "," + "UIAdapter.destinationGrid.Destinations.get(0).toString()", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+        paint.setTextSize(50);
+        paint.setColor(Color.WHITE);
+        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
+//        canvas.drawText(, canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+
+
+        System.out.println(Solution.size());
+        System.out.println(Solution.get("-16777216-0"));
+//        for (String key: Solution.keySet()) {
+//            for (Direction d: Solution.get(key)) {
+//                System.out.println(d);
+//
+//            }
+//
+//        }
 
     }
 }

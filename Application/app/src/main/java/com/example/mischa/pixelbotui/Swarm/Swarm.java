@@ -6,6 +6,7 @@ import android.location.Location;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+import com.example.mischa.pixelbotui.UI.PBCanvas;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,8 +20,7 @@ import java.util.HashMap;
 
 public class Swarm {
 
-    public ArrayList<Bot> SwarmList;
-
+    public ArrayList<Bot> SwarmList = new ArrayList<>();
 
 // Creates swarms by amount and by their colour, colour is currently not a feature. However creating with it in mind
     // Swarms can be created in multiple colours but in other methods, but each 'Swarm' is one colour
