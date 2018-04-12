@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.example.mischa.pixelbotui.Swarm.Type.*;
+import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 
 /**
  * Created by Daniel on 02/04/2018.
@@ -86,15 +87,51 @@ public class Grid {
     }
 
     // Not implemented yet.
-    public List returnPossibleMoves(Point coord) {
+    public List getSuccessorNodes(Node currentNode) {
+        List<Node> successors = new ArrayList<>();
+        Point coord = currentNode.Coord;
 
+        if (getTypeAtCoord(translateMove(coord, U)) == EMPTY)
+            successors.add(new Node(translateMove(coord, U), U, 1));
 
+        if (getTypeAtCoord(translateMove(coord, D)) == EMPTY)
+            successors.add(new Node(translateMove(coord, D), D, 1));
 
-        List<Node> temp = new ArrayList<>();
-        return temp;
+        if (getTypeAtCoord(translateMove(coord, L)) == EMPTY)
+            successors.add(new Node(translateMove(coord, L), L, 1));
+
+        if (getTypeAtCoord(translateMove(coord, R)) == EMPTY)
+            successors.add(new Node(translateMove(coord, R), R, 1));
+
+        return successors;
     }
     public void updateBoard(List instructions) {
 
+    }
+
+    private Point translateMove(Point coord, Direction dir) {
+        Point tempCoord = coord;
+        switch (dir) {
+            case U:
+                tempCoord.offset(0, 1);
+                break;
+            case D:
+                tempCoord.offset(0, -1);
+                break;
+            case L:
+                tempCoord.offset(-1, 0);
+                break;
+            case R:
+                tempCoord.offset(1, 0);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid direction provided! Can only accept U, D, L and R");
+        }
+        return tempCoord;
+    }
+
+    private Type getTypeAtCoord(Point coord) {
+        return Grid[coord.x][coord.y].Type;
     }
 
 }
@@ -106,10 +143,19 @@ class Position {
     Position() {}
 }
 
-// Each points on the grid will only ever have 3 different states:
-// either it is empty, has a bot or is a destination.
+// Each points on the grid will only ever have 4 different states:
+// either it is empty, off the grid, has a bot or is a destination.
 enum Type {
     EMPTY,
+    OFF_GRID,
     BOT,
     DESTINATION
+}
+
+enum Direction {
+    NA,
+    U,
+    D,
+    L,
+    R
 }

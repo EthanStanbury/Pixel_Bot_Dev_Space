@@ -2,12 +2,15 @@ package com.example.mischa.pixelbotui.Swarm;
 
 import android.graphics.Point;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 
 /**
  * Created by Daniel on 06/04/2018.
@@ -21,11 +24,11 @@ public class PathFinder {
     private static Grid Problem;
     private static Point CurrentDest;
 
-    public static HashMap<String, List<String>> getSolutions(Grid problem) {
+    public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs
         HashMap<Bot, Point> BotDestPairs = problem.BotDestPairs;
 
-        HashMap<String, List<String>> allBotsSolutions = new HashMap<>();
+        HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
             Bot bot = pair.getKey();
             CurrentDest = pair.getValue();
@@ -35,11 +38,11 @@ public class PathFinder {
         return allBotsSolutions;
     }
 
-    private static List<String> solve(Bot bot) {
+    private static List<Direction> solve(Bot bot) {
         // Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
 
         // Create the initial node
-        Node currentNode = new Node(bot.Location, "N/A", 0);
+        Node currentNode = new Node(bot.Location, NA, 0);
 
         List<Node> frontier = new ArrayList<>();
         frontier.add(currentNode);
@@ -57,7 +60,7 @@ public class PathFinder {
 
         while (frontier.size() > 0) {
             currentNode = get_lowest_f_node(frontier, f_values);
-            List<Node> successorNodes = Problem.returnPossibleMoves(currentNode.Coord);
+            List<Node> successorNodes = Problem.getSuccessorNodes(currentNode);
             for (int possMoveIndex = 0; possMoveIndex < successorNodes.size(); possMoveIndex++) {
                 Node succNode = successorNodes.get(possMoveIndex);
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
@@ -107,8 +110,8 @@ public class PathFinder {
         return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
     }
 
-    private static List<String> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
-        List<String> sequence = new ArrayList<>();
+    private static List<Direction> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+        List<Direction> sequence = new ArrayList<>();
 
         // PLEASE CHECK THAT THIS WORKS
         while (!state_coord.equals(initial_coord)) {
@@ -118,7 +121,7 @@ public class PathFinder {
         }
 
         // Is copying necessary the sequence list necessary?
-        List<String> sequence_reverse = sequence.subList(0, sequence.size());
+        List<Direction> sequence_reverse = sequence.subList(0, sequence.size());
         Collections.reverse(sequence_reverse);
         return sequence_reverse;
     }
@@ -127,12 +130,12 @@ public class PathFinder {
 
 class Node {
     Point Coord;
-    String Action;
+    Direction Action;
     int Cost;
 
     Node() {}
 
-    Node(Point coord, String action, int cost) {
+    Node(Point coord, Direction action, int cost) {
         Coord = coord;
         Action = action;
         Cost = cost;
@@ -141,9 +144,9 @@ class Node {
 
 class BackTrack {
     Point Coord;
-    String Action;
+    Direction Action;
 
-    BackTrack(Point coord, String action) {
+    BackTrack(Point coord, Direction action) {
         Coord = coord;
         Action = action;
     }
