@@ -1,22 +1,20 @@
 package com.example.mischa.pixelbotui.UI;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.R;
-import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Created by Mischa on 10/03/2018.
@@ -34,7 +32,7 @@ public class PBCanvas extends View {
     int newColour = Color.TRANSPARENT;
     int whiteBox;
 
-
+    Intent intent = new Intent();
 
     LayoutItem top;  //grey bar #1
     LayoutItem bottom; //grey bar #2
@@ -204,9 +202,9 @@ public class PBCanvas extends View {
             canvas.drawRect(uiGrid[i].rect, paint);
         }
 
-        paint.setTextSize();
-        paint.setColor();
-        canvas.drawText();
+        paint.setTextSize(50);
+        paint.setColor(Color.WHITE);
+        canvas.drawText("fuccboi", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
 
     }
 
