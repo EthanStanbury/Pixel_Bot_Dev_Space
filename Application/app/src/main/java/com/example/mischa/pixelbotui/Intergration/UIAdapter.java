@@ -22,14 +22,14 @@ public class UIAdapter {
 
 
     public static void createGridWpixel(){
-        Grid replacement = new Grid(PBCanvas.xDimension, PBCanvas.yDimension);
+
         for (Pixel p : PBCanvas.uiGrid) {
             if(p.colour != Color.TRANSPARENT){
-                replacement.addDestination(p);
+                destinationGrid.addDestination(p);
             }
         }
 
-        destinationGrid = replacement;
+
 
     }
 

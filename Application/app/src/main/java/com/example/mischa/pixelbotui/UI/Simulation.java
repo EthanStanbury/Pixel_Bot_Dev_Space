@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
 
 /**
@@ -34,5 +36,10 @@ public class Simulation extends View {
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
         }
+
+//        paint.setTextSize(50);
+//        paint.setColor(Color.WHITE);
+//        canvas.drawText(UIAdapter.destinationGrid.Bots.get(0).BotID + "," + "UIAdapter.destinationGrid.Destinations.get(0).toString()", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+
     }
 }
