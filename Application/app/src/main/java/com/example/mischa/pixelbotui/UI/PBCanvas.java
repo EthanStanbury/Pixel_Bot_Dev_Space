@@ -230,7 +230,7 @@ public class PBCanvas extends View {
                     clear();
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
-                    /** ETHAN WRITE CODE HERE */
+                    /** ETHAN WRITE CODE HERE FUCCBOI */
                 }
                 break;
             // For a swipe
