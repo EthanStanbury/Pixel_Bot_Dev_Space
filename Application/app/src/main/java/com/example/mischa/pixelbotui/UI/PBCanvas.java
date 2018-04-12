@@ -11,7 +11,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
+import com.example.mischa.pixelbotui.Swarm.Grid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -197,9 +199,6 @@ public class PBCanvas extends View {
             canvas.drawRect(p.rect, paint);
         }
 
-        paint.setTextSize(50);
-        paint.setColor(Color.WHITE);
-        canvas.drawText("sout", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
 
     }
 
@@ -230,6 +229,13 @@ public class PBCanvas extends View {
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     Intent intent = new Intent(context, SimActivity.class);
+<<<<<<< HEAD
+=======
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    UIAdapter.createGridWpixel();
+                    SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+                    Grid.mapBotToDest();
+>>>>>>> 690112f0c89ef60d9030002e33202d274bb32129
                     context.startActivity(intent);
                 }
                 break;

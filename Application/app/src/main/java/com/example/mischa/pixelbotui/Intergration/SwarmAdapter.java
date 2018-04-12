@@ -11,11 +11,14 @@ import java.util.HashMap;
 
 public class SwarmAdapter {
 
+
+
     public static ArrayList<Swarm> WholeSwarm = new ArrayList<>();
 
-    public static void SwarmCreate(HashMap<Integer, Integer> intialSwarm){
-        for (HashMap.Entry<Integer, Integer> entry : intialSwarm.entrySet()) {
-            Swarm add = new Swarm(entry);
+    public static void SwarmCreate(HashMap<Integer, Integer> initialSwarm){
+
+        for (Integer key : initialSwarm.keySet()) {
+            Swarm add = new Swarm(key, initialSwarm.get(key));
             WholeSwarm.add(add);
         }
 

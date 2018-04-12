@@ -2,10 +2,10 @@ package com.example.mischa.pixelbotui.Swarm;
 
 import android.graphics.Point;
 
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -26,7 +26,8 @@ public class PathFinder {
 
     public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs
-        HashMap<Bot, Point> BotDestPairs = problem.BotDestPairs;
+        Problem = problem;
+        HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
 
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
@@ -46,9 +47,14 @@ public class PathFinder {
 
         List<Node> frontier = new ArrayList<>();
         frontier.add(currentNode);
+        //Trying to make a new Array list that has unique elements
+        ArrayList<Point> explored = new ArrayList<>();
+        for (int i = 0; i< explored.size() && (!explored.get(i).equals(currentNode.Coord)); i++){
+            if (i == explored.size()-1){
+                explored.add(currentNode.Coord);
+            }
+        }
 
-        Set<Point> explored = new TreeSet<>();
-        explored.add(currentNode.Coord);
 
         HashMap<Point, BackTrack> back_track = new HashMap<>();
 

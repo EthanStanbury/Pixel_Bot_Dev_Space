@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+<<<<<<< HEAD
 import android.graphics.Rect;
 import android.view.View;
 
@@ -12,6 +13,19 @@ import java.sql.Time;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
+=======
+import android.view.View;
+
+import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+import com.example.mischa.pixelbotui.Swarm.Direction;
+import com.example.mischa.pixelbotui.Swarm.Grid;
+import com.example.mischa.pixelbotui.Swarm.PathFinder;
+import com.example.mischa.pixelbotui.Swarm.Swarm;
+
+import java.util.HashMap;
+import java.util.List;
+>>>>>>> 690112f0c89ef60d9030002e33202d274bb32129
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
 
@@ -20,6 +34,8 @@ import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
  */
 
 public class Simulation extends View {
+
+
 
     Paint paint = new Paint();
     int noOfRed;
@@ -63,6 +79,7 @@ public class Simulation extends View {
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
         }
+<<<<<<< HEAD
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : finishedBots) {
             paint.setColor(bot.pixel.colour);
@@ -199,5 +216,24 @@ public class Simulation extends View {
         }
         System.out.println("In here");
         wait(1000);
+=======
+
+        paint.setTextSize(50);
+        paint.setColor(Color.WHITE);
+        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
+//        canvas.drawText(, canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+
+
+        System.out.println(Solution.size());
+        System.out.println(Solution.get("-16777216-0"));
+//        for (String key: Solution.keySet()) {
+//            for (Direction d: Solution.get(key)) {
+//                System.out.println(d);
+//
+//            }
+//
+//        }
+
+>>>>>>> 690112f0c89ef60d9030002e33202d274bb32129
     }
 }

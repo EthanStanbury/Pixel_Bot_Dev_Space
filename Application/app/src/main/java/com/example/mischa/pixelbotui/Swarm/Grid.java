@@ -19,14 +19,16 @@ import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 // This class represents the virtual grid. It also represents as the 'problem' for the A* to solve.
 public class Grid {
 
+
+
     // Grid is defined when the class is instantiated.
     // Possible values of the grid are: E (empty), B (bot) and D (destination).
     private Position[][] Grid;
     private int[] Dimensions;
-    private ArrayList<Bot> Bots;
-    private ArrayList<Point> Destinations;
+    public static ArrayList<Bot> Bots;
+    public static ArrayList<Point> Destinations;
 
-    public HashMap<Bot, Point> BotDestPairs;
+    public static HashMap<Bot, Point> BotDestPairs;
 
     public Grid(int width, int height) {
         Dimensions = new int[2];
@@ -42,7 +44,6 @@ public class Grid {
                 if (checkOutsideBoundary(i, j)) {
                     this.Grid[i][j].Type = OFF_GRID;
                 }
-
             }
         }
 
@@ -54,8 +55,8 @@ public class Grid {
 
     public void addBot(Bot bot) {
         Point botCoord = bot.Location;
-        if (this.Grid[botCoord.x][botCoord.y].Type != EMPTY)
-            throw new IllegalStateException("Position at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
+        // if (this.Grid[botCoord.x][botCoord.y].Type != EMPTY)
+        //    throw new IllegalStateException("Px`osition at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
         Grid[botCoord.x][botCoord.y].Type = BOT;
         Bots.add(bot);
@@ -65,8 +66,8 @@ public class Grid {
         int x = pixel.location.x;
         int y = pixel.location.y;
 
-        if (this.Grid[x][y].Type != EMPTY)
-            throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
+        // if (this.Grid[x][y].Type != EMPTY)
+        //    throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
 
         Grid[x][y].Type = DESTINATION;
         Grid[x][y].Colour = pixel.colour;
@@ -81,14 +82,9 @@ public class Grid {
 
     // As of right now, it only maps the first bot with first inputted destination.
     // This is not the intended feature, but this will work for single bot implementation (A* Stage 0).
-    void mapBotToDest() {
+    public static void mapBotToDest() {
         BotDestPairs = new HashMap<>();
         BotDestPairs.put(Bots.get(0), Destinations.get(0));
-    }
-
-    public Point getDestForBot(Bot bot) {
-        mapBotToDest();
-        return BotDestPairs.get(bot);
     }
 
     // Not implemented yet.
@@ -140,7 +136,12 @@ public class Grid {
     }
 
     private Type getTypeAtCoord(Point coord) {
-        return Grid[coord.x][coord.y].Type;
+        int x = coord.x;
+        int y = coord.y;
+        if ((x >= 0 && y >= 0) && (x < Dimensions[0] && y < Dimensions[1]))
+            return Grid[x][y].Type;
+        else
+            return OFF_GRID;
     }
 
 }
@@ -161,10 +162,3 @@ enum Type {
     DESTINATION
 }
 
-enum Direction {
-    NA,
-    U,
-    D,
-    L,
-    R
-}
