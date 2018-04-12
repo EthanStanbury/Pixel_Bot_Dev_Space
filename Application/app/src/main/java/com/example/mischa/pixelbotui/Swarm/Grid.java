@@ -42,7 +42,6 @@ public class Grid {
                 if (checkOutsideBoundary(i, j)) {
                     this.Grid[i][j].Type = OFF_GRID;
                 }
-
             }
         }
 
@@ -81,14 +80,9 @@ public class Grid {
 
     // As of right now, it only maps the first bot with first inputted destination.
     // This is not the intended feature, but this will work for single bot implementation (A* Stage 0).
-    void mapBotToDest() {
+    public void mapBotToDest() {
         BotDestPairs = new HashMap<>();
         BotDestPairs.put(Bots.get(0), Destinations.get(0));
-    }
-
-    public Point getDestForBot(Bot bot) {
-        mapBotToDest();
-        return BotDestPairs.get(bot);
     }
 
     // Not implemented yet.
@@ -140,7 +134,12 @@ public class Grid {
     }
 
     private Type getTypeAtCoord(Point coord) {
-        return Grid[coord.x][coord.y].Type;
+        int x = coord.x;
+        int y = coord.y;
+        if ((x >= 0 && y >= 0) && (x < Dimensions[0] && y < Dimensions[1]))
+            return Grid[x][y].Type;
+        else
+            return OFF_GRID;
     }
 
 }
