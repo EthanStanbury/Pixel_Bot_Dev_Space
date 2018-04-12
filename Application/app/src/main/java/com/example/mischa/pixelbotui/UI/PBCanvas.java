@@ -32,7 +32,7 @@ public class PBCanvas extends View {
     int newColour = Color.TRANSPARENT;
     int whiteBox;
 
-    //Intent intent = new Intent();
+    Intent intent = new Intent();
     Context context;
 
     LayoutItem top;  //grey bar #1
@@ -52,18 +52,12 @@ public class PBCanvas extends View {
 
     ArrayList<LayoutItem> LayoutItemList = new ArrayList<>();
     ArrayList<LayoutItem> ClickableItems = new ArrayList<>();
-    public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
 
     public PBCanvas(Context context) {
         super(context);
-        this.context = context;
+        //this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
-
-        BotAmounts.put(Color.BLACK, 1);
-        // This needs to be called after all the bots are added to initialize the swarm
-        SwarmAdapter.SwarmCreate(BotAmounts);
-
 
 
         for (int i = 0; i < noOfSquares; i++) {
