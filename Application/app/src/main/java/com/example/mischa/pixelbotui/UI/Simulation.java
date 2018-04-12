@@ -55,6 +55,7 @@ public class Simulation extends View {
 
 
         System.out.println(Solution.size());
+        System.out.println(Solution.keySet().toString());
         System.out.println(Solution.get("-16777216-0"));
 //        for (String key: Solution.keySet()) {
 //            for (Direction d: Solution.get(key)) {
