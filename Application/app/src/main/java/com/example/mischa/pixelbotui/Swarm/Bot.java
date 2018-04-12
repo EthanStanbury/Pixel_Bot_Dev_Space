@@ -35,32 +35,6 @@ public class Bot {
 
     }
 
-    // Not complete yet, as it is lacking some basic boundary checks.
-    public void moveBot(String dir) {
-        // Get last known bot position in the list.
-        Point tempPoint = this.Location;
-
-        // Depending on inputted direction, perform specific offsets to the last known position.
-        switch (dir) {
-            case "U":
-                tempPoint.offset(0, 1);
-                break;
-            case "D":
-                tempPoint.offset(0, -1);
-                break;
-            case "L":
-                tempPoint.offset(-1, 0);
-                break;
-            case "R":
-                tempPoint.offset(1, 0);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid direction provided! Can only accept U, D, L and R");
-        }
-
-        this.Location = tempPoint;
-    }
-
     //This function will need data from the board
     private boolean IsBotMoving(){
       return true;
