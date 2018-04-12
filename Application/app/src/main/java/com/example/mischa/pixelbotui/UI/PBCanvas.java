@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
 
 import java.util.ArrayList;
@@ -197,9 +198,6 @@ public class PBCanvas extends View {
             canvas.drawRect(p.rect, paint);
         }
 
-        paint.setTextSize(50);
-        paint.setColor(Color.WHITE);
-        canvas.drawText("sout", canvas.getWidth()/2, canvas.getHeight() - 300, paint);
 
     }
 

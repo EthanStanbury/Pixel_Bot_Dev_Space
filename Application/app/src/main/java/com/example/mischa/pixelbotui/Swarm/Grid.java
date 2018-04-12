@@ -23,8 +23,8 @@ public class Grid {
     // Possible values of the grid are: E (empty), B (bot) and D (destination).
     private Position[][] Grid;
     private int[] Dimensions;
-    private ArrayList<Bot> Bots;
-    private ArrayList<Point> Destinations;
+    public ArrayList<Bot> Bots;
+    public ArrayList<Point> Destinations;
 
     public HashMap<Bot, Point> BotDestPairs;
 
