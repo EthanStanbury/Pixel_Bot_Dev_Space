@@ -5,15 +5,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-<<<<<<< HEAD
 import android.graphics.Rect;
+import android.os.Handler;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
 import java.sql.Time;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
-=======
 import android.view.View;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
@@ -25,15 +27,15 @@ import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.util.HashMap;
 import java.util.List;
->>>>>>> 690112f0c89ef60d9030002e33202d274bb32129
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
+import static java.lang.Thread.sleep;
 
 /**
  * Created by User on 11/04/2018.
  */
 
-public class Simulation extends View {
+public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
 
 
@@ -49,19 +51,24 @@ public class Simulation extends View {
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
 
+    MainThread thread;
+
 
     public Simulation(Context context) {
         super(context);
 
-        botMoves.put("black-1", "DDD");
-        botMoves.put("black-2", "RDRRRR");
+        getHolder().addCallback(this);
+
+        botMoves.put("yellow-1", "DDD");
+        botMoves.put("blue-1", "RDRRRR");
+        botMoves.put("purple-1", "DRDRRRRRD");
+        botMoves.put("red-1", "URRD");
+        botMoves.put("green-1", "UDRDRDRDRDR");
 
         createBots(botMoves);
-        System.out.println(unfinishedBots.get(0).pixel.location);
-        System.out.println(unfinishedBots.get(1).pixel.location);
-        while (unfinishedBots.size() > 0) {
-            run();
-        }
+
+        thread = new MainThread(getHolder(), this);
+        setFocusable(true);
 
     }
 
@@ -70,6 +77,15 @@ public class Simulation extends View {
         super.onDraw(canvas);
         //long start = System.currentTimeMillis();
         //if (System.currentTimeMillis() - start > 1000) {
+        paint.setStyle(Paint.Style.FILL);
+        for (SimBot bot : unfinishedBots) {
+            paint.setColor(bot.pixel.colour);
+            canvas.drawRect(pointToRect(bot.pixel.location), paint);
+        }
+        for (SimBot bot : finishedBots) {
+            paint.setColor(bot.pixel.colour);
+            canvas.drawRect(pointToRect(bot.pixel.location), paint);
+        }
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.TRANSPARENT);
@@ -78,12 +94,6 @@ public class Simulation extends View {
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
-        }
-<<<<<<< HEAD
-        paint.setStyle(Paint.Style.FILL);
-        for (SimBot bot : finishedBots) {
-            paint.setColor(bot.pixel.colour);
-            canvas.drawRect(pointToRect(bot.pixel.location), paint);
         }
         //}
 
@@ -165,6 +175,7 @@ public class Simulation extends View {
         for (int i = 0; i < unfinishedBots.size(); i++) {
             System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
+            System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));
                 unfinishedBots.remove(unfinishedBots.get(i));
@@ -207,33 +218,57 @@ public class Simulation extends View {
         return point;
     }
 
-    public void run() {
-        long origin = System.currentTimeMillis();
-        invalidate();
-        nextMoves();
-        for (int i = 0; i < unfinishedBots.size(); i++) {
-            System.out.println(unfinishedBots.get(i).pixel.location);
+
+
+    public boolean onTouchEvent(MotionEvent e) {
+        int xTouch = (int) e.getX();
+        int yTouch = (int) e.getY();
+
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            //run();
         }
-        System.out.println("In here");
-        wait(1000);
-=======
+        return true;
+    }
 
-        paint.setTextSize(50);
-        paint.setColor(Color.WHITE);
-        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
-//        canvas.drawText(, canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+    public void run() {
+        //long origin = System.currentTimeMillis();
+        nextMoves();
+        postInvalidate();
+        try {
+            System.out.println("wait");
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        invalidate();
+    }
 
-        System.out.println(Solution.size());
-        System.out.println(Solution.get("-16777216-0"));
-//        for (String key: Solution.keySet()) {
-//            for (Direction d: Solution.get(key)) {
-//                System.out.println(d);
-//
-//            }
-//
-//        }
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                thread.running = true;
+                thread.start();
+            }
+        }, 1000);
+    }
 
->>>>>>> 690112f0c89ef60d9030002e33202d274bb32129
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        boolean retry = true;
+        while (retry) {
+            try {
+                thread.running = false;
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            retry = false;
+        }
     }
 }

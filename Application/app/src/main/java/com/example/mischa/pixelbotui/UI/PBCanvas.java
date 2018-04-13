@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
@@ -22,7 +24,7 @@ import java.util.HashMap;
  * Created by Mischa on 10/03/2018.
  */
 
-public class PBCanvas extends View {
+public class PBCanvas extends SurfaceView {
 
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
@@ -228,14 +230,10 @@ public class PBCanvas extends View {
                     clear();
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
-                    Intent intent = new Intent(context, SimActivity.class);
-<<<<<<< HEAD
-=======
-                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     UIAdapter.createGridWpixel();
                     SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
                     Grid.mapBotToDest();
->>>>>>> 690112f0c89ef60d9030002e33202d274bb32129
+                    Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }
                 break;
