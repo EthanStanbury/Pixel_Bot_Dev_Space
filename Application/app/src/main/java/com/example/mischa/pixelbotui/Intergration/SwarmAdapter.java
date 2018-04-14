@@ -22,6 +22,5 @@ public class SwarmAdapter {
             WholeSwarm.add(add);
         }
 
-
     }
 }

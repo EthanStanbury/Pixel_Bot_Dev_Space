@@ -50,6 +50,7 @@ public class Grid {
         // Init the array arrays
         Bots = new ArrayList<>();
         Destinations = new ArrayList<>();
+        BotDestPairs = new HashMap<>();
 
     }
 
@@ -59,6 +60,7 @@ public class Grid {
         //    throw new IllegalStateException("Px`osition at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
         Grid[botCoord.x][botCoord.y].Type = BOT;
+        Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
         Bots.add(bot);
     }
 
@@ -71,8 +73,8 @@ public class Grid {
 
         Grid[x][y].Type = DESTINATION;
         Grid[x][y].Colour = pixel.colour;
-        Point addToDestination = new Point(x, y);
-        Destinations.add(addToDestination);
+        Destinations.add(new Point(x, y));
+        //System.out.println("GRID.JAVA: " + Destinations.get(0));
     }
 
     // May be completely redundant depending on implementation.
@@ -83,7 +85,6 @@ public class Grid {
     // As of right now, it only maps the first bot with first inputted destination.
     // This is not the intended feature, but this will work for single bot implementation (A* Stage 0).
     public static void mapBotToDest() {
-        BotDestPairs = new HashMap<>();
         BotDestPairs.put(Bots.get(0), Destinations.get(0));
     }
 
@@ -91,18 +92,24 @@ public class Grid {
     public List getSuccessorNodes(Node currentNode) {
         List<Node> successors = new ArrayList<>();
         Point coord = currentNode.Coord;
+        // System.out.println(translateMove(coord, D));
+        // System.out.println(getTypeAtCoord(translateMove(coord, D)));
 
-        if (getTypeAtCoord(translateMove(coord, U)) == EMPTY)
-            successors.add(new Node(translateMove(coord, U), U, 1));
+        Point tempCoord = translateMove(coord, U);
+        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+            successors.add(new Node(tempCoord, U, 1));
 
-        if (getTypeAtCoord(translateMove(coord, D)) == EMPTY)
-            successors.add(new Node(translateMove(coord, D), D, 1));
+        tempCoord = translateMove(coord, D);
+        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+            successors.add(new Node(tempCoord, D, 1));
 
-        if (getTypeAtCoord(translateMove(coord, L)) == EMPTY)
-            successors.add(new Node(translateMove(coord, L), L, 1));
+        tempCoord = translateMove(coord, L);
+        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+            successors.add(new Node(tempCoord, L, 1));
 
-        if (getTypeAtCoord(translateMove(coord, R)) == EMPTY)
-            successors.add(new Node(translateMove(coord, R), R, 1));
+        tempCoord = translateMove(coord, R);
+        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+            successors.add(new Node(tempCoord, R, 1));
 
         return successors;
     }
@@ -115,13 +122,13 @@ public class Grid {
     }
 
     private Point translateMove(Point coord, Direction dir) {
-        Point tempCoord = coord;
+        Point tempCoord = new Point(coord.x, coord.y);
         switch (dir) {
             case U:
-                tempCoord.offset(0, 1);
+                tempCoord.offset(0, -1);
                 break;
             case D:
-                tempCoord.offset(0, -1);
+                tempCoord.offset(0, 1);
                 break;
             case L:
                 tempCoord.offset(-1, 0);
@@ -138,10 +145,10 @@ public class Grid {
     private Type getTypeAtCoord(Point coord) {
         int x = coord.x;
         int y = coord.y;
-        if ((x >= 0 && y >= 0) && (x < Dimensions[0] && y < Dimensions[1]))
-            return Grid[x][y].Type;
-        else
+        if ((x < 0 || y < 0) || (x >= Dimensions[0] || y >= Dimensions[1]))
             return OFF_GRID;
+        else
+            return Grid[x][y].Type;
     }
 
 }
