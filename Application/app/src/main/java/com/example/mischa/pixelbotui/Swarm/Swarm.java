@@ -33,7 +33,7 @@ public class Swarm {
         Point defaultLocation = new Point(0, 1);
 
             for (int i = 0; i < numberOfBots; i++){
-                String id = (Colour.toString() +"-"+ i);
+                String id = (Colour.toString() +"/"+ i);
                 Bot add = new Bot(id, Colour, defaultLocation);
                 SwarmList.add(add);
                 UIAdapter.destinationGrid.addBot(add);
