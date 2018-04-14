@@ -10,23 +10,9 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
-import java.sql.Time;
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
-import android.view.View;
-
-import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
-import com.example.mischa.pixelbotui.Intergration.UIAdapter;
-import com.example.mischa.pixelbotui.Swarm.Direction;
-import com.example.mischa.pixelbotui.Swarm.Grid;
-import com.example.mischa.pixelbotui.Swarm.PathFinder;
-import com.example.mischa.pixelbotui.Swarm.Swarm;
-
-import java.util.HashMap;
-import java.util.List;
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
 import static java.lang.Thread.sleep;
@@ -36,8 +22,6 @@ import static java.lang.Thread.sleep;
  */
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
-
-
 
     Paint paint = new Paint();
     int noOfRed;
