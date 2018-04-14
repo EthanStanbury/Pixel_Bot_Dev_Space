@@ -15,10 +15,14 @@ import android.view.View;
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
+import com.example.mischa.pixelbotui.Swarm.Bot;
+import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.Grid;
+import com.example.mischa.pixelbotui.Swarm.PathFinder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Mischa on 10/03/2018.
@@ -206,6 +210,33 @@ public class PBCanvas extends SurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        // Daniel's test code, do not remove.
+        /*
+        paint.setTextSize(50);
+        paint.setColor(Color.WHITE);
+
+        Grid testGrid = new Grid(102, 102);
+        testGrid.addBot(new Bot("-16777216-0", 0, new Point(1, 0)));
+        testGrid.addDestination(new Pixel(0, new Point(34, 33)));
+
+        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(testGrid);
+
+
+        System.out.println(Solution.size());
+        System.out.println(Solution.keySet().toString());
+        System.out.println(Solution.get("-16777216-0"));
+
+        /*
+        for (String key: Solution.keySet()) {
+            for (Direction d: Solution.get(key)) {
+                System.out.println(d);
+
+            }
+
+        }*/
+
+        // End of test code
+
         int xTouch = (int) e.getX();
         int yTouch = (int) e.getY();
 
@@ -232,7 +263,6 @@ public class PBCanvas extends SurfaceView {
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     UIAdapter.createGridWpixel();
                     SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
-                    Grid.mapBotToDest();
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }

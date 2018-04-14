@@ -27,6 +27,7 @@ public class PathFinder {
     public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs
         Problem = problem;
+        Problem.mapBotToDest();
         HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
 
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
@@ -63,14 +64,17 @@ public class PathFinder {
 
         HashMap<Point, Integer> g_values = new HashMap<>();
         g_values.put(currentNode.Coord, 0);
-
         while (frontier.size() > 0) {
             currentNode = get_lowest_f_node(frontier, f_values);
             List<Node> successorNodes = Problem.getSuccessorNodes(currentNode);
+            // System.out.println("successor node count: " + successorNodes.size());
+            // System.out.println("current coord: " + currentNode.Coord);
             for (int possMoveIndex = 0; possMoveIndex < successorNodes.size(); possMoveIndex++) {
+                // System.out.println(successorNodes.get(possMoveIndex).Action);
                 Node succNode = successorNodes.get(possMoveIndex);
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
-                    if (currentNode.Coord == CurrentDest) {
+                    if (currentNode.Coord.equals(CurrentDest)) {
+                        System.out.println("DO I GET ANY SOLUTION???");
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, currentNode.Action));
                         return derive_move_seq(bot.Location, succNode.Coord, back_track);
                     }
