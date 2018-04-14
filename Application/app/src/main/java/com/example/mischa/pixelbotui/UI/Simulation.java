@@ -102,7 +102,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     public String parseColour(String input) {
         String output = "";
         int i = 0;
-        while (input.charAt(i) != '/' && i < input.length()) {
+        while (input.charAt(i) != '/' && i < input.length() - 1) {
             output = output + input.charAt(i);
             i++;
         }
