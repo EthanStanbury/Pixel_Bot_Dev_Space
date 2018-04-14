@@ -140,33 +140,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         int botColour = Color.MAGENTA;
         for (String key : moves.keySet()) {
             botColour = Integer.parseInt(parseColour(key));
-            /*switch (parseColour(key)) {
-                case "black": {
-                    botColour = Color.BLACK;
-                    break;
-                }
-                case "red": {
-                    botColour = Color.parseColor("#EE4266");
-                    break;
-                }
-                case "yellow": {
-                    botColour = Color.parseColor("#FFD23F");
-                    break;
-                }
-                case "green": {
-                    botColour = Color.parseColor("#0EAD69");
-                    break;
-                }
-                case "blue": {
-                    botColour = Color.parseColor("#3BCEAC");
-                    break;
-                }
-                case "purple": {
-                    botColour = Color.parseColor("#540D6E");
-                    break;
-                }
-                default: break;
-            }*/
             SimBot newBot = new SimBot(botColour, key, moves.get(key));
             unfinishedBots.add(newBot);
         }
