@@ -13,21 +13,11 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-<<<<<<< HEAD
-=======
-import android.view.View;
 
-import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
-import com.example.mischa.pixelbotui.Swarm.Bot;
 import com.example.mischa.pixelbotui.Swarm.Direction;
-import com.example.mischa.pixelbotui.Swarm.Grid;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
-import com.example.mischa.pixelbotui.Swarm.Swarm;
-
-import java.util.HashMap;
 import java.util.List;
->>>>>>> 8931defe24e832650f1ff62538771db86273e7a6
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
 import static java.lang.Thread.sleep;
@@ -86,8 +76,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        //long start = System.currentTimeMillis();
-        //if (System.currentTimeMillis() - start > 1000) {
+
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
@@ -113,7 +102,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     public String parseColour(String input) {
         String output = "";
         int i = 0;
-        while (input.charAt(i) != '-' && i < input.length()) {
+        while (input.charAt(i) != '/' && i < input.length()) {
             output = output + input.charAt(i);
             i++;
         }
@@ -150,7 +139,8 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     public void createBots(HashMap<String, String> moves) {
         int botColour = Color.MAGENTA;
         for (String key : moves.keySet()) {
-            switch (parseColour(key)) {
+            botColour = Integer.parseInt(parseColour(key));
+            /*switch (parseColour(key)) {
                 case "black": {
                     botColour = Color.BLACK;
                     break;
@@ -176,7 +166,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
                     break;
                 }
                 default: break;
-            }
+            }*/
             SimBot newBot = new SimBot(botColour, key, moves.get(key));
             unfinishedBots.add(newBot);
         }
@@ -248,7 +238,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         postInvalidate();
         try {
             System.out.println("wait");
-            sleep(500);
+            sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
