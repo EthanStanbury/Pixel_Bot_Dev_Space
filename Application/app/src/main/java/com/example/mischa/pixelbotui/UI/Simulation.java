@@ -270,5 +270,25 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
             retry = false;
         }
+/*        System.out.println("In here");
+        wait(1000);
+
+        paint.setTextSize(50);
+        paint.setColor(Color.WHITE);
+        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
+//        canvas.drawText(, canvas.getWidth()/2, canvas.getHeight() - 300, paint);
+
+
+        System.out.println(Solution.size());
+        System.out.println(Solution.keySet().toString());
+        System.out.println(Solution.get("-16777216-0"));
+//        for (String key: Solution.keySet()) {
+//            for (Direction d: Solution.get(key)) {
+//                System.out.println(d);
+//
+//            }
+//
+//        }*/
+
     }
 }
