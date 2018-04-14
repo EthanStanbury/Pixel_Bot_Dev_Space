@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+import com.example.mischa.pixelbotui.Swarm.Bot;
 import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.Grid;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
@@ -36,6 +37,7 @@ import static java.lang.Thread.sleep;
  */
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
+    HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
 
 
 
@@ -58,12 +60,23 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
 
         getHolder().addCallback(this);
+        for (String key:  Solution.keySet()) {
+            System.out.println((key));
+            botMoves.put(key, Solution.get(key).toString());
+            for (Direction d: Solution.get(key)) {
 
-        botMoves.put("yellow-1", "DDD");
-        botMoves.put("blue-1", "RDRRRR");
-        botMoves.put("purple-1", "DRDRRRRRD");
-        botMoves.put("red-1", "URRD");
-        botMoves.put("green-1", "UDRDRDRDRDR");
+                System.out.println(d);
+
+            }
+
+
+        }
+
+//        botMoves.put("yellow-1", "DDD");
+//        botMoves.put("blue-1", "RDRRRR");
+//        botMoves.put("purple-1", "DRDRRRRRD");
+//        botMoves.put("red-1", "URRD");
+//        botMoves.put("green-1", "UDRDRDRDRDR");
 
         createBots(botMoves);
 
@@ -176,6 +189,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
             System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
+
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));
                 unfinishedBots.remove(unfinishedBots.get(i));
