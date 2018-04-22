@@ -20,6 +20,8 @@ import com.example.mischa.pixelbotui.Swarm.PathFinder;
 import java.util.List;
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
+import static com.example.mischa.pixelbotui.UI.PBCanvas.xDimension;
+import static com.example.mischa.pixelbotui.UI.PBCanvas.yDimension;
 import static java.lang.Thread.sleep;
 
 /**
@@ -27,7 +29,7 @@ import static java.lang.Thread.sleep;
  */
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
-    HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
+    //HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
 
     Paint paint = new Paint();
     int noOfRed;
@@ -37,6 +39,8 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     int noOfPurple;
     int noOfBlack;
     int totalBots;
+    int squareWidth;
+    int excessSpace;
     HashMap<String, String> botMoves = new HashMap<>();
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
@@ -48,23 +52,47 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
 
         getHolder().addCallback(this);
-        for (String key:  Solution.keySet()) {
-            System.out.println((key));
-            botMoves.put(key, Solution.get(key).toString());
-            for (Direction d: Solution.get(key)) {
+//        for (String key:  Solution.keySet()) {
+//            System.out.println((key));
+//            botMoves.put(key, Solution.get(key).toString());
+//            for (Direction d: Solution.get(key)) {
+//
+//                System.out.println(d);
+//
+//            }
+//
+//
+//        }
 
-                System.out.println(d);
-
-            }
-
-
-        }
-
-//        botMoves.put("yellow-1", "DDD");
-//        botMoves.put("blue-1", "RDRRRR");
-//        botMoves.put("purple-1", "DRDRRRRRD");
-//        botMoves.put("red-1", "URRD");
-//        botMoves.put("green-1", "UDRDRDRDRDR");
+        //botMoves.put("-11268754/1", "D"); //purple
+        //botMoves.put("-12857684/1", "DD"); //blue
+        //botMoves.put("-15815319/1", "DDD"); //green
+        //botMoves.put("-11713/1", "DDDD"); //yellow
+        botMoves.put("-1162650/0", "RRR"); //red
+        botMoves.put("-1162650/1", "RRRR"); //red
+        botMoves.put("-1162650/2", "RRRRR"); //red
+        botMoves.put("-1162650/3", "DRRRRR"); //red
+        botMoves.put("-1162650/4", "DRRRRRR"); //red
+        botMoves.put("-1162650/5", "DRDRRRRR"); //red
+        botMoves.put("-1162650/6", "DRDRDRRRR"); //red
+        botMoves.put("-1162650/7", "DRDRDRRR"); //red
+        botMoves.put("-1162650/8", "DRDRDRDRR"); //red
+        botMoves.put("-1162650/9", "DRDRDRDR"); //red
+        botMoves.put("-1162650/10", "DRDRDRD"); //red
+        botMoves.put("-1162650/11", "DRDRDR"); //red
+        botMoves.put("-1162650/12", "DRDRD"); //red
+        botMoves.put("-1162650/13", "DDRR"); //red
+        botMoves.put("-1162650/14", "DRR"); //red
+        botMoves.put("-1162650/15", "DRRR"); //red
+        botMoves.put("-11713/0", "DRRRR"); //yellow
+        botMoves.put("-11713/1", "DDRRR"); //yellow
+        botMoves.put("-11713/2", "DDRRRR"); //yellow
+        botMoves.put("-11713/3", "DRDRRRR"); //yellow
+        botMoves.put("-11713/4", "DRDRDRR"); //yellow
+        botMoves.put("-15815319/0", "DDDDRDRRR"); //green
+        botMoves.put("-15815319/1", "DDDDDRRR"); //green
+        botMoves.put("-15815319/2", "DDDDDRRRDDR"); //green
+        botMoves.put("-15815319/3", "DDDDDRRRDR"); //green
 
         createBots(botMoves);
 
@@ -85,6 +113,32 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (SimBot bot : finishedBots) {
             paint.setColor(bot.pixel.colour);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
+        }
+        if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimension/ yDimension) {
+            squareWidth = (canvas.getHeight() - 200)/yDimension;
+            excessSpace = canvas.getWidth() - (xDimension * squareWidth);
+            for (int i = 0; i < yDimension; i++) {
+                for (int j = 0; j < xDimension; j++) {
+                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
+                            100 + i * squareWidth,
+                            (excessSpace / 2) + (j * squareWidth) + squareWidth,
+                            100 + (i * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].location.set(j,i);
+                }
+            }
+        } else {
+            squareWidth = (canvas.getWidth() - 200)/xDimension;
+            excessSpace = canvas.getHeight() - (yDimension * squareWidth);
+            for (int i = 0; i < yDimension; i++) {
+                for (int j = 0; j < xDimension; j++) {
+                    uiGrid[i * xDimension + j].rect.set(100 + j * squareWidth,
+                            (excessSpace / 2) + (i * squareWidth),
+                            100 + (j * squareWidth) + squareWidth,
+                            (excessSpace / 2) + (i * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].location.set(j,i);
+                }
+            }
+
         }
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
@@ -109,7 +163,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return output;
     }
 
-    public void getNumbersOfColours() {
+    public void getNumbersOfColours() { //unused, possibly delete?
         for (Pixel p : uiGrid) {
             if (p.colour == Color.parseColor("#EE4266")) {
                 noOfRed++;
@@ -193,20 +247,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return point;
     }
 
-
-
-    public boolean onTouchEvent(MotionEvent e) {
-        int xTouch = (int) e.getX();
-        int yTouch = (int) e.getY();
-
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            //run();
-        }
-        return true;
-    }
-
     public void run() {
-        //long origin = System.currentTimeMillis();
         nextMoves();
         postInvalidate();
         try {

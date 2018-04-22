@@ -32,8 +32,8 @@ public class PBCanvas extends SurfaceView {
 
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
-    public static int xDimension = 16; // horizontal axis
-    public static int yDimension = 16; // vertical axis
+    public static int xDimension = 10; // horizontal axis
+    public static int yDimension = 10; // vertical axis
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
@@ -137,17 +137,7 @@ public class PBCanvas extends SurfaceView {
 
 
             // Setting all the pixels' bounds, as well as the width of them
-            squareWidth = (canvas.getHeight() - 200)/yDimension;
-            excessSpace = canvas.getWidth() - (xDimension * squareWidth);
-            for (int i = 0; i < yDimension; i++) {
-                for (int j = 0; j < xDimension; j++) {
-                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
-                            100 + i * squareWidth,
-                            (excessSpace / 2) + (j * squareWidth) + squareWidth,
-                            100 + (i * squareWidth) + squareWidth);
-                    uiGrid[i * xDimension + j].location.set(j,i);
-                }
-            }
+            setLandscapeGrid(canvas);
         }
         /* This is for if the screen is portrait */
         else {
@@ -168,17 +158,7 @@ public class PBCanvas extends SurfaceView {
 
 
             // Setting all the pixels' bounds, as well as the width of them
-            squareWidth = (canvas.getWidth() - 200)/xDimension;
-            excessSpace = canvas.getHeight() - (yDimension * squareWidth);
-            for (int i = 0; i < yDimension; i++) {
-                for (int j = 0; j < xDimension; j++) {
-                    uiGrid[i * xDimension + j].rect.set(100 + j * squareWidth,
-                            (excessSpace / 2) + (i * squareWidth),
-                            100 + (j * squareWidth) + squareWidth,
-                            (excessSpace / 2) + (i * squareWidth) + squareWidth);
-                    uiGrid[i * xDimension + j].location.set(j,i);
-                }
-            }
+            setPortraitGrid(canvas);
         }
 
         // Draw all of the LayoutItems
@@ -204,8 +184,34 @@ public class PBCanvas extends SurfaceView {
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
         }
+    }
 
+    public void setPortraitGrid(Canvas canvas) {
+        squareWidth = (canvas.getWidth() - 200)/xDimension;
+        excessSpace = canvas.getHeight() - (yDimension * squareWidth);
+        for (int i = 0; i < yDimension; i++) {
+            for (int j = 0; j < xDimension; j++) {
+                uiGrid[i * xDimension + j].rect.set(100 + j * squareWidth,
+                        (excessSpace / 2) + (i * squareWidth),
+                        100 + (j * squareWidth) + squareWidth,
+                        (excessSpace / 2) + (i * squareWidth) + squareWidth);
+                uiGrid[i * xDimension + j].location.set(j,i);
+            }
+        }
+    }
 
+    public void setLandscapeGrid(Canvas canvas) {
+        squareWidth = (canvas.getHeight() - 200)/yDimension;
+        excessSpace = canvas.getWidth() - (xDimension * squareWidth);
+        for (int i = 0; i < yDimension; i++) {
+            for (int j = 0; j < xDimension; j++) {
+                uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
+                        100 + i * squareWidth,
+                        (excessSpace / 2) + (j * squareWidth) + squareWidth,
+                        100 + (i * squareWidth) + squareWidth);
+                uiGrid[i * xDimension + j].location.set(j,i);
+            }
+        }
     }
 
     @Override
@@ -261,8 +267,8 @@ public class PBCanvas extends SurfaceView {
                     clear();
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
-                    UIAdapter.createGridWpixel();
-                    SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+//                    UIAdapter.createGridWpixel();
+//                    SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }
@@ -294,10 +300,5 @@ public class PBCanvas extends SurfaceView {
         }
         rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 8, ClickableItems.get(whiteBox).rect.top - 8, ClickableItems.get(whiteBox).rect.right + 8, ClickableItems.get(whiteBox).rect.bottom + 8);
         postInvalidate();
-    }
-    /** Called when the user touches the button */
-    public void reset(View view) {
-        // Do something in response to button click
-        clear();
     }
 }
