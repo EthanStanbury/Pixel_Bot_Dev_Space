@@ -68,8 +68,8 @@ public class Grid {
         int x = pixel.location.x;
         int y = pixel.location.y;
 
-        // if (this.Grid[x][y].Type != EMPTY)
-        //    throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
+        if (this.Grid[x][y].Type == OFF_GRID)
+            throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is outside the boundary!");
 
         Grid[x][y].Type = DESTINATION;
         Grid[x][y].Colour = 0;//pixel.colour;

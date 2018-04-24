@@ -215,9 +215,9 @@ public class PBCanvas extends SurfaceView {
         paint.setTextSize(50);
         paint.setColor(Color.WHITE);
 
-        Grid testGrid = new Grid(102, 102);
+        Grid testGrid = new Grid(5, 5);
         testGrid.addBot(new Bot("-16777216-0", 0, new Point(1, 0)));
-        testGrid.addDestination(new Pixel(0, new Point(34, 33)));
+        testGrid.addDestination(new Pixel(0, new Point(2, 3)));
 
         HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(testGrid);
 
