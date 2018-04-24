@@ -60,7 +60,7 @@ public class Grid {
         //    throw new IllegalStateException("Px`osition at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
         Grid[botCoord.x][botCoord.y].Type = BOT;
-        Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
+        Grid[botCoord.x][botCoord.y].Colour = 0; //bot.Colour; BROKEN DUE TO DIFFERENCES IN COLOUR TYPES (int vs Color)
         Bots.add(bot);
     }
 
@@ -68,11 +68,11 @@ public class Grid {
         int x = pixel.location.x;
         int y = pixel.location.y;
 
-        // if (this.Grid[x][y].Type != EMPTY)
-        //    throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is not empty!");
+        if (this.Grid[x][y].Type == OFF_GRID)
+            throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is outside the boundary!");
 
         Grid[x][y].Type = DESTINATION;
-        Grid[x][y].Colour = pixel.colour;
+        Grid[x][y].Colour = 0;//pixel.colour;
         Destinations.add(new Point(x, y));
         //System.out.println("GRID.JAVA: " + Destinations.get(0));
     }

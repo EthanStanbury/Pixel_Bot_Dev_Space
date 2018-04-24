@@ -50,11 +50,11 @@ public class PathFinder {
         frontier.add(currentNode);
         //Trying to make a new Array list that has unique elements
         ArrayList<Point> explored = new ArrayList<>();
-        for (int i = 0; i< explored.size() && (!explored.get(i).equals(currentNode.Coord)); i++){
-            if (i == explored.size()-1){
-                explored.add(currentNode.Coord);
-            }
-        }
+        //for (int i = 0; i< explored.size() && (!explored.get(i).equals(currentNode.Coord)); i++){
+        //    if (i == explored.size()-1){
+        explored.add(currentNode.Coord);
+        //    }
+        //}
 
 
         HashMap<Point, BackTrack> back_track = new HashMap<>();
@@ -72,10 +72,11 @@ public class PathFinder {
             for (int possMoveIndex = 0; possMoveIndex < successorNodes.size(); possMoveIndex++) {
                 // System.out.println(successorNodes.get(possMoveIndex).Action);
                 Node succNode = successorNodes.get(possMoveIndex);
+                System.out.println(!frontier.contains(succNode));
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
-                    if (currentNode.Coord.equals(CurrentDest)) {
+                    if (succNode.Coord.equals(CurrentDest)) {
                         System.out.println("DO I GET ANY SOLUTION???");
-                        back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, currentNode.Action));
+                        back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
                         return derive_move_seq(bot.Location, succNode.Coord, back_track);
                     }
 
@@ -130,10 +131,8 @@ public class PathFinder {
             sequence.add(prev.Action);
         }
 
-        // Is copying necessary the sequence list necessary?
-        List<Direction> sequence_reverse = sequence.subList(0, sequence.size());
-        Collections.reverse(sequence_reverse);
-        return sequence_reverse;
+        Collections.reverse(sequence);
+        return sequence;
     }
 
 }
