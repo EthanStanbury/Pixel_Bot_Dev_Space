@@ -97,11 +97,12 @@ public class Grid {
             int lowestManDistIndex = 0;
             for (int i = 0; i < remainingBots.size(); i++) {
                 int ManhattanDist = Math.abs(remainingBots.get(i).Location.x - remainingDest.get(0).x) + Math.abs(remainingBots.get(i).Location.y - remainingDest.get(0).y);
-                if (ManhattanDist < lowestManhattanDist)
+                if (ManhattanDist < lowestManhattanDist) {
                     lowestManhattanDist = ManhattanDist;
                     lowestManDistIndex = i;
+                }
             }
-
+            //System.out.println(remainingBots.get(lowestManDistIndex).Location.y);
             BotDestPairs.put(remainingBots.get(lowestManDistIndex), remainingDest.get(0));
 
             remainingBots.remove(lowestManDistIndex);

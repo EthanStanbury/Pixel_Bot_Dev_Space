@@ -80,6 +80,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
+            System.out.println(bot.pixel.location);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
         }
         for (SimBot bot : finishedBots) {
