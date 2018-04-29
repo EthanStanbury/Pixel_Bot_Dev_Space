@@ -29,7 +29,7 @@ public class Swarm {
     // This is up to what mischa thinks is best but it could be an array of what colour and how many of that colour. The rest of the swarm can be created here
     // This function needs to create the swarm. And in the doing this every time a new colour is selected it needs to create a new array and add it to wholeswarm.
     //It should switch on colour and create a unique id for each bot, which will then be placed in it's swarm
-    public Swarm(Color Colour, Integer numberOfBots){
+    public Swarm(Integer Colour, Integer numberOfBots){
         Point defaultLocation = new Point(0, 1);
 
             for (int i = 0; i < numberOfBots; i++){
