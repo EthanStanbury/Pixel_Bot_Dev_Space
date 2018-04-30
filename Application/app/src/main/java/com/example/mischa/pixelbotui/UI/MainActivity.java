@@ -26,7 +26,12 @@ public class MainActivity extends Activity {
         canvas.setBackgroundColor(Color.GRAY);
         setContentView(canvas);
 
-        BotAmounts.put(Color.YELLOW, 4);
+        BotAmounts.put(-1162650, 4); //Red
+        BotAmounts.put(-11713, 4); //Yellow
+        BotAmounts.put(-15815319, 4); //Green
+        BotAmounts.put(-12857684, 4); //Blue
+        BotAmounts.put(-11268754, 4); //Purple
+        BotAmounts.put(Color.BLACK, 4); //Black
 
 
         // This needs to be called after all the bots are added to initialize the swarm

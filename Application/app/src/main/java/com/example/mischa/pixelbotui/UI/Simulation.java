@@ -75,6 +75,12 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 //        botMoves.put("red-1", "URRD");
 //        botMoves.put("green-1", "UDRDRDRDRDR");
 
+        System.out.println(Color.parseColor("#EE4266"));
+        System.out.println(Color.parseColor("#FFD23F"));
+        System.out.println(Color.parseColor("#0EAD69"));
+        System.out.println(Color.parseColor("#3BCEAC"));
+        System.out.println(Color.parseColor("#540D6E"));
+
         createBots(botMoves);
 
         thread = new MainThread(getHolder(), this);
