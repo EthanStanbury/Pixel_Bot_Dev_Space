@@ -46,14 +46,13 @@ public class Swarm {
                 defaultLocation.y += 1;
 
             }
+
+        for (String  b: thisSwarmList.keySet()) {
+            System.out.println("All locations are :" + thisSwarmList.get(b).Location);
+        }
         this.SwarmList = thisSwarmList;
 
 
     }
 
-
-    // When the type of output of the pathfinding algorithm has been determined, I will change it from 'void'.
-    public void solveGrid() {
-
-    }
 }
