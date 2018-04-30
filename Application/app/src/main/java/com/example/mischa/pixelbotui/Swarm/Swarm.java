@@ -41,6 +41,8 @@ public class Swarm {
                 thisSwarmList.put(id, add);
                 System.out.println("IDs are :" + add.BotID + " and Locations are: " + add.Location );
                 UIAdapter.destinationGrid.addBot(add);
+                System.out.println("----------------------------------------------------------------");
+                System.out.println("IDs are :" + add.BotID + " and Locations are: " + add.Location );
                 defaultLocation.y += 1;
 
             }
