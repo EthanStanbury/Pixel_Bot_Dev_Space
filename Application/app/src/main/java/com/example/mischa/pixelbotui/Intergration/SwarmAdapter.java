@@ -1,5 +1,7 @@
 package com.example.mischa.pixelbotui.Intergration;
 
+import android.graphics.Color;
+
 import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.util.ArrayList;
@@ -13,13 +15,13 @@ public class SwarmAdapter {
 
 
 
-    public static ArrayList<Swarm> WholeSwarm = new ArrayList<>();
+    public static HashMap<Integer, Swarm> WholeSwarm = new HashMap<>();
 
     public static void SwarmCreate(HashMap<Integer, Integer> initialSwarm){
 
-        for (Integer key : initialSwarm.keySet()) {
+        for (int key : initialSwarm.keySet()) {
             Swarm add = new Swarm(key, initialSwarm.get(key));
-            WholeSwarm.add(add);
+            WholeSwarm.put(key, add);
         }
 
     }

@@ -20,7 +20,9 @@ import java.util.HashMap;
 
 public class Swarm {
 
-    public ArrayList<Bot> SwarmList = new ArrayList<>();
+    public HashMap<String, Bot> SwarmList = new HashMap<>();
+    //TODO This will need to be taken from the physical bot or a method of specifying where a bot starts will need to be created
+    Point defaultLocation = new Point(0, 1);
 
 // Creates swarms by amount and by their colour, colour is currently not a feature. However creating with it in mind
     // Swarms can be created in multiple colours but in other methods, but each 'Swarm' is one colour
@@ -30,13 +32,13 @@ public class Swarm {
     // This function needs to create the swarm. And in the doing this every time a new colour is selected it needs to create a new array and add it to wholeswarm.
     //It should switch on colour and create a unique id for each bot, which will then be placed in it's swarm
     public Swarm(Integer Colour, Integer numberOfBots){
-        Point defaultLocation = new Point(0, 1);
 
             for (int i = 0; i < numberOfBots; i++){
                 String id = (Colour.toString() +"/"+ i);
                 Bot add = new Bot(id, Colour, defaultLocation);
-                SwarmList.add(add);
+                SwarmList.put(id, add);
                 UIAdapter.destinationGrid.addBot(add);
+                defaultLocation.y += 1;
             }
 
 

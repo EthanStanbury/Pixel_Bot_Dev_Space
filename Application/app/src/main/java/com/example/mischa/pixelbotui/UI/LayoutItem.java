@@ -1,5 +1,6 @@
 package com.example.mischa.pixelbotui.UI;
 
+import android.graphics.Color;
 import android.graphics.Rect;
 
 /**

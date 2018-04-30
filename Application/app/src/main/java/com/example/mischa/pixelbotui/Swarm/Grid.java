@@ -25,8 +25,8 @@ public class Grid {
     // Possible values of the grid are: E (empty), B (bot) and D (destination).
     private Position[][] Grid;
     private int[] Dimensions;
-    public static ArrayList<Bot> Bots;
-    public static ArrayList<Point> Destinations;
+    public static List<Bot> Bots;
+    public static List<Point> Destinations;
 
     public static HashMap<Bot, Point> BotDestPairs;
 
@@ -82,10 +82,32 @@ public class Grid {
         Grid[x][y].Type = EMPTY;
     }
 
-    // As of right now, it only maps the first bot with first inputted destination.
-    // This is not the intended feature, but this will work for single bot implementation (A* Stage 0).
+    // Pairs all bots to their individual destinations based on distance.
+    // The bot that is closest to a certain destination will be chosen as bot-dest pair.
     public static void mapBotToDest() {
-        BotDestPairs.put(Bots.get(0), Destinations.get(0));
+        if (Bots.size() < Destinations.size())
+            throw new IllegalStateException("FATAL ERROR: Number of destinations is greater than the number of available bots!");
+
+        List<Point> remainingDest = new ArrayList<>(Destinations);
+        List<Bot> remainingBots = new ArrayList<>(Bots);
+
+        // For every destination, find the closest bot by the manhattan distance to it.
+        while (remainingDest.size() > 0 ) {
+            int lowestManhattanDist = Integer.MAX_VALUE;
+            int lowestManDistIndex = 0;
+            for (int i = 0; i < remainingBots.size(); i++) {
+                int ManhattanDist = Math.abs(remainingBots.get(i).Location.x - remainingDest.get(0).x) + Math.abs(remainingBots.get(i).Location.y - remainingDest.get(0).y);
+                if (ManhattanDist < lowestManhattanDist) {
+                    lowestManhattanDist = ManhattanDist;
+                    lowestManDistIndex = i;
+                }
+            }
+            //System.out.println(remainingBots.get(lowestManDistIndex).Location.y);
+            BotDestPairs.put(remainingBots.get(lowestManDistIndex), remainingDest.get(0));
+
+            remainingBots.remove(lowestManDistIndex);
+            remainingDest.remove(0);
+        }
     }
 
     // Not implemented yet.

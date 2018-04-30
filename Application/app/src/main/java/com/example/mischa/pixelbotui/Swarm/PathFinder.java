@@ -32,6 +32,7 @@ public class PathFinder {
 
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
+
             Bot bot = pair.getKey();
             CurrentDest = pair.getValue();
             allBotsSolutions.put(bot.BotID, solve(bot));
