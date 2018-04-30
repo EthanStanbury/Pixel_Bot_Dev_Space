@@ -10,13 +10,11 @@ public class SimBot {
 
     Pixel pixel;
     String ID;
-    Point coord;
     String path;
 
     public SimBot(int color, String ID, String path, Point coordinates) {
-        this.pixel = new Pixel(color, coord);
+        this.pixel = new Pixel(color, coordinates);
         this.ID = ID;
         this.path = path;
-        this.coord = coordinates;
     }
 }

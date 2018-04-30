@@ -14,9 +14,12 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
+import com.example.mischa.pixelbotui.Swarm.Swarm;
+
 import java.util.List;
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
@@ -140,8 +143,20 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     public void createBots(HashMap<String, String> moves) {
         int botColour = Color.MAGENTA;
         for (String key : moves.keySet()) {
+            //point should never be 0,0 should throw error if it is this.
+            Point botLocation = new Point(0,0 );
+
             botColour = Integer.parseInt(parseColour(key));
-            SimBot newBot = new SimBot(botColour, key, moves.get(key));
+            //TODO this needs to be changed to a variable
+            for (Integer swarmColour: SwarmAdapter.WholeSwarm.keySet()) {
+                if (swarmColour == botColour){
+                    Swarm correctSwarm = SwarmAdapter.WholeSwarm.get(botColour);
+                     botLocation = correctSwarm.SwarmList.get(key).Location;
+                }
+
+            }
+
+            SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
             unfinishedBots.add(newBot);
         }
     }
