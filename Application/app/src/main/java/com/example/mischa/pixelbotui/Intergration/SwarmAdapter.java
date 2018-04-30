@@ -22,9 +22,6 @@ public class SwarmAdapter {
         for (int key : initialSwarm.keySet()) {
             Swarm add = new Swarm(key, initialSwarm.get(key));
             WholeSwarm.put(key, add);
-            for (String id: add.SwarmList.keySet()) {
-                System.out.println("Adds locations are :" + add.SwarmList.get(id).Location + "And Id's are :" + add.SwarmList.get(id).BotID + " plus search Id is :" + id);
-            }
 
         }
 

@@ -36,19 +36,12 @@ public class Swarm {
             for (int i = 0; i < numberOfBots; i++){
                 Point defaultLocation = new Point(0, 1+i);
                 String id = (Colour.toString() +"/"+ i);
-
                 Bot add = new Bot(id, Colour, defaultLocation);
                 thisSwarmList.put(id, add);
-                System.out.println("IDs are :" + add.BotID + " and Locations are: " + add.Location );
                 UIAdapter.destinationGrid.addBot(add);
-                System.out.println("----------------------------------------------------------------");
-                System.out.println("IDs are :" + add.BotID + " and Locations are: " + add.Location );
-                defaultLocation.y += i;
+
             }
 
-        for (String  b: thisSwarmList.keySet()) {
-            System.out.println("All locations are :" + thisSwarmList.get(b).Location);
-        }
         this.SwarmList = thisSwarmList;
 
 
