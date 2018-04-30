@@ -32,6 +32,7 @@ import static java.lang.Thread.sleep;
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
 
+
     Paint paint = new Paint();
     int noOfRed;
     int noOfYellow;
@@ -51,12 +52,17 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
 
         getHolder().addCallback(this);
+        System.out.println("Solutions for the paths");
+        for (String Id : Solution.keySet()) {
+            System.out.println(Solution.get(Id).toString());
+        }
         for (String key:  Solution.keySet()) {
-            System.out.println((key));
+
+           // System.out.println((key));
             botMoves.put(key, Solution.get(key).toString());
             for (Direction d: Solution.get(key)) {
 
-                System.out.println(d);
+             //   System.out.println(d);
 
             }
 
@@ -83,7 +89,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
-            System.out.println(bot.pixel.location);
+            //System.out.println(bot.pixel.location);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
         }
         for (SimBot bot : finishedBots) {
@@ -141,7 +147,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void createBots(HashMap<String, String> moves) {
-        int botColour = Color.MAGENTA;
+        int botColour;
         for (String key : moves.keySet()) {
             //point should never be 0,0 should throw error if it is this.
             Point botLocation = new Point(0,0 );
@@ -149,23 +155,28 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             botColour = Integer.parseInt(parseColour(key));
             //TODO this needs to be changed to a variable
             for (Integer swarmColour: SwarmAdapter.WholeSwarm.keySet()) {
-                if (swarmColour == botColour){
-                    Swarm correctSwarm = SwarmAdapter.WholeSwarm.get(botColour);
-                     botLocation = correctSwarm.SwarmList.get(key).Location;
-                }
+                if (swarmColour == botColour) {
+                    for (String id : SwarmAdapter.WholeSwarm.get(swarmColour).SwarmList.keySet()) {
+                        botLocation = SwarmAdapter.WholeSwarm.get(swarmColour).SwarmList.get(id).Location;
 
+                        SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
+                        unfinishedBots.add(newBot);
+                        System.out.println("Bot Location is :" + botLocation.toString());
+                    }
+
+
+                }
             }
 
-            SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
-            unfinishedBots.add(newBot);
+
         }
     }
 
     public void nextMoves() {
         for (int i = 0; i < unfinishedBots.size(); i++) {
-            System.out.println(unfinishedBots.get(i).path);
+         //   System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
-            System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
+          //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
 
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));
@@ -226,7 +237,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         nextMoves();
         postInvalidate();
         try {
-            System.out.println("wait");
+         //   System.out.println("wait");
             sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();

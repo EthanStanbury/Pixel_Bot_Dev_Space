@@ -26,7 +26,9 @@ public class MainActivity extends Activity {
         canvas.setBackgroundColor(Color.GRAY);
         setContentView(canvas);
 
-        BotAmounts.put(Color.BLACK, 4);
+        BotAmounts.put(Color.YELLOW, 4);
+
+
         // This needs to be called after all the bots are added to initialize the swarm
         //SwarmAdapter.SwarmCreate(BotAmounts);
 

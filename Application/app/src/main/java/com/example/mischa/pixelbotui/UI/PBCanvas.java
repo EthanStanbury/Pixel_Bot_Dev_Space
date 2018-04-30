@@ -263,6 +263,13 @@ public class PBCanvas extends SurfaceView {
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     UIAdapter.createGridWpixel();
                     SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+                    System.out.println(SwarmAdapter.WholeSwarm.size());
+//                    for (Integer key: SwarmAdapter.WholeSwarm.keySet()) {
+//
+//
+//                    }
+
+
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }
