@@ -73,10 +73,10 @@ public class PathFinder {
             for (int possMoveIndex = 0; possMoveIndex < successorNodes.size(); possMoveIndex++) {
                 // System.out.println(successorNodes.get(possMoveIndex).Action);
                 Node succNode = successorNodes.get(possMoveIndex);
-                System.out.println(!frontier.contains(succNode));
+               // System.out.println(!frontier.contains(succNode));
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
                     if (succNode.Coord.equals(CurrentDest)) {
-                        System.out.println("DO I GET ANY SOLUTION???");
+                       // System.out.println("DO I GET ANY SOLUTION???");
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
                         return derive_move_seq(bot.Location, succNode.Coord, back_track);
                     }

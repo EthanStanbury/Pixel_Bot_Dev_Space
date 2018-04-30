@@ -19,8 +19,8 @@ import java.util.HashMap;
 // This Class will be used to build a swarm which consists of individual pixels.
 
 public class Swarm {
+    public HashMap<String, Bot> SwarmList;
 
-    public HashMap<String, Bot> SwarmList = new HashMap<>();
     //TODO This will need to be taken from the physical bot or a method of specifying where a bot starts will need to be created
     Point defaultLocation = new Point(0, 1);
 
@@ -32,15 +32,19 @@ public class Swarm {
     // This function needs to create the swarm. And in the doing this every time a new colour is selected it needs to create a new array and add it to wholeswarm.
     //It should switch on colour and create a unique id for each bot, which will then be placed in it's swarm
     public Swarm(Integer Colour, Integer numberOfBots){
+        HashMap<String, Bot> thisSwarmList = new HashMap<>();
 
             for (int i = 0; i < numberOfBots; i++){
                 String id = (Colour.toString() +"/"+ i);
+
                 Bot add = new Bot(id, Colour, defaultLocation);
-                SwarmList.put(id, add);
+                thisSwarmList.put(id, add);
+                System.out.println("IDs are :" + add.BotID + " and Locations are: " + add.Location );
                 UIAdapter.destinationGrid.addBot(add);
                 defaultLocation.y += 1;
-            }
 
+            }
+        this.SwarmList = thisSwarmList;
 
 
     }
