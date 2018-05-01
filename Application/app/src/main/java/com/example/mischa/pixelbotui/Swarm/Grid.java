@@ -72,7 +72,7 @@ public class Grid {
             throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is outside the boundary!");
 
         Grid[x][y].Type = DESTINATION;
-        Grid[x][y].Colour = 0;//pixel.colour;
+        Grid[x][y].Colour = pixel.colour;
         Destinations.add(new Point(x, y));
         //System.out.println("GRID.JAVA: " + Destinations.get(0));
     }
@@ -84,30 +84,68 @@ public class Grid {
 
     // Pairs all bots to their individual destinations based on distance.
     // The bot that is closest to a certain destination will be chosen as bot-dest pair.
-    public static void mapBotToDest() {
-        if (Bots.size() < Destinations.size())
-            throw new IllegalStateException("FATAL ERROR: Number of destinations is greater than the number of available bots!");
+    // TODO: CLEAN UP THIS CODE AS IT IS VERY UGLY AND UNREADABLE.
+    public void mapBotToDest() {
+        List<Integer> colours = new ArrayList<>();
+        HashMap<Integer, List<Bot>> remainingBots = new HashMap<>();
+        HashMap<Integer, List<Point>> remainingDest = new HashMap<>();
 
-        List<Point> remainingDest = new ArrayList<>(Destinations);
-        List<Bot> remainingBots = new ArrayList<>(Bots);
+        for (int i = 0; i < Bots.size(); i++) {
+            int botColour = Bots.get(i).Colour;
+            if (!colours.contains(botColour)) {
+                colours.add(botColour);
+            }
+            if (!remainingBots.containsKey(botColour)) {
+                remainingBots.put(botColour, new ArrayList<Bot>());
+            }
+            remainingBots.get(botColour).add(Bots.get(i));
+        }
 
-        // For every destination, find the closest bot by the manhattan distance to it.
-        while (remainingDest.size() > 0 ) {
-            int lowestManhattanDist = Integer.MAX_VALUE;
-            int lowestManDistIndex = 0;
-            for (int i = 0; i < remainingBots.size(); i++) {
-                int ManhattanDist = Math.abs(remainingBots.get(i).Location.x - remainingDest.get(0).x) + Math.abs(remainingBots.get(i).Location.y - remainingDest.get(0).y);
-                if (ManhattanDist < lowestManhattanDist) {
-                    lowestManhattanDist = ManhattanDist;
-                    lowestManDistIndex = i;
+        for (int i = 0; i < Destinations.size(); i++) {
+            Point destCoord = Destinations.get(i);
+            int destColour = this.Grid[destCoord.x][destCoord.y].Colour;
+            if (!remainingDest.containsKey(destColour)) {
+                remainingDest.put(destColour, new ArrayList<Point>());
+            }
+            remainingDest.get(destColour).add(new Point(destCoord));
+        }
+
+        for (int i = 0; i < colours.size(); i++) {
+            if (remainingBots.containsKey(colours.get(i)) && remainingDest.containsKey(colours.get(i))) {
+                if (remainingBots.get(colours.get(i)).size() < remainingDest.get(colours.get(i)).size())
+                    throw new IllegalStateException("FATAL ERROR: Number of destinations is greater than the number of available bots!");
+            }
+        }
+
+        for (int i = 0; i < colours.size(); i++) {
+            // List<Point> remainingDest = new ArrayList<>(Destinations);
+            // List<Bot> remainingBots = new ArrayList<>(Bots);
+            if (remainingBots.containsKey(colours.get(i)) && remainingDest.containsKey(colours.get(i))) {
+
+            // For every destination, find the closest bot by the manhattan distance to it.
+                while (remainingDest.get(colours.get(i)).size() > 0 ) {
+                    int lowestManhattanDist = Integer.MAX_VALUE;
+                    int lowestManDistIndex = 0;
+                    for (int j = 0; j < remainingBots.get(colours.get(i)).size(); j++) {
+
+                        int ManhattanDist = Math.abs(remainingBots.get(colours.get(i)).get(j).Location.x -
+                                                     remainingDest.get(colours.get(i)).get(0).x) +
+                                            Math.abs(remainingBots.get(colours.get(i)).get(j).Location.y -
+                                                     remainingDest.get(colours.get(i)).get(0).y);
+                        if (ManhattanDist < lowestManhattanDist) {
+                            lowestManhattanDist = ManhattanDist;
+                            lowestManDistIndex = j;
+                        }
+                    }
+                    //System.out.println(remainingBots.get(lowestManDistIndex).Location.y);
+                    BotDestPairs.put(remainingBots.get(colours.get(i)).get(lowestManDistIndex), remainingDest.get(colours.get(i)).get(0));
+
+                    remainingBots.get(colours.get(i)).remove(lowestManDistIndex);
+                    remainingDest.get(colours.get(i)).remove(0);
                 }
             }
-            //System.out.println(remainingBots.get(lowestManDistIndex).Location.y);
-            BotDestPairs.put(remainingBots.get(lowestManDistIndex), remainingDest.get(0));
-
-            remainingBots.remove(lowestManDistIndex);
-            remainingDest.remove(0);
         }
+        System.out.println("hhgghjghjhjghj");
     }
 
     // Not implemented yet.
