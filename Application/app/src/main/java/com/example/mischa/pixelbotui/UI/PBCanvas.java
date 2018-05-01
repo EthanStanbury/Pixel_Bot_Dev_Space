@@ -39,6 +39,7 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int newColour = Color.TRANSPARENT;
     int whiteBox;
+    HashMap<Integer, Integer> pixelAmounts = MainActivity.BotAmounts;
 
     Context context;
 
@@ -111,6 +112,12 @@ public class PBCanvas extends SurfaceView {
             p.colour = Color.TRANSPARENT;
         }
         postInvalidate();
+    }
+
+    public void updatePixelAmounts() {
+        for (Pixel p : uiGrid) {
+            if (p.colour != Color.TRANSPARENT) pixelAmounts.put(p.colour, pixelAmounts.get(p.colour) - 1);
+        }
     }
 
     /** Every time the screen is drawn, this is called */
@@ -193,6 +200,12 @@ public class PBCanvas extends SurfaceView {
         paint.setColor(Color.BLACK);
         canvas.drawText("CLEAR", rClear.rect.exactCenterX(), rClear.rect.exactCenterY() + 20, paint);
         canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
+        paint.setColor(Color.WHITE);
+        for (LayoutItem item : LayoutItemList) {
+            if (pixelAmounts.containsKey(item.colour)) {
+                canvas.drawText("" + pixelAmounts.get(item.colour), item.rect.exactCenterX(), item.rect.exactCenterY(), paint);
+            }
+        }
 
         // Drawing all the Pixels
         for (Pixel p : uiGrid) {
@@ -255,6 +268,7 @@ public class PBCanvas extends SurfaceView {
                 for (int i = 0; i < noOfSquares; i++) {
                     if (uiGrid[i].rect.contains(xTouch,yTouch)) {
                         uiGrid[i].colour = newColour;
+                        updatePixelAmounts();
                     }
                 }
                 if (rClear.rect.contains(xTouch, yTouch)) {
