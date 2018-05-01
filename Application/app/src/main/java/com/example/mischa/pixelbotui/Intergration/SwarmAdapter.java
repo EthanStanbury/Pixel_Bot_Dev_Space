@@ -22,6 +22,7 @@ public class SwarmAdapter {
         for (int key : initialSwarm.keySet()) {
             Swarm add = new Swarm(key, initialSwarm.get(key));
             WholeSwarm.put(key, add);
+
         }
 
     }

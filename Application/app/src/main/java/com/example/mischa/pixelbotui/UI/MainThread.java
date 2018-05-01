@@ -30,7 +30,7 @@ public class MainThread extends Thread {
                 synchronized (surfaceHolder) {
                     while (simulation.unfinishedBots.size() > 0) {
                         this.simulation.run();
-                        System.out.println("loop");
+                      //  System.out.println("loop");
                     }
                 }
             } catch (Exception e) {
