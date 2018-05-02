@@ -77,25 +77,26 @@ public class ExampleInstrumentedTest {
     public void pathFindCalcTime() throws Exception {
 
 
-
+        // add the bots
         BotAmounts.put(-1162650, 4); //Red
         BotAmounts.put(-11713, 4); //Yellow
         BotAmounts.put(-15815319, 4); //Green
         BotAmounts.put(-12857684, 4); //Blue
         BotAmounts.put(-11268754, 4); //Purple
         BotAmounts.put(Color.BLACK, 4); //Black
-
+        //set dimensions
         int yDimension = 10;
         int xDimension = 10;
         int noOfSquares = yDimension*xDimension;
         Pixel[] uiGrid;
         uiGrid = new Pixel[noOfSquares];
 
-
+        // create all the null grid
         for (int i = 0; i < noOfSquares; i++) {
             uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));
         }
 
+        //set the pixel location to change depending on what pixel it is
         for (int i = 0; i < yDimension; i++) {
             for (int j = 0; j < xDimension; j++) {
                 uiGrid[i * xDimension + j].rect.set((j * 10),
@@ -105,28 +106,34 @@ public class ExampleInstrumentedTest {
                 uiGrid[i * xDimension + j].location.set(j,i);
             }
         }
-
+        //create 4 random 'on' pixels
         for (int i = 4; i <= 4; i++){
             Random random = new Random();
             int select = random.nextInt(8) + 1;
 
             Pixel pixelEdit = uiGrid[select * xDimension + select];
             pixelEdit.colour = Color.RED;
+            uiGrid[select * xDimension + select]  = pixelEdit;
         }
 
-        UIAdapter.createGridWpixel(uiGrid);
+        //create the swarm
         SwarmAdapter.SwarmCreate(BotAmounts);
-
-        long start = System.currentTimeMillis();
+        //create the grid
+        UIAdapter.createGridWpixel(uiGrid);
+        //find solutions
+        long start = System.currentTimeMillis(); //To start to measure the time it takes to get the solutions
         HashMap<String, List<Direction>> solutions =  PathFinder.getSolutions(UIAdapter.destinationGrid);
-        List<Direction> solutionsTest = solutions.get(Color.RED);
         long end = System.currentTimeMillis();
+
+        List<Direction> solutionsTest = solutions.get(Color.RED);
 
         System.out.println("OIOIOIOI" + solutions);
 
         assertTrue("Got a time greater than 10seconds which was: " + (start - end), start - end < 10000);
+        assertTrue("Got an invalid solution string, it was: " + uiGrid.length, solutionsCheck(solutions));
         assertTrue("Output a different amount of solutions than bots got "+  solutions.size() + " solutions", solutions.size() >= 4 );
-        assertTrue("Got an invalid solution string, it was: " + solutionsTest, solutionsCheck(solutions));
+
+
 
 
     }
