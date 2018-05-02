@@ -28,9 +28,10 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class pathReqCheck {
 
     List<Direction> wrongSolution;
+    int botCreateAmount = 6;
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
 
 
@@ -74,11 +75,11 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void pathFindCalcTime() throws Exception {
+    public void pathReqCheck() throws Exception {
 
 
         // add the bots
-        BotAmounts.put(-1162650, 4); //Red
+        BotAmounts.put(-1162650, botCreateAmount); //Red
         BotAmounts.put(-11713, 4); //Yellow
         BotAmounts.put(-15815319, 4); //Green
         BotAmounts.put(-12857684, 4); //Blue
@@ -107,13 +108,16 @@ public class ExampleInstrumentedTest {
             }
         }
         //create 4 random 'on' pixels
-        for (int i = 4; i <= 4; i++){
+        for (int i = 0; i < botCreateAmount; i++){
             Random random = new Random();
-            int select = random.nextInt(8) + 1;
 
-            Pixel pixelEdit = uiGrid[select * xDimension + select];
-            pixelEdit.colour = Color.RED;
-            uiGrid[select * xDimension + select]  = pixelEdit;
+            int xSelect = random.nextInt(8) + 1;
+            int ySelect = random.nextInt(8) + 1;
+
+
+            Pixel pixelEdit = uiGrid[xSelect * xDimension + ySelect];
+            pixelEdit.colour = -1162650;
+            uiGrid[xSelect * xDimension + ySelect]  = pixelEdit;
         }
 
         //create the swarm
@@ -125,13 +129,13 @@ public class ExampleInstrumentedTest {
         HashMap<String, List<Direction>> solutions =  PathFinder.getSolutions(UIAdapter.destinationGrid);
         long end = System.currentTimeMillis();
 
-        List<Direction> solutionsTest = solutions.get(Color.RED);
+
 
         System.out.println("OIOIOIOI" + solutions);
 
         assertTrue("Got a time greater than 10seconds which was: " + (start - end), start - end < 10000);
-        assertTrue("Got an invalid solution string, it was: " + uiGrid.length, solutionsCheck(solutions));
-        assertTrue("Output a different amount of solutions than bots got "+  solutions.size() + " solutions", solutions.size() >= 4 );
+        assertTrue("Got an invalid solution string, it was: " + wrongSolution, solutionsCheck(solutions));
+        assertTrue("Output a different amount of solutions than bots got "+  solutions.size() + " solutions", solutions.size() >= botCreateAmount );
 
 
 
