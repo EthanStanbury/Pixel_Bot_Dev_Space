@@ -1,5 +1,6 @@
 package com.example.mischa.pixelbotui.UI;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -32,8 +33,10 @@ public class PBCanvas extends SurfaceView {
 
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
+
     public static int xDimension = 16; // horizontal axis
     public static int yDimension = 16; // vertical axis
+
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
@@ -65,6 +68,12 @@ public class PBCanvas extends SurfaceView {
         this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
+
+        if (xDimension < 10 || yDimension < 10){
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setMessage("Grid dimension below 10. Please restart the app and select grid dimension over 10. ");
+            alert.show();
+        }
 
 
         for (int i = 0; i < noOfSquares; i++) {
@@ -261,7 +270,7 @@ public class PBCanvas extends SurfaceView {
                     clear();
                 }
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
-                    UIAdapter.createGridWpixel();
+                    UIAdapter.createGridWpixel(uiGrid);
                     SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
                     System.out.println(SwarmAdapter.WholeSwarm.size());
 //                    for (Integer key: SwarmAdapter.WholeSwarm.keySet()) {

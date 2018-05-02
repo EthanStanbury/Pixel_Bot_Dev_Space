@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,8 +31,9 @@ import static java.lang.Thread.sleep;
  */
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
+    long startTime = System.currentTimeMillis();
     HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
-
+    long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
     int noOfRed;
@@ -49,7 +51,12 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
 
     public Simulation(Context context) {
+
         super(context);
+
+        if (startTime - endTime > 10000){
+
+        }
 
         getHolder().addCallback(this);
         System.out.println("Solutions for the paths");

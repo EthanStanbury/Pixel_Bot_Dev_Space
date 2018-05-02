@@ -21,9 +21,9 @@ public class UIAdapter {
 
 
 
-    public static void createGridWpixel(){
+    public static void createGridWpixel(Pixel[] uiGrid){
 
-        for (Pixel p : PBCanvas.uiGrid) {
+        for (Pixel p : uiGrid) {
             if(p.colour != Color.TRANSPARENT){
                 destinationGrid.addDestination(p);
             }
