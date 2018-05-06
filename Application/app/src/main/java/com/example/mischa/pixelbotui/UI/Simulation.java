@@ -1,5 +1,6 @@
 package com.example.mischa.pixelbotui.UI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,16 +48,15 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
 
+    LayoutItem backButton;
+
     MainThread thread;
 
+    Activity activity = (Activity) getContext();
 
     public Simulation(Context context) {
 
         super(context);
-
-        if (startTime - endTime > 10000){
-
-        }
 
         getHolder().addCallback(this);
         System.out.println("Solutions for the paths");
@@ -76,6 +76,8 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
         }
         createBots(botMoves);
+
+        backButton = new LayoutItem(Color.LTGRAY);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -111,6 +113,14 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
         }
+
+        backButton.rect.set(50, 50, 400, 175);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(backButton.colour);
+        canvas.drawRect(backButton.rect, paint);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(50);
+        canvas.drawText("DRAW AGAIN", backButton.rect.exactCenterX() - 150, backButton.rect.exactCenterY() + 20, paint);
     }
 
     public String parseColour(String input) {
@@ -228,7 +238,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         int yTouch = (int) e.getY();
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            //run();
+            if (backButton.rect.contains(xTouch,yTouch)) {
+                activity.finish();
+            }
         }
         return true;
     }

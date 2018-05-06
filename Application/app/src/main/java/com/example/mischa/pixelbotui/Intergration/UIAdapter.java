@@ -27,7 +27,7 @@ public class UIAdapter {
 
         for (Pixel p : uiGrid) {
             if(p.colour != Color.TRANSPARENT && p.colour != Color.DKGRAY){
-                
+
                 destinationGrid.addDestination(p);
             }
         }

@@ -239,7 +239,7 @@ public class PBCanvas extends SurfaceView {
         paint.setColor(Color.WHITE);
         for (LayoutItem item : LayoutItemList) {
             if (pixelAmounts.containsKey(item.colour)) {
-                canvas.drawText("" + pixelAmounts.get(item.colour), item.rect.exactCenterX(), item.rect.exactCenterY(), paint);
+                canvas.drawText("" + pixelAmounts.get(item.colour), item.rect.exactCenterX(), item.rect.exactCenterY() + 10, paint);
             }
         }
 
