@@ -8,6 +8,7 @@ import android.view.View;
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Swarm.Bot;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 public class MainActivity extends Activity {
@@ -29,8 +30,8 @@ public class MainActivity extends Activity {
         BotAmounts.put(-1162650,    10); //Red
         BotAmounts.put(-11713,      10); //Yellow
         BotAmounts.put(-15815319,   10); //Green
-        BotAmounts.put(-12857684,   0); //Blue
-        BotAmounts.put(-11268754,   0); //Purple
+        BotAmounts.put(-12857684,   10); //Blue
+        BotAmounts.put(-11268754,   10); //Purple
         BotAmounts.put(Color.BLACK, 0); //Black
 
 
