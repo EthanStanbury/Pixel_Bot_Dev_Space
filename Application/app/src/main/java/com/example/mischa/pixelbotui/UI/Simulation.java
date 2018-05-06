@@ -61,7 +61,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         System.out.println("Solutions for the paths");
         for (String Id : Solution.keySet()) {
-            System.out.println(Solution.get(Id).toString());
+            //System.out.println(Solution.get(Id).toString());
         }
         for (String key:  Solution.keySet()) {
 
@@ -75,19 +75,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
 
         }
-
-//        botMoves.put("yellow-1", "DDD");
-//        botMoves.put("blue-1", "RDRRRR");
-//        botMoves.put("purple-1", "DRDRRRRRD");
-//        botMoves.put("red-1", "URRD");
-//        botMoves.put("green-1", "UDRDRDRDRDR");
-
-        System.out.println(Color.parseColor("#EE4266"));
-        System.out.println(Color.parseColor("#FFD23F"));
-        System.out.println(Color.parseColor("#0EAD69"));
-        System.out.println(Color.parseColor("#3BCEAC"));
-        System.out.println(Color.parseColor("#540D6E"));
-
         createBots(botMoves);
 
         thread = new MainThread(getHolder(), this);
@@ -99,6 +86,15 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        for (Pixel p : uiGrid) {
+            paint.setStyle(Paint.Style.FILL);
+            if (PBCanvas.isIn(p, PBCanvas.border)) {
+                paint.setColor(Color.DKGRAY);
+            } else {
+                paint.setColor(Color.TRANSPARENT);
+            }
+            canvas.drawRect(p.rect, paint);
+        }
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
@@ -110,16 +106,11 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
         }
         for (Pixel p : uiGrid) {
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.TRANSPARENT);
-            canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
         }
-        //}
-
     }
 
     public String parseColour(String input) {
@@ -132,7 +123,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return output;
     }
 
-    public void getNumbersOfColours() {
+/*    public void getNumbersOfColours() {
         for (Pixel p : uiGrid) {
             if (p.colour == Color.parseColor("#EE4266")) {
                 noOfRed++;
@@ -157,7 +148,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         totalBots = noOfRed + noOfYellow + noOfGreen + noOfBlue + noOfPurple + noOfBlack;
-    }
+    }*/
 
     public void createBots(HashMap<String, String> moves) {
         int botColour;
