@@ -17,11 +17,13 @@ import java.util.HashMap;
 
 public class UIAdapter {
 
-    public static Grid destinationGrid = new Grid(PBCanvas.xDimension, PBCanvas.yDimension);
+    public static Grid destinationGrid;
 
 
 
     public static void createGridWpixel(Pixel[] uiGrid){
+
+        destinationGrid = new Grid(PBCanvas.xDimension, PBCanvas.yDimension);
 
         for (Pixel p : uiGrid) {
             if(p.colour != Color.TRANSPARENT){
@@ -32,7 +34,4 @@ public class UIAdapter {
 
 
     }
-
-
-
 }
