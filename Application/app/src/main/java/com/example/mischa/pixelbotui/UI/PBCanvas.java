@@ -117,11 +117,11 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rBlue);
         ClickableItems.add(rPurple);
 
-        pixelAmounts.put(-1162650,    0); //Red
-        pixelAmounts.put(-11713,      0); //Yellow
-        pixelAmounts.put(-15815319,   0); //Green
-        pixelAmounts.put(-12857684,   0); //Blue
-        pixelAmounts.put(-11268754,   0); //Purple
+        pixelAmounts.put(-1162650,    10); //Red
+        pixelAmounts.put(-11713,      10); //Yellow
+        pixelAmounts.put(-15815319,   10); //Green
+        pixelAmounts.put(-12857684,   10); //Blue
+        pixelAmounts.put(-11268754,   10); //Purple
 
     }
 
@@ -142,7 +142,7 @@ public class PBCanvas extends SurfaceView {
                     count++;
                 }
             }
-            pixelAmounts.put(key, count);
+            pixelAmounts.put(key, 10 - count);
             //pixelAmounts.put(key, ); //TODO
             //MainActivity.BotAmounts.put(key, temp);
         }
@@ -312,7 +312,7 @@ public class PBCanvas extends SurfaceView {
                     }
                 }
                 // Colour the pressed rectangle
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) { //TODO
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) > 0) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
@@ -339,7 +339,7 @@ public class PBCanvas extends SurfaceView {
             // For a swipe
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) { //TODO
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) > 0) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
