@@ -34,14 +34,15 @@ public class PBCanvas extends SurfaceView {
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
 
-    public static int xDimension = 16; // horizontal axis
-    public static int yDimension = 16; // vertical axis
+    public static int xDimension = 12; // horizontal axis
+    public static int yDimension = 12; // vertical axis
 
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
     int newColour = Color.TRANSPARENT;
     int whiteBox;
+    HashMap<Integer, Integer> pixelAmounts = MainActivity.BotAmounts;
 
     Context context;
 
@@ -60,8 +61,19 @@ public class PBCanvas extends SurfaceView {
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
+    int redAmnt;
+    int yelAmnt;
+    int grnAmnt;
+    int bluAmnt;
+    int purAmnt;
+
     ArrayList<LayoutItem> LayoutItemList = new ArrayList<>();
     ArrayList<LayoutItem> ClickableItems = new ArrayList<>();
+
+    public static ArrayList<Pixel> border = new ArrayList<>();
+
+    int count = 0;
+    int temp;
 
     public PBCanvas(Context context) {
         super(context);
@@ -77,18 +89,17 @@ public class PBCanvas extends SurfaceView {
             alert.show();
         }
 
-
         for (int i = 0; i < noOfSquares; i++) {
             uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));
         }
         top = new LayoutItem(Color.DKGRAY);
         bottom = new LayoutItem(Color.DKGRAY);
         rErase = new LayoutItem(Color.TRANSPARENT);
-        rRed = new LayoutItem(Color.parseColor("#EE4266"));
-        rYellow = new LayoutItem(Color.parseColor("#FFD23F"));
-        rGreen = new LayoutItem(Color.parseColor("#0EAD69"));
-        rBlue = new LayoutItem(Color.parseColor("#3BCEAC"));
-        rPurple = new LayoutItem(Color.parseColor("#540D6E"));
+        rRed = new LayoutItem(Color.parseColor("#EE4266")); // -1162650
+        rYellow = new LayoutItem(Color.parseColor("#FFD23F")); // -11713
+        rGreen = new LayoutItem(Color.parseColor("#0EAD69")); // -15815319
+        rBlue = new LayoutItem(Color.parseColor("#3BCEAC")); // -12857684
+        rPurple = new LayoutItem(Color.parseColor("#540D6E")); // -11268754
         rColourPicked = new LayoutItem(Color.WHITE);
         rColourPicked.rect.set(0,0,0,0);
         eraseBG = new LayoutItem(Color.LTGRAY);
@@ -115,6 +126,12 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rBlue);
         ClickableItems.add(rPurple);
 
+//        redAmnt = MainActivity.BotAmounts.get(-1162650);
+//        yelAmnt = MainActivity.BotAmounts.get(-11713);
+//        grnAmnt = MainActivity.BotAmounts.get(-15815319);
+//        bluAmnt = MainActivity.BotAmounts.get(-12857684);
+//        purAmnt = MainActivity.BotAmounts.get(-11268754);
+
     }
 
     public void clear() {
@@ -122,6 +139,28 @@ public class PBCanvas extends SurfaceView {
             p.colour = Color.TRANSPARENT;
         }
         postInvalidate();
+    }
+
+    public void updatePixelAmounts() {
+
+        for (int key : pixelAmounts.keySet()) {
+            count = 0;
+            //temp = MainActivity.BotAmounts.get(key);
+            for (Pixel p : uiGrid) {
+                if (p.colour == key && !isIn(p, border)) count++;
+            }
+            pixelAmounts.put(key, count);
+            //MainActivity.BotAmounts.put(key, temp);
+        }
+    }
+
+    public static boolean isIn(Pixel p, ArrayList list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(p)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Every time the screen is drawn, this is called */
@@ -157,6 +196,9 @@ public class PBCanvas extends SurfaceView {
                             (excessSpace / 2) + (j * squareWidth) + squareWidth,
                             100 + (i * squareWidth) + squareWidth);
                     uiGrid[i * xDimension + j].location.set(j,i);
+                    if (i == 0 || j == 0 || i == yDimension - 1 || j == xDimension - 1) {
+                        border.add(uiGrid[i * xDimension + j]);
+                    }
                 }
             }
         }
@@ -188,6 +230,9 @@ public class PBCanvas extends SurfaceView {
                             100 + (j * squareWidth) + squareWidth,
                             (excessSpace / 2) + (i * squareWidth) + squareWidth);
                     uiGrid[i * xDimension + j].location.set(j,i);
+                    if (i == 0 || j == 0 || i == yDimension - 1 || j == xDimension - 1) {
+                        border.add(uiGrid[i * xDimension + j]);
+                    }
                 }
             }
         }
@@ -204,11 +249,21 @@ public class PBCanvas extends SurfaceView {
         paint.setColor(Color.BLACK);
         canvas.drawText("CLEAR", rClear.rect.exactCenterX(), rClear.rect.exactCenterY() + 20, paint);
         canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
+        paint.setColor(Color.WHITE);
+        for (LayoutItem item : LayoutItemList) {
+            if (pixelAmounts.containsKey(item.colour)) {
+                canvas.drawText("" + pixelAmounts.get(item.colour), item.rect.exactCenterX(), item.rect.exactCenterY() + 10, paint);
+            }
+        }
 
         // Drawing all the Pixels
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
-            paint.setColor(p.colour);
+            if (isIn(p, border)) {
+                paint.setColor(Color.DKGRAY);
+            } else {
+                paint.setColor(p.colour);
+            }
             canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
@@ -263,9 +318,11 @@ public class PBCanvas extends SurfaceView {
                     }
                 }
                 // Colour the pressed rectangle
-                for (int i = 0; i < noOfSquares; i++) {
-                    if (uiGrid[i].rect.contains(xTouch,yTouch)) {
-                        uiGrid[i].colour = newColour;
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) {
+                    for (int i = 0; i < noOfSquares; i++) {
+                        if (uiGrid[i].rect.contains(xTouch, yTouch)) {
+                            uiGrid[i].colour = newColour;
+                        }
                     }
                 }
                 if (rClear.rect.contains(xTouch, yTouch)) {
@@ -285,15 +342,19 @@ public class PBCanvas extends SurfaceView {
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }
+                updatePixelAmounts();
                 break;
             // For a swipe
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
-                for (int i = 0; i < noOfSquares; i++) {
-                    if (uiGrid[i].rect.contains(xTouch,yTouch)) {
-                        uiGrid[i].colour = newColour;
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) {
+                    for (int i = 0; i < noOfSquares; i++) {
+                        if (uiGrid[i].rect.contains(xTouch, yTouch)) {
+                            uiGrid[i].colour = newColour;
+                        }
                     }
                 }
+                updatePixelAmounts();
                 break;
         }
         postInvalidate(); //Redraw

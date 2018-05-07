@@ -28,7 +28,7 @@ public class MainThread extends Thread {
             try {
                 canvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
-                    while (simulation.unfinishedBots.size() > 0) {
+                    while (simulation.unfinishedBots.size() > 0 && simulation.runThread) {
                         this.simulation.run();
                       //  System.out.println("loop");
                     }

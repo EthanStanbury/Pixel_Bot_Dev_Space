@@ -7,11 +7,20 @@ import android.os.Bundle;
 
 public class SimActivity extends Activity {
 
+    Simulation simCanvas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Simulation simCanvas = new Simulation(this);
+        if (simCanvas == null) {
+            simCanvas = new Simulation(this);
+        }
         simCanvas.setBackgroundColor(Color.GRAY);
         setContentView(simCanvas);
+    }
+
+    @Override
+    public void onBackPressed() {
+        simCanvas.runThread = false;
+        finish();
     }
 }

@@ -26,7 +26,8 @@ public class UIAdapter {
         destinationGrid = new Grid(PBCanvas.xDimension, PBCanvas.yDimension);
 
         for (Pixel p : uiGrid) {
-            if(p.colour != Color.TRANSPARENT){
+            if(p.colour != Color.TRANSPARENT && p.colour != Color.DKGRAY){
+
                 destinationGrid.addDestination(p);
             }
         }
@@ -34,7 +35,4 @@ public class UIAdapter {
 
 
     }
-
-
-
 }

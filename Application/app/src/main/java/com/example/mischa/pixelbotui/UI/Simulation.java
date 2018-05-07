@@ -1,5 +1,6 @@
 package com.example.mischa.pixelbotui.UI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,32 +37,32 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
-    int noOfRed;
-    int noOfYellow;
-    int noOfGreen;
-    int noOfBlue;
-    int noOfPurple;
-    int noOfBlack;
-    int totalBots;
+//    int noOfRed;
+//    int noOfYellow;
+//    int noOfGreen;
+//    int noOfBlue;
+//    int noOfPurple;
+//    int noOfBlack;
+//    int totalBots;
     HashMap<String, String> botMoves = new HashMap<>();
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
+    boolean runThread = true;
+
+    LayoutItem backButton;
 
     MainThread thread;
 
+    Activity activity = (Activity) getContext();
 
     public Simulation(Context context) {
 
         super(context);
 
-        if (startTime - endTime > 10000){
-
-        }
-
         getHolder().addCallback(this);
         System.out.println("Solutions for the paths");
         for (String Id : Solution.keySet()) {
-            System.out.println(Solution.get(Id).toString());
+            //System.out.println(Solution.get(Id).toString());
         }
         for (String key:  Solution.keySet()) {
 
@@ -75,20 +76,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
 
         }
-
-//        botMoves.put("yellow-1", "DDD");
-//        botMoves.put("blue-1", "RDRRRR");
-//        botMoves.put("purple-1", "DRDRRRRRD");
-//        botMoves.put("red-1", "URRD");
-//        botMoves.put("green-1", "UDRDRDRDRDR");
-
-        System.out.println(Color.parseColor("#EE4266"));
-        System.out.println(Color.parseColor("#FFD23F"));
-        System.out.println(Color.parseColor("#0EAD69"));
-        System.out.println(Color.parseColor("#3BCEAC"));
-        System.out.println(Color.parseColor("#540D6E"));
-
         createBots(botMoves);
+
+        backButton = new LayoutItem(Color.LTGRAY);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -99,6 +89,15 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        for (Pixel p : uiGrid) {
+            paint.setStyle(Paint.Style.FILL);
+            if (PBCanvas.isIn(p, PBCanvas.border)) {
+                paint.setColor(Color.DKGRAY);
+            } else {
+                paint.setColor(Color.TRANSPARENT);
+            }
+            canvas.drawRect(p.rect, paint);
+        }
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
@@ -110,16 +109,19 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
         }
         for (Pixel p : uiGrid) {
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.TRANSPARENT);
-            canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(5);
             canvas.drawRect(p.rect, paint);
         }
-        //}
 
+        backButton.rect.set(50, 50, 400, 175);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setColor(backButton.colour);
+        canvas.drawRect(backButton.rect, paint);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(50);
+        canvas.drawText("DRAW AGAIN", backButton.rect.exactCenterX() - 150, backButton.rect.exactCenterY() + 20, paint);
     }
 
     public String parseColour(String input) {
@@ -132,7 +134,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return output;
     }
 
-    public void getNumbersOfColours() {
+/*    public void getNumbersOfColours() {
         for (Pixel p : uiGrid) {
             if (p.colour == Color.parseColor("#EE4266")) {
                 noOfRed++;
@@ -157,7 +159,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         totalBots = noOfRed + noOfYellow + noOfGreen + noOfBlue + noOfPurple + noOfBlack;
-    }
+    }*/
 
     public void createBots(HashMap<String, String> moves) {
         int botColour;
@@ -237,7 +239,20 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         int yTouch = (int) e.getY();
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            //run();
+            if (backButton.rect.contains(xTouch,yTouch)) {
+                activity.finish();
+                runThread = false;
+                /*boolean retry = true;
+                while (retry) {
+                    try {
+                        thread.running = false;
+                        thread.join();
+                    } catch (InterruptedException f) {
+                        f.printStackTrace();
+                    }
+                    retry = false;
+                }*/
+            }
         }
         return true;
     }
