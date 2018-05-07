@@ -309,14 +309,16 @@ public class PBCanvas extends SurfaceView {
                         newColour = ClickableItems.get(i).colour;
                         rColourPicked.rect.set(ClickableItems.get(i).rect.left - 8, ClickableItems.get(i).rect.top - 8, ClickableItems.get(i).rect.right + 8, ClickableItems.get(i).rect.bottom + 8);
                         whiteBox = i;
+                        System.out.println(newColour);
                     }
                 }
                 // Colour the pressed rectangle
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) > 0) { //TODO
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) > 0 || newColour == Color.TRANSPARENT) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
                         }
+                        System.out.println(uiGrid[i].colour);
                     }
                 }
                 if (rClear.rect.contains(xTouch, yTouch)) {
@@ -339,11 +341,12 @@ public class PBCanvas extends SurfaceView {
             // For a swipe
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) > 0) { //TODO
+                if ((pixelAmounts.keySet().contains(newColour)) && pixelAmounts.get(newColour) > 0 || newColour == Color.TRANSPARENT) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
                         }
+                        System.out.println(uiGrid[i].colour);
                     }
                 }
                 break;
