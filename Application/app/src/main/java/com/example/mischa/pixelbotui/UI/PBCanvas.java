@@ -320,7 +320,7 @@ public class PBCanvas extends SurfaceView {
                 // Colour the pressed rectangle
                 if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
-                        if (uiGrid[i].rect.contains(xTouch, yTouch)) {
+                        if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
                         }
                     }
@@ -349,7 +349,7 @@ public class PBCanvas extends SurfaceView {
                 // Colour the rectangles it passes through
                 if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
-                        if (uiGrid[i].rect.contains(xTouch, yTouch)) {
+                        if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
                         }
                     }
