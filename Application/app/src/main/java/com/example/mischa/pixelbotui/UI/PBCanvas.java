@@ -149,7 +149,7 @@ public class PBCanvas extends SurfaceView {
             for (Pixel p : uiGrid) {
                 if (p.colour == key && !isIn(p, border)) count++;
             }
-            pixelAmounts.put(key, count);
+            pixelAmounts.put(key, count); //TODO
             //MainActivity.BotAmounts.put(key, temp);
         }
     }
@@ -318,7 +318,7 @@ public class PBCanvas extends SurfaceView {
                     }
                 }
                 // Colour the pressed rectangle
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) {
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch)) {
                             uiGrid[i].colour = newColour;
@@ -347,7 +347,7 @@ public class PBCanvas extends SurfaceView {
             // For a swipe
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) {
+                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) < 10) { //TODO
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch)) {
                             uiGrid[i].colour = newColour;
