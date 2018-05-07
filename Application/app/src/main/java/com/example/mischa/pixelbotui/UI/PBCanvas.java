@@ -42,7 +42,7 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int newColour = Color.TRANSPARENT;
     int whiteBox;
-    HashMap<Integer, Integer> pixelAmounts = MainActivity.BotAmounts;
+    HashMap<Integer, Integer> pixelAmounts = new HashMap<>();
 
     Context context;
 
@@ -61,19 +61,12 @@ public class PBCanvas extends SurfaceView {
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
-    int redAmnt;
-    int yelAmnt;
-    int grnAmnt;
-    int bluAmnt;
-    int purAmnt;
+    int count = 0;
 
     ArrayList<LayoutItem> LayoutItemList = new ArrayList<>();
     ArrayList<LayoutItem> ClickableItems = new ArrayList<>();
 
     public static ArrayList<Pixel> border = new ArrayList<>();
-
-    int count = 0;
-    int temp;
 
     public PBCanvas(Context context) {
         super(context);
@@ -124,11 +117,11 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rBlue);
         ClickableItems.add(rPurple);
 
-//        redAmnt = MainActivity.BotAmounts.get(-1162650);
-//        yelAmnt = MainActivity.BotAmounts.get(-11713);
-//        grnAmnt = MainActivity.BotAmounts.get(-15815319);
-//        bluAmnt = MainActivity.BotAmounts.get(-12857684);
-//        purAmnt = MainActivity.BotAmounts.get(-11268754);
+        pixelAmounts.put(-1162650,    0); //Red
+        pixelAmounts.put(-11713,      0); //Yellow
+        pixelAmounts.put(-15815319,   0); //Green
+        pixelAmounts.put(-12857684,   0); //Blue
+        pixelAmounts.put(-11268754,   0); //Purple
 
     }
 
@@ -142,12 +135,15 @@ public class PBCanvas extends SurfaceView {
     public void updatePixelAmounts() {
 
         for (int key : pixelAmounts.keySet()) {
-            count = 0;
             //temp = MainActivity.BotAmounts.get(key);
+            count = 0;
             for (Pixel p : uiGrid) {
-                if (p.colour == key && !isIn(p, border)) count++;
+                if (p.colour == key && !isIn(p, border)) {
+                    count++;
+                }
             }
-            pixelAmounts.put(key, count); //TODO
+            pixelAmounts.put(key, count);
+            //pixelAmounts.put(key, ); //TODO
             //MainActivity.BotAmounts.put(key, temp);
         }
     }
@@ -339,7 +335,6 @@ public class PBCanvas extends SurfaceView {
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }
-                updatePixelAmounts();
                 break;
             // For a swipe
             case MotionEvent.ACTION_MOVE:
@@ -351,9 +346,9 @@ public class PBCanvas extends SurfaceView {
                         }
                     }
                 }
-                updatePixelAmounts();
                 break;
         }
+        updatePixelAmounts();
         postInvalidate(); //Redraw
         return true;
     }
