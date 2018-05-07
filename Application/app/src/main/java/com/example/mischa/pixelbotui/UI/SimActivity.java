@@ -17,4 +17,10 @@ public class SimActivity extends Activity {
         simCanvas.setBackgroundColor(Color.GRAY);
         setContentView(simCanvas);
     }
+
+    @Override
+    public void onBackPressed() {
+        simCanvas.runThread = false;
+        finish();
+    }
 }

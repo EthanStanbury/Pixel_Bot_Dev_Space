@@ -37,16 +37,17 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
-    int noOfRed;
-    int noOfYellow;
-    int noOfGreen;
-    int noOfBlue;
-    int noOfPurple;
-    int noOfBlack;
-    int totalBots;
+//    int noOfRed;
+//    int noOfYellow;
+//    int noOfGreen;
+//    int noOfBlue;
+//    int noOfPurple;
+//    int noOfBlack;
+//    int totalBots;
     HashMap<String, String> botMoves = new HashMap<>();
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
+    boolean runThread = true;
 
     LayoutItem backButton;
 
@@ -240,6 +241,17 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (backButton.rect.contains(xTouch,yTouch)) {
                 activity.finish();
+                runThread = false;
+                /*boolean retry = true;
+                while (retry) {
+                    try {
+                        thread.running = false;
+                        thread.join();
+                    } catch (InterruptedException f) {
+                        f.printStackTrace();
+                    }
+                    retry = false;
+                }*/
             }
         }
         return true;
