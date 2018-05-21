@@ -37,13 +37,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
-//    int noOfRed;
-//    int noOfYellow;
-//    int noOfGreen;
-//    int noOfBlue;
-//    int noOfPurple;
-//    int noOfBlack;
-//    int totalBots;
     HashMap<String, String> botMoves = new HashMap<>();
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
@@ -60,22 +53,11 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
 
         getHolder().addCallback(this);
-        System.out.println("Solutions for the paths");
-        for (String Id : Solution.keySet()) {
-            //System.out.println(Solution.get(Id).toString());
-        }
+
         for (String key:  Solution.keySet()) {
-
-           // System.out.println((key));
             botMoves.put(key, Solution.get(key).toString());
-            for (Direction d: Solution.get(key)) {
-
-             //   System.out.println(d);
-
-            }
-
-
         }
+
         createBots(botMoves);
 
         backButton = new LayoutItem(Color.LTGRAY);
@@ -85,10 +67,12 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    // Every time the app is drawn
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        //Draw the grid, and border
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
             if (PBCanvas.isIn(p, PBCanvas.border)) {
@@ -98,10 +82,11 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
             canvas.drawRect(p.rect, paint);
         }
+
+        // Draw the bots
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
-            //System.out.println(bot.pixel.location);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
         }
         for (SimBot bot : finishedBots) {
@@ -124,6 +109,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawText("DRAW AGAIN", backButton.rect.exactCenterX() - 150, backButton.rect.exactCenterY() + 20, paint);
     }
 
+    // Get the colour from an input string, up until '/'
     public String parseColour(String input) {
         String output = "";
         int i = 0;
@@ -134,37 +120,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return output;
     }
 
-/*    public void getNumbersOfColours() {
-        for (Pixel p : uiGrid) {
-            if (p.colour == Color.parseColor("#EE4266")) {
-                noOfRed++;
-                break;
-            } else if (p.colour == Color.parseColor("#FFD23F")) {
-                noOfYellow++;
-                break;
-            } else if (p.colour == Color.parseColor("#0EAD69")) {
-                noOfGreen++;
-                break;
-            } else if (p.colour == Color.parseColor("#3BCEAC")) {
-                noOfBlue++;
-                break;
-            } else if (p.colour == Color.parseColor("#540D6E")) {
-                noOfPurple++;
-                break;
-            } else if (p.colour == Color.BLACK) {
-                noOfBlack++;
-                break;
-            } else {
-                break;
-            }
-        }
-        totalBots = noOfRed + noOfYellow + noOfGreen + noOfBlue + noOfPurple + noOfBlack;
-    }*/
-
     public void createBots(HashMap<String, String> moves) {
         int botColour;
         for (String key : moves.keySet()) {
-            //point should never be 0,0 should throw error if it is this.
             Point botLocation;
 
             botColour = Integer.parseInt(parseColour(key));
@@ -184,6 +142,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    // Update the positions of the bots according to the next moves in their strings
     public void nextMoves() {
         for (int i = 0; i < unfinishedBots.size(); i++) {
          //   System.out.println(unfinishedBots.get(i).path);
@@ -200,6 +159,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
+    // Convert a point (x,y) to the rectangle there.
     public Rect pointToRect(Point point) {
         Rect rec = new Rect();
         for (Pixel p : uiGrid) {
@@ -233,7 +193,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
+    // Handles the touch events
     public boolean onTouchEvent(MotionEvent e) {
         int xTouch = (int) e.getX();
         int yTouch = (int) e.getY();
@@ -242,27 +202,16 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             if (backButton.rect.contains(xTouch,yTouch)) {
                 activity.finish();
                 runThread = false;
-                /*boolean retry = true;
-                while (retry) {
-                    try {
-                        thread.running = false;
-                        thread.join();
-                    } catch (InterruptedException f) {
-                        f.printStackTrace();
-                    }
-                    retry = false;
-                }*/
             }
         }
         return true;
     }
 
+    // The method that is called over and over to move the bots
     public void run() {
-        //long origin = System.currentTimeMillis();
         nextMoves();
         postInvalidate();
         try {
-         //   System.out.println("wait");
             sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -274,6 +223,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         invalidate();
     }
 
+    // Start the thread
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         new Handler().postDelayed(new Runnable() {
@@ -285,6 +235,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         }, 1000);
     }
 
+    // End the thread
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         boolean retry = true;
@@ -297,25 +248,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
             retry = false;
         }
-/*        System.out.println("In here");
-        wait(1000);
-
-        paint.setTextSize(50);
-        paint.setColor(Color.WHITE);
-        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
-//        canvas.drawText(, canvas.getWidth()/2, canvas.getHeight() - 300, paint);
-
-
-        System.out.println(Solution.size());
-        System.out.println(Solution.keySet().toString());
-        System.out.println(Solution.get("-16777216-0"));
-//        for (String key: Solution.keySet()) {
-//            for (Direction d: Solution.get(key)) {
-//                System.out.println(d);
-//
-//            }
-//
-//        }*/
 
     }
 }

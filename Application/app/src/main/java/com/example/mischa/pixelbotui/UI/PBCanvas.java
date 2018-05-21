@@ -127,6 +127,7 @@ public class PBCanvas extends SurfaceView {
 
     }
 
+    // Clears the grid of any current drawing
     public void clear() {
         for (Pixel p : uiGrid) {
             p.colour = Color.TRANSPARENT;
@@ -134,6 +135,7 @@ public class PBCanvas extends SurfaceView {
         postInvalidate();
     }
 
+    // This counts how many of each colour are on the grid at the current time
     public void updatePixelAmounts() {
 
         for (int key : pixelAmounts.keySet()) {
@@ -150,6 +152,7 @@ public class PBCanvas extends SurfaceView {
         }
     }
 
+    // Test if a pixel is in a list
     public static boolean isIn(Pixel p, ArrayList list) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).equals(p)) {
@@ -159,7 +162,7 @@ public class PBCanvas extends SurfaceView {
         return false;
     }
 
-    /** Every time the screen is drawn, this is called */
+    // Every time the screen is drawn, this is called
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -246,6 +249,8 @@ public class PBCanvas extends SurfaceView {
         canvas.drawText("CLEAR", rClear.rect.exactCenterX(), rClear.rect.exactCenterY() + 20, paint);
         canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
         paint.setColor(Color.WHITE);
+
+        // Writing the amount of colour left to use on the colours
         for (LayoutItem item : LayoutItemList) {
             if (pixelAmounts.containsKey(item.colour)) {
                 canvas.drawText("" + pixelAmounts.get(item.colour), item.rect.exactCenterX(), item.rect.exactCenterY() + 10, paint);
@@ -270,34 +275,9 @@ public class PBCanvas extends SurfaceView {
 
     }
 
+    // This is where touch events are handled, swiping, tapping etc
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        // Daniel's test code, do not remove.
-        /*
-        paint.setTextSize(50);
-        paint.setColor(Color.WHITE);
-
-        Grid testGrid = new Grid(5, 5);
-        testGrid.addBot(new Bot("-16777216-0", 0, new Point(1, 0)));
-        testGrid.addDestination(new Pixel(0, new Point(2, 3)));
-
-        HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(testGrid);
-
-
-        System.out.println(Solution.size());
-        System.out.println(Solution.keySet().toString());
-        System.out.println(Solution.get("-16777216-0"));
-
-        /*
-        for (String key: Solution.keySet()) {
-            for (Direction d: Solution.get(key)) {
-                System.out.println(d);
-
-            }
-
-        }*/
-
-        // End of test code
 
         int xTouch = (int) e.getX();
         int yTouch = (int) e.getY();
@@ -323,6 +303,7 @@ public class PBCanvas extends SurfaceView {
                         System.out.println(uiGrid[i].colour);
                     }
                 }
+                // if they tap clear or submit
                 if (rClear.rect.contains(xTouch, yTouch)) {
                     clear();
                 }
@@ -336,7 +317,7 @@ public class PBCanvas extends SurfaceView {
 //
 //                    }
 
-
+                    // start the new activity
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
                 }
@@ -359,6 +340,7 @@ public class PBCanvas extends SurfaceView {
         return true;
     }
 
+    // Save the current state of the app
     public int[] getSavedState() {
         for (int i = 0; i < uiGrid.length; i++) {
             saveState[i] = uiGrid[i].colour;
@@ -366,16 +348,12 @@ public class PBCanvas extends SurfaceView {
         return saveState;
     }
 
+    // Update the state with what has been saved
     public void giveRestoreState(int[] state) {
         for (int i = 0; i < uiGrid.length; i++) {
             uiGrid[i].colour = state[i];
         }
         rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 8, ClickableItems.get(whiteBox).rect.top - 8, ClickableItems.get(whiteBox).rect.right + 8, ClickableItems.get(whiteBox).rect.bottom + 8);
         postInvalidate();
-    }
-    /** Called when the user touches the button */
-    public void reset(View view) {
-        // Do something in response to button click
-        clear();
     }
 }

@@ -22,28 +22,42 @@ public class Grid {
 
 
     // Grid is defined when the class is instantiated.
-    // Possible values of the grid are: E (empty), B (bot) and D (destination).
+    // Possible values of the grid are: EMPTY, OFF_GRID, BOT, DESTINATION.
     private Position[][] Grid;
-    private int[] Dimensions;
-    public static List<Bot> Bots;
-    public static List<Point> Destinations;
+    private int[] Dimensions;               // Stores the size of the grid in (x, y) format, including the OFF_GRID boundary
+    public static List<Bot> Bots;           // Stores a list of all the available bots and all of its relevant information
+    public static List<Point> Destinations; // Stores all destination points (which is determined by the coloured pixels on the screen
 
-    public static HashMap<Bot, Point> BotDestPairs;
+    public static HashMap<Bot, Point> BotDestPairs; // Once the bots are mapped to their respective destinations, the pair is stored in here
 
+    // Init Grid object here
     public Grid(int width, int height) {
+        // Save the dimensions of the grid
         Dimensions = new int[2];
         Dimensions[0] = width;
         Dimensions[1] = height;
 
-        // Setup an empty grid with dimensions defined above.
+        // Setup an empty grid with dimensions parsed in.
         Grid = new Position[width][height];
 
+        // Basically labels all of the edge coordinates as 'OFF_GRID', as the grid is set up like this:
+        /*
+        O_G     = Off Grid (where bots can be stored in)
+        E       = Empty (Where bots can travel across)
+
+        O_G O_G O_G O_G O_G
+        O_G  E   E   E  O_G
+        O_G  E   E   E  O_G
+        O_G  E   E   E  O_G
+        O_G O_G O_G O_G O_G
+         */
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
+                // Create new Position object for every coordinate. The default type is 'EMPTY'.
                 this.Grid[i][j] = new Position();
-                if (checkOutsideBoundary(i, j)) {
+                // Change type to OFF_GRID for all edge coordinates.
+                if (checkOutsideBoundary(i, j))
                     this.Grid[i][j].Type = OFF_GRID;
-                }
             }
         }
 
@@ -54,62 +68,84 @@ public class Grid {
 
     }
 
+    // This method is called every time a bot is to be added
     public void addBot(Bot bot) {
+        // Extract the bot coordinates from the bot object
         Point botCoord = bot.Location;
-        // if (this.Grid[botCoord.x][botCoord.y].Type != EMPTY)
-        //    throw new IllegalStateException("Px`osition at coordinates: " + botCoord.x + ", " + botCoord.y + " is not empty!");
 
+        // Set the grid at certain position to be of type Bot
         Grid[botCoord.x][botCoord.y].Type = BOT;
-        Grid[botCoord.x][botCoord.y].Colour = 0; //bot.Colour; BROKEN DUE TO DIFFERENCES IN COLOUR TYPES (int vs Color)
+        // Set colour
+        Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
+        // Add to Bots list
         Bots.add(bot);
     }
 
+    // This is called every time a destination (basically a coloured pixel on the grid) is to be added
     public void addDestination(Pixel pixel) {
+        // Extract pixel coordinates
         int x = pixel.location.x;
         int y = pixel.location.y;
 
+        // If coordinates are not actually on the board, throw an exception.
         if (this.Grid[x][y].Type == OFF_GRID)
             throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is outside the boundary!");
 
+        // Set grid at coord to be destination
         Grid[x][y].Type = DESTINATION;
+        // Set colour of it
         Grid[x][y].Colour = pixel.colour;
+        // Add each pixel to the Destinations list
         Destinations.add(new Point(x, y));
-        //System.out.println("GRID.JAVA: " + Destinations.get(0));
     }
 
-    // May be completely redundant depending on implementation.
+    // Not used yet. It is advised that this is not to be used yet as tests has not been done with it
     public void resetAtCoord(int x, int y) {
         Grid[x][y].Type = EMPTY;
     }
 
     // Pairs all bots to their individual destinations based on distance.
     // The bot that is closest to a certain destination will be chosen as bot-dest pair.
-    // TODO: CLEAN UP THIS CODE AS IT IS VERY UGLY AND UNREADABLE.
     public void mapBotToDest() {
-        List<Integer> colours = new ArrayList<>();
-        HashMap<Integer, List<Bot>> remainingBots = new HashMap<>();
-        HashMap<Integer, List<Point>> remainingDest = new HashMap<>();
+        // Store all detected unique colours that are used (for bots and destinations)
+        List<Integer>                   colours =       new ArrayList<>();
 
+        // Temporarily store the bots and destinations that are yet to be mapped.
+        // Not every bot may be used from remainingBots, but everything in remainingDest will be used.
+        // This hashmap is split according to the colour codes (Integer). For example, all of red bots will be in the same list.
+        HashMap<Integer, List<Bot>>     remainingBots = new HashMap<>();
+        HashMap<Integer, List<Point>>   remainingDest = new HashMap<>();
+
+        /* ----- Detect all unique colours, bots and destinations ----- */
         for (int i = 0; i < Bots.size(); i++) {
             int botColour = Bots.get(i).Colour;
-            if (!colours.contains(botColour)) {
+            // If colour doesn't exist in the colours list, then add it.
+            // Note that this is only done in the bots section,
+            // as there will always be a more variety of colours of bots than destinations.
+            // (no. of destinations is always going to be less than or equal to no. of bots of same colour)
+            if (!colours.contains(botColour))
                 colours.add(botColour);
-            }
-            if (!remainingBots.containsKey(botColour)) {
+
+            // Init the list with colour key if the list has not been created yet
+            if (!remainingBots.containsKey(botColour))
                 remainingBots.put(botColour, new ArrayList<Bot>());
-            }
+
             remainingBots.get(botColour).add(Bots.get(i));
         }
 
+        // Repeat the above for all destinations too
         for (int i = 0; i < Destinations.size(); i++) {
             Point destCoord = Destinations.get(i);
             int destColour = this.Grid[destCoord.x][destCoord.y].Colour;
-            if (!remainingDest.containsKey(destColour)) {
+
+            if (!remainingDest.containsKey(destColour))
                 remainingDest.put(destColour, new ArrayList<Point>());
-            }
+
             remainingDest.get(destColour).add(new Point(destCoord));
         }
+        /* -------------------------------------------------------------- */
 
+        // Make sure that there are less than or equal number of destinations to bots for every colour
         for (int i = 0; i < colours.size(); i++) {
             if (remainingBots.containsKey(colours.get(i)) && remainingDest.containsKey(colours.get(i))) {
                 if (remainingBots.get(colours.get(i)).size() < remainingDest.get(colours.get(i)).size())
@@ -117,48 +153,57 @@ public class Grid {
             }
         }
 
+        // Basic idea: Pair every bot to the closest compatible destination. Please note that this method can be changed later.
         for (int i = 0; i < colours.size(); i++) {
-            // List<Point> remainingDest = new ArrayList<>(Destinations);
-            // List<Bot> remainingBots = new ArrayList<>(Bots);
             if (remainingBots.containsKey(colours.get(i)) && remainingDest.containsKey(colours.get(i))) {
+                // Get the list of bots and destinations with matching colours
+                List <Bot>   CSremainBots = new ArrayList<>(remainingBots.get(colours.get(i)));
+                List <Point> CSremainDest = new ArrayList<>(remainingDest.get(colours.get(i)));
 
-            // For every destination, find the closest bot by the manhattan distance to it.
-                while (remainingDest.get(colours.get(i)).size() > 0 ) {
+                // For every destination, find the closest bot by the manhattan distance to it
+                while (CSremainDest.size() > 0 ) {
                     int lowestManhattanDist = Integer.MAX_VALUE;
                     int lowestManDistIndex = 0;
-                    for (int j = 0; j < remainingBots.get(colours.get(i)).size(); j++) {
+                    for (int j = 0; j < CSremainBots.size(); j++) {
 
-                        int ManhattanDist = Math.abs(remainingBots.get(colours.get(i)).get(j).Location.x -
-                                                     remainingDest.get(colours.get(i)).get(0).x) +
-                                            Math.abs(remainingBots.get(colours.get(i)).get(j).Location.y -
-                                                     remainingDest.get(colours.get(i)).get(0).y);
+                        int ManhattanDist = Math.abs(CSremainBots.get(j).Location.x - CSremainDest.get(0).x) +
+                                            Math.abs(CSremainBots.get(j).Location.y - CSremainDest.get(0).y);
+
+                        // If dist is lower than the lowest known, then replace it with new values
                         if (ManhattanDist < lowestManhattanDist) {
+                            // Set the comparing distance value to the newly detected lowest value
                             lowestManhattanDist = ManhattanDist;
-                            lowestManDistIndex = j;
+                            lowestManDistIndex = j; // Save the index
                         }
                     }
-                    //System.out.println(remainingBots.get(lowestManDistIndex).Location.y);
-                    BotDestPairs.put(remainingBots.get(colours.get(i)).get(lowestManDistIndex), remainingDest.get(colours.get(i)).get(0));
 
-                    remainingBots.get(colours.get(i)).remove(lowestManDistIndex);
-                    remainingDest.get(colours.get(i)).remove(0);
+                    // Pair the bot with destination with the lowest known manhattan distance.
+                    BotDestPairs.put(CSremainBots.get(lowestManDistIndex), CSremainDest.get(0));
+
+                    // Remove the bot and dest from the 'remaining' lists
+                    CSremainBots.remove(lowestManDistIndex);
+                    // Removing the first element will shift all contents towards index 0 by 1, hence this method will work and every destination will be paired.
+                    CSremainDest.remove(0);
                 }
             }
         }
-        System.out.println("hhgghjghjhjghj");
     }
 
-    // Not implemented yet.
+    // Return every possible move from a certain coordinate position.
     public List getSuccessorNodes(Node currentNode) {
+        // Save a list of all moves possible.
         List<Node> successors = new ArrayList<>();
+        // Extract the coordinate passed in
         Point coord = currentNode.Coord;
-        // System.out.println(translateMove(coord, D));
-        // System.out.println(getTypeAtCoord(translateMove(coord, D)));
 
+        // Change coordinate according to the specified move (in this case, U)
         Point tempCoord = translateMove(coord, U);
+        // Check if this new coordinate is somewhere the bot can move to
         if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+            // Add the new 'Node' to the successors list. Save the new coordinate, direction taken and the cost of movement
             successors.add(new Node(tempCoord, U, 1));
 
+        // Repeat for all other directions
         tempCoord = translateMove(coord, D);
         if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
             successors.add(new Node(tempCoord, D, 1));
@@ -173,14 +218,24 @@ public class Grid {
 
         return successors;
     }
+
+    // Not implemented yet, but will be for A* 'Stage 4' (anti collision features)
+    // Basic idea is to save the time step of the bots' locations
+    // so that it could be used to make that coordinate inaccessible at certain time steps.
     public void updateBoard(List instructions) {
 
     }
 
+    //-------------------------
+    //-----Private Methods-----
+    //-------------------------
+
+    // Check if the given set of coordinates are on the edge of the grid
     private boolean checkOutsideBoundary(int x, int y) {
         return (x == 0 || y == 0) || (x == (Dimensions[0] - 1) || y == (Dimensions[1] - 1));
     }
 
+    // Edit the given coordinates accordingly based on provided direction.
     private Point translateMove(Point coord, Direction dir) {
         Point tempCoord = new Point(coord.x, coord.y);
         switch (dir) {
@@ -202,6 +257,7 @@ public class Grid {
         return tempCoord;
     }
 
+    // Return type at a specific point on the grid.
     private Type getTypeAtCoord(Point coord) {
         int x = coord.x;
         int y = coord.y;
@@ -213,7 +269,9 @@ public class Grid {
 
 }
 
+// For every position on the grid, it will have a type and a colour.
 class Position {
+    // Default values for every new Position object are as follows:
     Type Type = EMPTY;
     int Colour = Color.TRANSPARENT;
 
