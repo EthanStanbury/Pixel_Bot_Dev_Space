@@ -20,11 +20,12 @@ public class UIAdapter {
     public static Grid destinationGrid;
 
 
+    //@param  uiGrid  Is the list of pixels, that have been colour.
 
     public static void createGridWpixel(Pixel[] uiGrid){
 
         destinationGrid = new Grid(PBCanvas.xDimension, PBCanvas.yDimension);
-
+        // For each colour that is not transparent add it to the list of destinations within the grid
         for (Pixel p : uiGrid) {
             if(p.colour != Color.TRANSPARENT && p.colour != Color.DKGRAY){
 

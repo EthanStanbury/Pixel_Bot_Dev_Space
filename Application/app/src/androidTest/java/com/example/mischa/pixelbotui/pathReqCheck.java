@@ -26,6 +26,10 @@ import static org.junit.Assert.*;
  * Instrumented test, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ *
+ * This is a testing file, it is difficult to create an instance and test it. So most of the instance needs to be created in the testing file
+ * It also needs to be run on a VM to run the test
+ *
  */
 @RunWith(AndroidJUnit4.class)
 public class pathReqCheck {
@@ -42,6 +46,8 @@ public class pathReqCheck {
         Boolean valid = false;
         for (String key: solutions.keySet()) {
             List<Direction> list = solutions.get(key);
+
+            //checks to see if the destination string is valid. Valid = ["L,D,R,U,L,L,"] or something similar
             for (int i = 0; i < list.size();  i++) {
                 String direction = list.get(i).toString();
                 switch (direction){
