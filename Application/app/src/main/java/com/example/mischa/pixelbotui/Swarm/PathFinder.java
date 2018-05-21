@@ -5,10 +5,7 @@ import android.graphics.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 
@@ -19,17 +16,20 @@ import static com.example.mischa.pixelbotui.Swarm.Direction.*;
  * I've also used the knowledge gained from my COMP3620 Python AI assignment.
  */
 
-// Not completely sure how to implement it yet, but I have a decent idea. I will update this code very soon.
 public class PathFinder {
     private static Grid Problem;
     private static Point CurrentDest;
 
     public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
-        // For every bot in the bot -> dest pairs
-        Problem = problem;
-        Problem.mapBotToDest();
+        // For every bot in the bot -> dest pairs, solve for a solution with the A* algorithm.
+        Problem = problem;      // Grid with all the bots and destinations are defined as the 'Problem' that needs solving.
+        Problem.mapBotToDest(); // When getSolutions() method was called, it is assumed that all bots and destinations were added.
+                                // Hence, it is now acceptable to link all destinations to a bot.
+
+        // Save the bot-dest pair hashmap to a local variable.
         HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
 
+        // Stores all bot-dest pair solutions into this hashmap
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
@@ -42,54 +42,63 @@ public class PathFinder {
     }
 
     private static List<Direction> solve(Bot bot) {
-        // Bot CurrentBot = bot; // Denotes the current bot the A* is solving the path for.
-
         // Create the initial node
         Node currentNode = new Node(bot.Location, NA, 0);
 
+        // Store the nodes in the frontier. The function 'get_lowest_f_node' will select the next node.
         List<Node> frontier = new ArrayList<>();
-        frontier.add(currentNode);
-        //Trying to make a new Array list that has unique elements
+        frontier.add(currentNode); // Frontier starts off with the starting coordinates.
+
+        // Keep track of states that has been visited.
+        // Adds the first coordinate to the list as it is already 'visited'
         ArrayList<Point> explored = new ArrayList<>();
-        //for (int i = 0; i< explored.size() && (!explored.get(i).equals(currentNode.Coord)); i++){
-        //    if (i == explored.size()-1){
         explored.add(currentNode.Coord);
-        //    }
-        //}
 
-
+        // Keeps track of all states and the last movement.
+        // It is used in 'derive_move_seq' to generate the final sequence of moves.
         HashMap<Point, BackTrack> back_track = new HashMap<>();
 
+        // Store estimated costs to the goal (f = g + h).
+        // For the first node, the f value is entirely heuristic.
         HashMap<Point, Integer> f_values = new HashMap<>();
         f_values.put(currentNode.Coord, heuristic(currentNode.Coord));
-
+        // Store the current cost so far to get to the current location
         HashMap<Point, Integer> g_values = new HashMap<>();
         g_values.put(currentNode.Coord, 0);
+
+        // Until no more nodes are left to search, keep searching
         while (frontier.size() > 0) {
+            // Get the node with the lowest f value.
             currentNode = get_lowest_f_node(frontier, f_values);
+
+            // Get all the 'successor nodes', which basically are all possible moves from current location.
             List<Node> successorNodes = Problem.getSuccessorNodes(currentNode);
-            // System.out.println("successor node count: " + successorNodes.size());
-            // System.out.println("current coord: " + currentNode.Coord);
             for (int possMoveIndex = 0; possMoveIndex < successorNodes.size(); possMoveIndex++) {
-                // System.out.println(successorNodes.get(possMoveIndex).Action);
                 Node succNode = successorNodes.get(possMoveIndex);
-               // System.out.println(!frontier.contains(succNode));
+
+                // If successor node is not explored yet AND is not already in the frontier,
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
+                    // If goal is found (landed on destination),
                     if (succNode.Coord.equals(CurrentDest)) {
-                       // System.out.println("DO I GET ANY SOLUTION???");
+                        // Add this final goal state for backtracking
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
                         return derive_move_seq(bot.Location, succNode.Coord, back_track);
                     }
 
+                    // # Add node to frontier and explored if goal is not found.
                     frontier.add(succNode);
                     explored.add(succNode.Coord);
 
+                    // Provision a new g value.
                     Integer temp_g_value = g_values.get(currentNode.Coord) + succNode.Cost;
-
+                    // If the successor state does not have a value,
+                    // set it to a high number so that it passes the next test.
                     if (!g_values.containsKey(succNode.Coord))
                         g_values.put(succNode.Coord, 999999);
-
+                    // If the provisioned g value is less than the previously known lowest g value,
+                    // replace it and use the new path to get to this state instead.
                     if (temp_g_value < g_values.get(succNode.Coord)) {
+                        // Add state to back_track for later.
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
 
                         g_values.put(succNode.Coord, temp_g_value);
@@ -101,6 +110,8 @@ public class PathFinder {
         return null;
     }
 
+    // Returns the node with the lowest known f_value.
+    // Always tries the node with lowest cost estimate first.
     private static Node get_lowest_f_node(List<Node> frontier, HashMap<Point, Integer> f_values) {
         int current_f_value = 999999;
         int index_to_remove = 0;
@@ -113,31 +124,40 @@ public class PathFinder {
                 index_to_remove = i;
             }
         }
+
+        // Nodes that are picked are removed from the frontier, so they don't get selected again.
         frontier.remove(index_to_remove);
         return node_to_return;
     }
 
+    // Heuristic is an estimate of the most optimistic (lowest) cost that the solver should expect.
+    // This way, the solver doesn't try moves that veer away from the goal.
     // This calculates the Manhattan distance from given position to the target destination.
     private static Integer heuristic(Point pos) {
         return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
     }
 
+    // The idea to to reverse engineer the sequence of moves to get to the destination came from:
+    // https://en.wikipedia.org/wiki/A*_search_algorithm (function called 'reconstruct_path')
     private static List<Direction> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
         List<Direction> sequence = new ArrayList<>();
 
-        // PLEASE CHECK THAT THIS WORKS
+        // Keep searching until we have determined the link from the finish to the start and its sequence of moves.
+        // Saved in reverse order though, since we are searching from finish to start.
         while (!state_coord.equals(initial_coord)) {
             BackTrack prev = back_track.get(state_coord);
             state_coord = prev.Coord;
             sequence.add(prev.Action);
         }
 
+        // Reverse the reversed sequence
         Collections.reverse(sequence);
         return sequence;
     }
 
 }
 
+// Each node consists of a coordinate, an action and the cost to move
 class Node {
     Point Coord;
     Direction Action;
@@ -152,6 +172,7 @@ class Node {
     }
 }
 
+// In order for back tracking to work, only the coordinate and action is required.
 class BackTrack {
     Point Coord;
     Direction Action;
