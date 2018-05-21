@@ -9,6 +9,8 @@ import android.view.SurfaceHolder;
 
 public class MainThread extends Thread {
 
+    // THIS IS THE CLASS THAT CONTAINS THE THREAD THAT RUNS THE SIMULATION
+
     boolean running;
     Canvas canvas;
     Simulation simulation;
@@ -30,7 +32,6 @@ public class MainThread extends Thread {
                 synchronized (surfaceHolder) {
                     while (simulation.unfinishedBots.size() > 0 && simulation.runThread) {
                         this.simulation.run();
-                      //  System.out.println("loop");
                     }
                 }
             } catch (Exception e) {

@@ -8,6 +8,8 @@ import android.os.Bundle;
 public class SimActivity extends Activity {
 
     Simulation simCanvas;
+
+    // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +20,7 @@ public class SimActivity extends Activity {
         setContentView(simCanvas);
     }
 
+    // Override for the back button, stops the thread running as well as finishing the activity
     @Override
     public void onBackPressed() {
         simCanvas.runThread = false;

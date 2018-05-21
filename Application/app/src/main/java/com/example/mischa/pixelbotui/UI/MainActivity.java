@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
 
 
-
+    // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,16 +27,13 @@ public class MainActivity extends Activity {
         canvas.setBackgroundColor(Color.GRAY);
         setContentView(canvas);
 
+        // The amount of bots we have to work with
         BotAmounts.put(-1162650,    10); //Red
         BotAmounts.put(-11713,      10); //Yellow
         BotAmounts.put(-15815319,   10); //Green
         BotAmounts.put(-12857684,   10); //Blue
         BotAmounts.put(-11268754,   10); //Purple
         BotAmounts.put(Color.BLACK, 0); //Black
-
-
-        // This needs to be called after all the bots are added to initialize the swarm
-        //SwarmAdapter.SwarmCreate(BotAmounts);
 
 
     }
