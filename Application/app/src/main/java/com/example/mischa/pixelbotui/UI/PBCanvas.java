@@ -1,13 +1,18 @@
 package com.example.mischa.pixelbotui.UI;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -24,6 +29,9 @@ import com.example.mischa.pixelbotui.Swarm.PathFinder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 /**
  * Created by Mischa on 10/03/2018.
@@ -44,6 +52,8 @@ public class PBCanvas extends SurfaceView {
     int whiteBox;
     HashMap<Integer, Integer> pixelAmounts = new HashMap<>();
 
+    BluetoothAdapter compSocket = BluetoothAdapter.getDefaultAdapter();
+
     Context context;
 
     LayoutItem top;  //grey bar #1
@@ -60,6 +70,7 @@ public class PBCanvas extends SurfaceView {
     LayoutItem rClear;
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
+    static final int  REQUEST_ENABLE_BT = 1;
 
     int count = 0;
 
@@ -68,12 +79,44 @@ public class PBCanvas extends SurfaceView {
 
     public static ArrayList<Pixel> border = new ArrayList<>();
 
+    private final BroadcastReceiver compSocketReceiver1 = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            // When discovery finds a device
+            if (action.equals(compSocket.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, compSocket.ERROR);
+
+                switch(state){
+                    case BluetoothAdapter.STATE_OFF:
+                        Log.d(TAG, "onReceive: STATE OFF");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        Log.d(TAG, "compSocketReceiver1: STATE TURNING OFF");
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        Log.d(TAG, "compSocketReceiver1: STATE ON");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        Log.d(TAG, "compSocketReceiver1: STATE TURNING ON");
+                        break;
+                }
+            }
+        }
+    };
+
+
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: called.");
+
+        context.unregisterReceiver(compSocketReceiver1);
+    }
+
+
     public PBCanvas(Context context) {
         super(context);
         this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
-
 
 
         if (xDimension < 10 || yDimension < 10){
@@ -127,6 +170,8 @@ public class PBCanvas extends SurfaceView {
 
     }
 
+
+
     // Clears the grid of any current drawing
     public void clear() {
         for (Pixel p : uiGrid) {
@@ -147,8 +192,7 @@ public class PBCanvas extends SurfaceView {
                 }
             }
             pixelAmounts.put(key, 10 - count);
-            //pixelAmounts.put(key, ); //TODO
-            //MainActivity.BotAmounts.put(key, temp);
+
         }
     }
 
