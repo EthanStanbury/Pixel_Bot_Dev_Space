@@ -1,6 +1,8 @@
 package com.example.mischa.pixelbotui.UI;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.View;
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Swarm.Bot;
 
+import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -17,6 +20,9 @@ public class MainActivity extends Activity {
     int[] saveState;
     int[] restoreState;
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
+
+
+
 
 
     // Called when activity is created
@@ -58,6 +64,8 @@ public class MainActivity extends Activity {
         canvas.giveRestoreState(restoreState);
         canvas.newColour = state.getInt("colour");
         canvas.whiteBox = state.getInt("whiteBox");
+
+
 
     }
 }
