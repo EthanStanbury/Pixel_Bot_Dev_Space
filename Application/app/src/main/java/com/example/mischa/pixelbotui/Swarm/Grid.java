@@ -92,7 +92,7 @@ public class Grid {
             throw new IllegalStateException("Position at coordinates: " + x + ", " + y + " is outside the boundary!");
 
         // Set grid at coord to be destination
-        Grid[x][y].Type = DESTINATION;
+        Grid[x][y].IsDestination = true;
         // Set colour of it
         Grid[x][y].Colour = pixel.colour;
         // Add each pixel to the Destinations list
@@ -199,21 +199,21 @@ public class Grid {
         // Change coordinate according to the specified move (in this case, U)
         Point tempCoord = translateMove(coord, U);
         // Check if this new coordinate is somewhere the bot can move to
-        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+        if (getTypeAtCoord(tempCoord) == EMPTY)
             // Add the new 'Node' to the successors list. Save the new coordinate, direction taken and the cost of movement
             successors.add(new Node(tempCoord, U, 1));
 
         // Repeat for all other directions
         tempCoord = translateMove(coord, D);
-        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+        if (getTypeAtCoord(tempCoord) == EMPTY)
             successors.add(new Node(tempCoord, D, 1));
 
         tempCoord = translateMove(coord, L);
-        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+        if (getTypeAtCoord(tempCoord) == EMPTY)
             successors.add(new Node(tempCoord, L, 1));
 
         tempCoord = translateMove(coord, R);
-        if (getTypeAtCoord(tempCoord) == EMPTY || getTypeAtCoord(tempCoord) == DESTINATION)
+        if (getTypeAtCoord(tempCoord) == EMPTY)
             successors.add(new Node(tempCoord, R, 1));
 
         return successors;
@@ -273,17 +273,21 @@ public class Grid {
 class Position {
     // Default values for every new Position object are as follows:
     Type Type = EMPTY;
-    int Colour = Color.TRANSPARENT;
+    boolean IsDestination = false;
+    int Colour = Color.TRANSPARENT; // Only should be considered when IsDestination flag is set to true.
+
+    // Used and modified when Type = BOT
+    List<Integer> OccupiedTimeSteps = new ArrayList<>(); // If position is occuped for time steps 1, 3, 5, 6, 9, then this list stores {1, 3, 5, 6, 9}.
+    boolean IsPushable = false; // Initially, bot is unpushable. It changes to true when the bot is resting.
 
     Position() {}
 }
 
-// Each points on the grid will only ever have 4 different states:
-// either it is empty, off the grid, has a bot or is a destination.
+// Each points on the grid will only ever have 3 different states:
+// either it is empty, off the grid or contains a bot for at least 1 time step.
 enum Type {
     EMPTY,
     OFF_GRID,
-    BOT,
-    DESTINATION
+    BOT
 }
 
