@@ -38,6 +38,24 @@ public class PathFinder {
             allBotsSolutions.put(bot.BotID, solve(bot));
         }
 
+        // This is a step by step checker: it checks the bots' positions for any collisions and resolves them.
+        boolean anyStepsLeft = true;
+        int timeStep = 0;
+        while (anyStepsLeft) {
+            anyStepsLeft = false;   // Assume that there are no actions left, unless found.
+
+            for (int i = 0; i < Problem.Bots.size(); i++) {
+                String currentBotID = Problem.Bots.get(i).BotID;
+                List<Direction> currentBotPath = allBotsSolutions.get(currentBotID);
+                if (timeStep < currentBotPath.size()) {
+                    anyStepsLeft = true;
+                    // Calculate the next coordinate -- or put it as a part of the output.
+                }
+
+            }
+            timeStep += 1;
+        }
+
         return allBotsSolutions;
     }
 

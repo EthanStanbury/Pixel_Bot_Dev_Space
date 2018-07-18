@@ -216,6 +216,9 @@ public class Grid {
         if (getTypeAtCoord(tempCoord) == EMPTY)
             successors.add(new Node(tempCoord, R, 1));
 
+        // Staying at current position will always be a valid move.
+        successors.add(new Node(coord, S, 1));
+
         return successors;
     }
 
@@ -251,8 +254,10 @@ public class Grid {
             case R:
                 tempCoord.offset(1, 0);
                 break;
+            case S:
+                break;
             default:
-                throw new IllegalArgumentException("Invalid direction provided! Can only accept U, D, L and R");
+                throw new IllegalArgumentException("Invalid direction provided! Can only accept U, D, L, R and S");
         }
         return tempCoord;
     }
