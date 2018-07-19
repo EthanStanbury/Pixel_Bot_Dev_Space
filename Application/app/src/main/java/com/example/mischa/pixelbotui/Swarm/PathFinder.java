@@ -29,13 +29,23 @@ public class PathFinder {
         // Save the bot-dest pair hashmap to a local variable.
         HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
 
+        // Saves a list of all bots that have been paired to a destination.
+        List<Bot> pairedBotList = new ArrayList<>();
+
         // Stores all bot-dest pair solutions into this hashmap
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
+        // Stores the position history of each bots (that are moving).
+        HashMap<String, List<Point>> allBotsPositions = new HashMap<>();
+
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
             Bot bot = pair.getKey();
             CurrentDest = pair.getValue();
-            allBotsSolutions.put(bot.BotID, solve(bot));
+
+            pairedBotList.add(bot);
+
+            allBotsSolutions.put(bot.BotID, solve(bot).Actions);
+            allBotsPositions.put(bot.BotID, solve(bot).Coordinates);
         }
 
         // This is a step by step checker: it checks the bots' positions for any collisions and resolves them.
@@ -44,12 +54,13 @@ public class PathFinder {
         while (anyStepsLeft) {
             anyStepsLeft = false;   // Assume that there are no actions left, unless found.
 
-            for (int i = 0; i < Problem.Bots.size(); i++) {
-                String currentBotID = Problem.Bots.get(i).BotID;
+            for (int i = 0; i < pairedBotList.size(); i++) {
+                String currentBotID = pairedBotList.get(i).BotID;
+                List<Point> currentBotPositions = allBotsPositions.get(currentBotID);
                 List<Direction> currentBotPath = allBotsSolutions.get(currentBotID);
-                if (timeStep < currentBotPath.size()) {
+                if (timeStep < currentBotPositions.size()) {
                     anyStepsLeft = true;
-                    // Calculate the next coordinate -- or put it as a part of the output.
+                    // Check if position at time step x is free:
                 }
 
             }
@@ -59,7 +70,7 @@ public class PathFinder {
         return allBotsSolutions;
     }
 
-    private static List<Direction> solve(Bot bot) {
+    private static CoordActionOutput solve(Bot bot) {
         // Create the initial node
         Node currentNode = new Node(bot.Location, NA, 0);
 
@@ -157,7 +168,8 @@ public class PathFinder {
 
     // The idea to to reverse engineer the sequence of moves to get to the destination came from:
     // https://en.wikipedia.org/wiki/A*_search_algorithm (function called 'reconstruct_path')
-    private static List<Direction> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+    private static CoordActionOutput derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+        List<Point> pos = new ArrayList<>();
         List<Direction> sequence = new ArrayList<>();
 
         // Keep searching until we have determined the link from the finish to the start and its sequence of moves.
@@ -165,12 +177,14 @@ public class PathFinder {
         while (!state_coord.equals(initial_coord)) {
             BackTrack prev = back_track.get(state_coord);
             state_coord = prev.Coord;
+            pos.add(prev.Coord);
             sequence.add(prev.Action);
         }
 
         // Reverse the reversed sequence
+        Collections.reverse(pos);
         Collections.reverse(sequence);
-        return sequence;
+        return new CoordActionOutput(pos, sequence);
     }
 
 }
@@ -198,5 +212,16 @@ class BackTrack {
     BackTrack(Point coord, Direction action) {
         Coord = coord;
         Action = action;
+    }
+}
+
+// Saves both the positions and actions the bot will take.
+class CoordActionOutput {
+    List<Point> Coordinates;
+    List<Direction> Actions;
+
+    CoordActionOutput(List<Point> coords, List<Direction> actions) {
+        Coordinates = new ArrayList<>(coords);
+        Actions = new ArrayList<>(actions);
     }
 }

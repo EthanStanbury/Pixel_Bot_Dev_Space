@@ -25,7 +25,7 @@ public class Grid {
     // Possible values of the grid are: EMPTY, OFF_GRID, BOT, DESTINATION.
     private Position[][] Grid;
     private int[] Dimensions;               // Stores the size of the grid in (x, y) format, including the OFF_GRID boundary
-    public static List<Bot> Bots;           // Stores a list of all the available bots and all of its relevant information
+    private static List<Bot> Bots;          // Stores a list of all the available bots and all of its relevant information
     public static List<Point> Destinations; // Stores all destination points (which is determined by the coloured pixels on the screen
 
     public static HashMap<Bot, Point> BotDestPairs; // Once the bots are mapped to their respective destinations, the pair is stored in here
