@@ -6,6 +6,7 @@ import android.graphics.Point;
 import com.example.mischa.pixelbotui.UI.Pixel;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class Grid {
     }
 
     // This method is called every time a bot is to be added
-    public void addBot(Bot bot) {
+    public void addBot(Bot bot ) {  //, int timeStep) {
         // Extract the bot coordinates from the bot object
         Point botCoord = bot.Location;
 
@@ -77,6 +78,8 @@ public class Grid {
         Grid[botCoord.x][botCoord.y].Type = BOT;
         // Set colour
         Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
+        // Add time step
+        // Grid[botCoord.x][botCoord.y].OccupiedTimeSteps.add(timeStep);
         // Add to Bots list
         Bots.add(bot);
     }
@@ -229,6 +232,20 @@ public class Grid {
 
     }
 
+    // Checks if a certain position is available to be occupied at a certain time step.
+    public boolean checkAvailability(Point position, int timeStep) {
+        Position pos = Grid[position.x][position.y];
+
+        if (pos.Type != EMPTY && pos.Type != BOT)
+            return false;
+        else if (pos.Type == EMPTY)
+            return true;
+        else {
+            // Return true if not occupied at the given time step, return false if it is occupied.
+            return !pos.OccupiedTimeSteps.contains(timeStep);
+        }
+    }
+
     //-------------------------
     //-----Private Methods-----
     //-------------------------
@@ -291,8 +308,8 @@ class Position {
 // Each points on the grid will only ever have 3 different states:
 // either it is empty, off the grid or contains a bot for at least 1 time step.
 enum Type {
-    EMPTY,
+    EMPTY,      // Used if a position is NEVER ever occupied.
     OFF_GRID,
-    BOT
+    BOT         // Used if a position is occupied by a bot at least for 1 time step.
 }
 

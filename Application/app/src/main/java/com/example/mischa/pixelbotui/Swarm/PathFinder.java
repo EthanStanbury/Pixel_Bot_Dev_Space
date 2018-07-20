@@ -61,6 +61,12 @@ public class PathFinder {
                 if (timeStep < currentBotPositions.size()) {
                     anyStepsLeft = true;
                     // Check if position at time step x is free:
+                    boolean posAvailable = Problem.checkAvailability(currentBotPositions.get(timeStep), timeStep);
+
+                    if (posAvailable) {
+
+                    }
+
                 }
 
             }
