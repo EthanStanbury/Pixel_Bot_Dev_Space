@@ -50,22 +50,25 @@ public class PathFinder {
 
         // This is a step by step checker: it checks the bots' positions for any collisions and resolves them.
         boolean anyStepsLeft = true;
-        int timeStep = 0;
+        int timeStep = 1; // Ignore saving the initial step, as it is already done (during bot initialisation)
         while (anyStepsLeft) {
             anyStepsLeft = false;   // Assume that there are no actions left, unless found.
-
+            System.out.println("TIME STEP: " + timeStep);
             for (int i = 0; i < pairedBotList.size(); i++) {
                 String currentBotID = pairedBotList.get(i).BotID;
+                // Don't simply copy the contents of the lists, but instead enable direct editing to the list that is about to be sent.
                 List<Point> currentBotPositions = allBotsPositions.get(currentBotID);
                 List<Direction> currentBotPath = allBotsSolutions.get(currentBotID);
                 if (timeStep < currentBotPositions.size()) {
                     anyStepsLeft = true;
                     // Check if position at time step x is free:
                     boolean posAvailable = Problem.checkAvailability(currentBotPositions.get(timeStep), timeStep);
+                    System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
+                    if (posAvailable)
+                        Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID);
+                    else
+                        System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
 
-                    if (posAvailable) {
-
-                    }
 
                 }
 

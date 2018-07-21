@@ -70,7 +70,7 @@ public class Grid {
     }
 
     // This method is called every time a bot is to be added
-    public void addBot(Bot bot ) {  //, int timeStep) {
+    public void addBot(Bot bot) {  //, int timeStep) {
         // Extract the bot coordinates from the bot object
         Point botCoord = bot.Location;
 
@@ -78,8 +78,8 @@ public class Grid {
         Grid[botCoord.x][botCoord.y].Type = BOT;
         // Set colour
         Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
-        // Add time step
-        // Grid[botCoord.x][botCoord.y].OccupiedTimeSteps.add(timeStep);
+        // Add time step with bot ID.
+        Grid[botCoord.x][botCoord.y].OccupiedTimeSteps.put(0, bot.BotID);
         // Add to Bots list
         Bots.add(bot);
     }
@@ -228,7 +228,10 @@ public class Grid {
     // Not implemented yet, but will be for A* 'Stage 4' (anti collision features)
     // Basic idea is to save the time step of the bots' locations
     // so that it could be used to make that coordinate inaccessible at certain time steps.
-    public void updateBoard(List instructions) {
+    public void updateBoard(Point currentPos, int timeStep, String botID) {
+        Position pos = Grid[currentPos.x][currentPos.y];
+        pos.Type = BOT;
+        pos.OccupiedTimeSteps.put(timeStep, botID);
 
     }
 
@@ -242,7 +245,7 @@ public class Grid {
             return true;
         else {
             // Return true if not occupied at the given time step, return false if it is occupied.
-            return !pos.OccupiedTimeSteps.contains(timeStep);
+            return !pos.OccupiedTimeSteps.containsKey(timeStep);
         }
     }
 
@@ -299,7 +302,11 @@ class Position {
     int Colour = Color.TRANSPARENT; // Only should be considered when IsDestination flag is set to true.
 
     // Used and modified when Type = BOT
-    List<Integer> OccupiedTimeSteps = new ArrayList<>(); // If position is occuped for time steps 1, 3, 5, 6, 9, then this list stores {1, 3, 5, 6, 9}.
+    // List<Integer> OccupiedTimeSteps = new ArrayList<>(); // If position is occuped for time steps 1, 3, 5, 6, 9, then this list stores {1, 3, 5, 6, 9}.
+
+    // Time step -> ID of occupying bot.
+    HashMap<Integer, String> OccupiedTimeSteps = new HashMap<>();
+
     boolean IsPushable = false; // Initially, bot is unpushable. It changes to true when the bot is resting.
 
     Position() {}
