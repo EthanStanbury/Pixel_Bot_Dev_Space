@@ -228,11 +228,17 @@ public class Grid {
     // Not implemented yet, but will be for A* 'Stage 4' (anti collision features)
     // Basic idea is to save the time step of the bots' locations
     // so that it could be used to make that coordinate inaccessible at certain time steps.
-    public void updateBoard(Point currentPos, int timeStep, String botID) {
+    public void updateBoard(Point currentPos, int timeStep, String botID, boolean reachedDestFlag) {
         Position pos = Grid[currentPos.x][currentPos.y];
         pos.Type = BOT;
         pos.OccupiedTimeSteps.put(timeStep, botID);
 
+        pos.IsPushable = reachedDestFlag;
+
+        if (timeStep > pos.lastOccupiedTimeStep) {
+            pos.lastOccupiedTimeStep = timeStep;
+            pos.lastOccupiedID = botID;
+        }
     }
 
     // Checks if a certain position is available to be occupied at a certain time step.
@@ -302,10 +308,10 @@ class Position {
     int Colour = Color.TRANSPARENT; // Only should be considered when IsDestination flag is set to true.
 
     // Used and modified when Type = BOT
-    // List<Integer> OccupiedTimeSteps = new ArrayList<>(); // If position is occuped for time steps 1, 3, 5, 6, 9, then this list stores {1, 3, 5, 6, 9}.
-
     // Time step -> ID of occupying bot.
     HashMap<Integer, String> OccupiedTimeSteps = new HashMap<>();
+    String lastOccupiedID;
+    int lastOccupiedTimeStep;
 
     boolean IsPushable = false; // Initially, bot is unpushable. It changes to true when the bot is resting.
 

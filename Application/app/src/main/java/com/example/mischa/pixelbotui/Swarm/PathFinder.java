@@ -64,8 +64,10 @@ public class PathFinder {
                     // Check if position at time step x is free:
                     boolean posAvailable = Problem.checkAvailability(currentBotPositions.get(timeStep), timeStep);
                     System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
+                    boolean reachedDestination = timeStep >= currentBotPositions.size();
+
                     if (posAvailable)
-                        Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID);
+                        Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID, reachedDestination);
                     else
                         System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
 
