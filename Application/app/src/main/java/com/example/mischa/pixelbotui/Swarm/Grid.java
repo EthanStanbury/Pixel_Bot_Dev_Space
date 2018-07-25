@@ -250,9 +250,16 @@ public class Grid {
         else if (pos.Type == EMPTY)
             return true;
         else {
-            // Return true if not occupied at the given time step, return false if it is occupied.
-            return !pos.OccupiedTimeSteps.containsKey(timeStep);
+            // Return false if it is occupied. OR a bot has reached its destination and is resting at that spot (can be determined by the value of IsPushable).
+            if (pos.OccupiedTimeSteps.containsKey(timeStep) || (timeStep > pos.lastOccupiedTimeStep && pos.IsPushable))
+                return false;
+            else
+                return true;
         }
+    }
+
+    public boolean getPushableStatus(Point position) {
+        return Grid[position.x][position.y].IsPushable;
     }
 
     //-------------------------

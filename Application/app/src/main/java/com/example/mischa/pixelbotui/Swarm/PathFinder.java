@@ -63,17 +63,26 @@ public class PathFinder {
                     anyStepsLeft = true;
                     // Check if position at time step x is free:
                     boolean posAvailable = Problem.checkAvailability(currentBotPositions.get(timeStep), timeStep);
-                    System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
-                    boolean reachedDestination = timeStep >= currentBotPositions.size();
+                    // System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
+                    boolean reachedDestination = timeStep == currentBotPositions.size() - 1;
+                    System.out.println(reachedDestination);
 
                     if (posAvailable)
                         Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID, reachedDestination);
-                    else
+                    else {
                         System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
 
-
+                        // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
+                        if (!Problem.getPushableStatus(currentBotPositions.get(timeStep))) {
+                            // Add an additional step to the bot's path sequence (stop for 1 time step)
+                            System.out.println("Adding a 'stop' command in the sequence at this timestep(" + timeStep + ")...");
+                            currentBotPositions.add(timeStep, currentBotPositions.get(timeStep));
+                            currentBotPath.add(timeStep, S);
+                        } else { // A temporary solution - until the 'push' method is implemented, the bot should just walk over other bots that have stopped to prevent the program from 'hanging'.
+                            Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID, reachedDestination);
+                        }
+                    }
                 }
-
             }
             timeStep += 1;
         }
