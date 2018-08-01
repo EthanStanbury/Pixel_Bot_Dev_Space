@@ -27,7 +27,7 @@ public class Grid {
     private Position[][] Grid;
     private int[] Dimensions;               // Stores the size of the grid in (x, y) format, including the OFF_GRID boundary
     private static List<Bot> Bots;          // Stores a list of all the available bots and all of its relevant information
-    public static List<Point> Destinations; // Stores all destination points (which is determined by the coloured pixels on the screen
+    private static List<Point> Destinations; // Stores all destination points (which is determined by the coloured pixels on the screen
 
     public static HashMap<Bot, Point> BotDestPairs; // Once the bots are mapped to their respective destinations, the pair is stored in here
 
@@ -110,6 +110,32 @@ public class Grid {
     // Pairs all bots to their individual destinations based on distance.
     // The bot that is closest to a certain destination will be chosen as bot-dest pair.
     public void mapBotToDest() {
+        // Pair the same number of bots as there are number of destinations.
+        for (int i = 0; i < Destinations.size(); i++) {
+            Bot currentBot = Bots.get(i);
+
+            // Simply pair the bot to the closest destination. Allow multiple bot to single dest pairs for now.
+            // (The step-by-step analysis will resolve this)
+            int lowestManhattanDist = Integer.MAX_VALUE;
+            int lowestManDistIndex = 0;
+
+            for (int j = 0; j < Destinations.size(); j++) {
+                int ManhattanDist = Math.abs(currentBot.Location.x - Destinations.get(j).x) +
+                        Math.abs(currentBot.Location.y - Destinations.get(j).y);
+
+                // If dist is lower than the lowest known, then replace it with new values
+                if (ManhattanDist < lowestManhattanDist) {
+                    // Set the comparing distance value to the newly detected lowest value
+                    lowestManhattanDist = ManhattanDist;
+                    lowestManDistIndex = j; // Save the index
+                }
+            }
+
+            BotDestPairs.put(currentBot, Destinations.get(lowestManDistIndex));
+        }
+
+        /* -----------------OLD CODE (match each bot to unique destination with colour matching---------------
+
         // Store all detected unique colours that are used (for bots and destinations)
         List<Integer>                   colours =       new ArrayList<>();
 
@@ -119,7 +145,7 @@ public class Grid {
         HashMap<Integer, List<Bot>>     remainingBots = new HashMap<>();
         HashMap<Integer, List<Point>>   remainingDest = new HashMap<>();
 
-        /* ----- Detect all unique colours, bots and destinations ----- */
+        /* ----- Detect all unique colours, bots and destinations -----
         for (int i = 0; i < Bots.size(); i++) {
             int botColour = Bots.get(i).Colour;
             // If colour doesn't exist in the colours list, then add it.
@@ -146,7 +172,7 @@ public class Grid {
 
             remainingDest.get(destColour).add(new Point(destCoord));
         }
-        /* -------------------------------------------------------------- */
+        /* --------------------------------------------------------------
 
         // Make sure that there are less than or equal number of destinations to bots for every colour
         for (int i = 0; i < colours.size(); i++) {
@@ -190,6 +216,7 @@ public class Grid {
                 }
             }
         }
+        */
     }
 
     // Return every possible move from a certain coordinate position.
