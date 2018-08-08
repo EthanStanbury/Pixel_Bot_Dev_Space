@@ -289,6 +289,10 @@ public class Grid {
         return Grid[position.x][position.y].IsPushable;
     }
 
+    public String returnPushableBotID(Point position) {
+        return Grid[position.x][position.y].lastOccupiedID;
+    }
+
     //-------------------------
     //-----Private Methods-----
     //-------------------------

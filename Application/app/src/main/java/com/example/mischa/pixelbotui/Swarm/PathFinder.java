@@ -61,25 +61,40 @@ public class PathFinder {
                 List<Direction> currentBotPath = allBotsSolutions.get(currentBotID);
                 if (timeStep < currentBotPositions.size()) {
                     anyStepsLeft = true;
+
+                    Point currentPos = currentBotPositions.get(timeStep);
                     // Check if position at time step x is free:
-                    boolean posAvailable = Problem.checkAvailability(currentBotPositions.get(timeStep), timeStep);
+                    boolean posAvailable = Problem.checkAvailability(currentPos, timeStep);
                     // System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
                     boolean reachedDestination = timeStep == currentBotPositions.size() - 1;
                     System.out.println(reachedDestination);
 
                     if (posAvailable)
-                        Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID, reachedDestination);
+                        Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
                     else {
                         System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
 
                         // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
-                        if (!Problem.getPushableStatus(currentBotPositions.get(timeStep))) {
+                        if (!Problem.getPushableStatus(currentPos)) {
                             // Add an additional step to the bot's path sequence (stop for 1 time step)
                             System.out.println("Adding a 'stop' command in the sequence at this timestep(" + timeStep + ")...");
-                            currentBotPositions.add(timeStep, currentBotPositions.get(timeStep));
+                            currentBotPositions.add(timeStep, currentPos);
                             currentBotPath.add(timeStep, S);
                         } else { // A temporary solution - until the 'push' method is implemented, the bot should just walk over other bots that have stopped to prevent the program from 'hanging'.
-                            Problem.updateBoard(currentBotPositions.get(timeStep), timeStep, currentBotID, reachedDestination);
+                            Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
+
+                            // Match the sequence length of the pushing and pushed bot so they are in sync (in the right time step).
+                            String pushedBotID = Problem.returnPushableBotID(currentPos);
+                            int indexOfLastEvent = allBotsPositions.size() - 1;
+                            int catchupsCounter = (timeStep - 1) - indexOfLastEvent;
+                            List<Point> pushBotPosList = allBotsPositions.get(pushedBotID);
+                            List<Direction> pushBotPathList = allBotsSolutions.get(pushedBotID);
+
+                            while (catchupsCounter > 0) {
+                                pushBotPosList.add(pushBotPosList.get(indexOfLastEvent));
+                                pushBotPathList.add(pushBotPathList.get(indexOfLastEvent));
+                                catchupsCounter -= 1;
+                            }
                         }
                     }
                 }
