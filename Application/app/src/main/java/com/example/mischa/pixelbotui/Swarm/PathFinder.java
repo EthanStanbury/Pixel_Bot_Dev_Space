@@ -18,7 +18,7 @@ import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 
 public class PathFinder {
     private static Grid Problem;
-    private static Point CurrentDest;
+    // private static Point CurrentDest;
 
     public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs, solve for a solution with the A* algorithm.
@@ -40,12 +40,13 @@ public class PathFinder {
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
             Bot bot = pair.getKey();
-            CurrentDest = pair.getValue();
 
             pairedBotList.add(bot);
 
-            allBotsSolutions.put(bot.BotID, solve(bot).Actions);
-            allBotsPositions.put(bot.BotID, solve(bot).Coordinates);
+            CoordActionOutput aStarOutput = solve(bot, pair.getValue());
+
+            allBotsSolutions.put(bot.BotID, aStarOutput.Actions);
+            allBotsPositions.put(bot.BotID, aStarOutput.Coordinates);
         }
 
         // This is a step by step checker: it checks the bots' positions for any collisions and resolves them.
@@ -54,6 +55,11 @@ public class PathFinder {
         while (anyStepsLeft) {
             anyStepsLeft = false;   // Assume that there are no actions left, unless found.
             System.out.println("TIME STEP: " + timeStep);
+
+            List<Point> pushingBots = new ArrayList<>();
+            List<String> pushedBotsID = new ArrayList<>();
+            List<Point> pushedBotsPos = new ArrayList<>();
+
             for (int i = 0; i < pairedBotList.size(); i++) {
                 String currentBotID = pairedBotList.get(i).BotID;
                 // Don't simply copy the contents of the lists, but instead enable direct editing to the list that is about to be sent.
@@ -69,9 +75,11 @@ public class PathFinder {
                     boolean reachedDestination = timeStep == currentBotPositions.size() - 1;
                     System.out.println(reachedDestination);
 
-                    if (posAvailable)
+                    if (posAvailable) {
                         Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
-                    else {
+                        pairedBotList.get(i).Location = currentPos;
+                        // Add code here to update bot's colour when it reaches its destination.
+                    } else {
                         System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
 
                         // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
@@ -81,31 +89,63 @@ public class PathFinder {
                             currentBotPositions.add(timeStep, currentPos);
                             currentBotPath.add(timeStep, S);
                         } else { // A temporary solution - until the 'push' method is implemented, the bot should just walk over other bots that have stopped to prevent the program from 'hanging'.
-                            Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
+                            // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
 
                             // Match the sequence length of the pushing and pushed bot so they are in sync (in the right time step).
                             String pushedBotID = Problem.returnPushableBotID(currentPos);
-                            int indexOfLastEvent = allBotsPositions.size() - 1;
+                            int indexOfLastEvent = allBotsPositions.get(pushedBotID).size() - 1;
                             int catchupsCounter = (timeStep - 1) - indexOfLastEvent;
                             List<Point> pushBotPosList = allBotsPositions.get(pushedBotID);
                             List<Direction> pushBotPathList = allBotsSolutions.get(pushedBotID);
 
                             while (catchupsCounter > 0) {
                                 pushBotPosList.add(pushBotPosList.get(indexOfLastEvent));
-                                pushBotPathList.add(pushBotPathList.get(indexOfLastEvent));
+                                pushBotPathList.add(S);
                                 catchupsCounter -= 1;
                             }
+
+                            pushingBots.add(currentBotPositions.get(timeStep - 1));
+                            pushedBotsID.add(pushedBotID);
+                            pushedBotsPos.add(pushBotPosList.get(timeStep - 1));
+                            System.out.println(pushBotPosList.size() - timeStep + 1);
+                            System.out.println(currentBotPositions.get(timeStep - 1));
+                            System.out.println(pushBotPosList.get(timeStep - 1));
                         }
                     }
                 }
             }
+
+            for (int j = 0; j < pushingBots.size(); j++) {
+                String pushedID = pushedBotsID.get(j);
+                Point newTarget = determineNewDestination(pushingBots.get(j), pushedBotsPos.get(j));
+                Bot pushedBot = getBotObject(pushedID, pairedBotList);
+
+                CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
+
+
+            }
+
             timeStep += 1;
         }
 
         return allBotsSolutions;
     }
 
-    private static CoordActionOutput solve(Bot bot) {
+    private static Bot getBotObject(String botID, List<Bot> botList) {
+        for (int i = 0; i < botList.size(); i++) {
+            if (botList.get(i).BotID.equals(botID)) {
+                return botList.get(i);
+            }
+        }
+        return null; // If no match is found
+    }
+
+    private static Point determineNewDestination(Point pushing, Point pushed) {
+
+        return null;
+    }
+
+    private static CoordActionOutput solve(Bot bot, Point dest) {
         // Create the initial node
         Node currentNode = new Node(bot.Location, NA, 0);
 
@@ -125,7 +165,7 @@ public class PathFinder {
         // Store estimated costs to the goal (f = g + h).
         // For the first node, the f value is entirely heuristic.
         HashMap<Point, Integer> f_values = new HashMap<>();
-        f_values.put(currentNode.Coord, heuristic(currentNode.Coord));
+        f_values.put(currentNode.Coord, heuristic(currentNode.Coord, dest));
         // Store the current cost so far to get to the current location
         HashMap<Point, Integer> g_values = new HashMap<>();
         g_values.put(currentNode.Coord, 0);
@@ -143,7 +183,7 @@ public class PathFinder {
                 // If successor node is not explored yet AND is not already in the frontier,
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
                     // If goal is found (landed on destination),
-                    if (succNode.Coord.equals(CurrentDest)) {
+                    if (succNode.Coord.equals(dest)) {
                         // Add this final goal state for backtracking
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
                         return derive_move_seq(bot.Location, succNode.Coord, back_track);
@@ -166,7 +206,7 @@ public class PathFinder {
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
 
                         g_values.put(succNode.Coord, temp_g_value);
-                        f_values.put(succNode.Coord, (g_values.get(succNode.Coord) + heuristic(succNode.Coord)));
+                        f_values.put(succNode.Coord, (g_values.get(succNode.Coord) + heuristic(succNode.Coord, dest)));
                     }
                 }
             }
@@ -197,8 +237,8 @@ public class PathFinder {
     // Heuristic is an estimate of the most optimistic (lowest) cost that the solver should expect.
     // This way, the solver doesn't try moves that veer away from the goal.
     // This calculates the Manhattan distance from given position to the target destination.
-    private static Integer heuristic(Point pos) {
-        return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
+    private static Integer heuristic(Point pos, Point dest) {
+        return Math.abs(pos.x - dest.x) + Math.abs(pos.y - dest.y);
     }
 
     // The idea to to reverse engineer the sequence of moves to get to the destination came from:
