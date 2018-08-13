@@ -121,7 +121,8 @@ public class PathFinder {
                 Bot pushedBot = getBotObject(pushedID, pairedBotList);
 
                 CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
-
+                allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
+                allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
 
             }
 
