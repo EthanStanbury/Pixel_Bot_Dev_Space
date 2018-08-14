@@ -1,3 +1,6 @@
+## Note: This is our GitHub, where all of our code is stored and logged. If you are looking for documetation head over to our [Google Drive Repository] (https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q)
+
+
 ## Background & Questacon's Vision
 Questacon is The National Science and Technology Centre located in Canberra, Australia. The facility, administered within the Australian Government's Department of Industry, Innovation and Science, is home to a range of innovative exhibits, shows, and activities designed appealing to people of all ages.
 
