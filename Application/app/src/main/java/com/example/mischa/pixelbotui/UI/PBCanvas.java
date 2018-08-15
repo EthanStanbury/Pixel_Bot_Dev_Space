@@ -36,13 +36,16 @@ public class PBCanvas extends SurfaceView {
 
     public static int xDimension = 12; // horizontal axis
     public static int yDimension = 12; // vertical axis
+    int xDimWOBorder = xDimension - 2;
+    int yDimWOBorder = yDimension - 2;
 
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
     int newColour = Color.TRANSPARENT;
     int whiteBox;
-    HashMap<Integer, Integer> pixelAmounts = new HashMap<>();
+    int botsTotal = 50;
+    int currentBotAmount;
 
     Context context;
 
@@ -58,10 +61,9 @@ public class PBCanvas extends SurfaceView {
     LayoutItem eraseBG;
     LayoutItem rSubmit;
     LayoutItem rClear;
+    LayoutItem gridBG;
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
-
-    int count = 0;
 
     ArrayList<LayoutItem> LayoutItemList = new ArrayList<>();
     ArrayList<LayoutItem> ClickableItems = new ArrayList<>();
@@ -94,10 +96,11 @@ public class PBCanvas extends SurfaceView {
         rBlue = new LayoutItem(Color.parseColor("#3BCEAC")); // -12857684
         rPurple = new LayoutItem(Color.parseColor("#540D6E")); // -11268754
         rColourPicked = new LayoutItem(Color.WHITE);
-        rColourPicked.rect.set(0,0,0,0);
+        rColourPicked.rect.set(-1,0,0,0);
         eraseBG = new LayoutItem(Color.LTGRAY);
         rSubmit = new LayoutItem(Color.LTGRAY);
         rClear = new LayoutItem(Color.LTGRAY);
+        gridBG = new LayoutItem(Color.LTGRAY);
 
         LayoutItemList.add(top);
         LayoutItemList.add(bottom);
@@ -111,6 +114,7 @@ public class PBCanvas extends SurfaceView {
         LayoutItemList.add(eraseBG);
         LayoutItemList.add(rSubmit);
         LayoutItemList.add(rClear);
+        LayoutItemList.add(gridBG);
 
         ClickableItems.add(rErase);
         ClickableItems.add(rRed);
@@ -118,13 +122,6 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rGreen);
         ClickableItems.add(rBlue);
         ClickableItems.add(rPurple);
-
-        pixelAmounts.put(-1162650,    10); //Red
-        pixelAmounts.put(-11713,      10); //Yellow
-        pixelAmounts.put(-15815319,   10); //Green
-        pixelAmounts.put(-12857684,   10); //Blue
-        pixelAmounts.put(-11268754,   10); //Purple
-
     }
 
     // Clears the grid of any current drawing
@@ -136,20 +133,14 @@ public class PBCanvas extends SurfaceView {
     }
 
     // This counts how many of each colour are on the grid at the current time
-    public void updatePixelAmounts() {
-
-        for (int key : pixelAmounts.keySet()) {
-            //temp = MainActivity.BotAmounts.get(key);
-            count = 0;
-            for (Pixel p : uiGrid) {
-                if (p.colour == key && !isIn(p, border)) {
-                    count++;
-                }
+    public void updateBotAmount() {
+        int count = 0;
+        for (Pixel p : uiGrid) {
+            if (p.colour != Color.TRANSPARENT) {
+                count++;
             }
-            pixelAmounts.put(key, 10 - count);
-            //pixelAmounts.put(key, ); //TODO
-            //MainActivity.BotAmounts.put(key, temp);
         }
+        currentBotAmount = botsTotal - count;
     }
 
     // Test if a pixel is in a list
@@ -169,16 +160,16 @@ public class PBCanvas extends SurfaceView {
         paint.setStrokeWidth(5);
 
         /* This is for if the screen is landscape, basically */
-        if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimension/yDimension) {
+        if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
             // Set all the positions of the rectangles on the screen
-            top.rect.set(0,0,200, canvas.getHeight());
-            bottom.rect.set(canvas.getWidth() - 200,0, canvas.getWidth(), canvas.getHeight());
-            rRed.rect.set(40, (canvas.getHeight()/7) - 60, 160, (canvas.getHeight()/7) + 60);
-            rYellow.rect.set(40, 2 * (canvas.getHeight()/7) - 60, 160, 2 * (canvas.getHeight()/7) + 60);
-            rGreen.rect.set(40, 3 * (canvas.getHeight()/7) - 60, 160, 3 * (canvas.getHeight()/7) + 60);
-            rBlue.rect.set(40, 4 * (canvas.getHeight()/7) - 60, 160, 4 * (canvas.getHeight()/7) + 60);
-            rPurple.rect.set(40, 5 * (canvas.getHeight()/7) - 60, 160, 5 * (canvas.getHeight()/7) + 60);
-            rErase.rect.set(40, 6 * (canvas.getHeight()/7) - 60, 160, 6 * (canvas.getHeight()/7) + 60);
+            top.rect.set(0,0,300, canvas.getHeight());
+            bottom.rect.set(canvas.getWidth() - 300,0, canvas.getWidth(), canvas.getHeight());
+            rRed.rect.set(70, (canvas.getHeight()/7) - 80, 230, (canvas.getHeight()/7) + 80);
+            rYellow.rect.set(70, 2 * (canvas.getHeight()/7) - 80, 230, 2 * (canvas.getHeight()/7) + 80);
+            rGreen.rect.set(70, 3 * (canvas.getHeight()/7) - 80, 230, 3 * (canvas.getHeight()/7) + 80);
+            rBlue.rect.set(70, 4 * (canvas.getHeight()/7) - 80, 230, 4 * (canvas.getHeight()/7) + 80);
+            rPurple.rect.set(70, 5 * (canvas.getHeight()/7) - 80, 230, 5 * (canvas.getHeight()/7) + 80);
+            rErase.rect.set(70, 6 * (canvas.getHeight()/7) - 80, 230, 6 * (canvas.getHeight()/7) + 80);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top - 4, rErase.rect.right - 4, rErase.rect.bottom + 4);
             eraseBG.rect.set(rErase.rect);
             rClear.rect.set(canvas.getWidth() - 240, 40, canvas.getWidth() - 40, 160);
@@ -186,32 +177,30 @@ public class PBCanvas extends SurfaceView {
 
 
             // Setting all the pixels' bounds, as well as the width of them
-            squareWidth = (canvas.getHeight() - 200)/yDimension;
-            excessSpace = canvas.getWidth() - (xDimension * squareWidth);
-            for (int i = 0; i < yDimension; i++) {
-                for (int j = 0; j < xDimension; j++) {
-                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + (j * squareWidth),
+            squareWidth = (canvas.getHeight() - 200)/yDimWOBorder;
+            excessSpace = canvas.getWidth() - (xDimWOBorder * squareWidth);
+            for (int i = 0; i < yDimWOBorder; i++) {
+                for (int j = 0; j < xDimWOBorder; j++) {
+                    uiGrid[i * xDimWOBorder + j].rect.set((excessSpace / 2) + (j * squareWidth),
                             100 + i * squareWidth,
                             (excessSpace / 2) + (j * squareWidth) + squareWidth,
                             100 + (i * squareWidth) + squareWidth);
-                    uiGrid[i * xDimension + j].location.set(j,i);
-                    if (i == 0 || j == 0 || i == yDimension - 1 || j == xDimension - 1) {
-                        border.add(uiGrid[i * xDimension + j]);
-                    }
+                    uiGrid[i * xDimWOBorder + j].location.set(j,i);
                 }
             }
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 - (yDimWOBorder/2 * squareWidth), canvas.getWidth()/2 + (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 + (yDimWOBorder/2 * squareWidth));
         }
         /* This is for if the screen is portrait */
         else {
             // Set all the positions of the rectangles on the screen
-            top.rect.set(0,0,canvas.getWidth(),200);
-            bottom.rect.set(0,canvas.getHeight() - 200,canvas.getWidth(),canvas.getHeight());
-            rRed.rect.set(canvas.getWidth()/7 - 60, 40, canvas.getWidth()/7 + 60, 160);
-            rYellow.rect.set( 2 * (canvas.getWidth()/7) - 60, 40, 2 * (canvas.getWidth()/7) + 60, 160);
-            rGreen.rect.set(3 * (canvas.getWidth()/7) - 60, 40, 3 * (canvas.getWidth()/7) + 60, 160);
-            rBlue.rect.set(4 * (canvas.getWidth()/7) - 60, 40, 4 * (canvas.getWidth()/7) + 60, 160);
-            rPurple.rect.set(5 * (canvas.getWidth()/7) - 60, 40, 5 * (canvas.getWidth()/7) + 60, 160);
-            rErase.rect.set(6 * (canvas.getWidth()/7) - 60, 40, 6 * (canvas.getWidth()/7) + 60, 160);
+            top.rect.set(0,0,canvas.getWidth(),300);
+            bottom.rect.set(0,canvas.getHeight() - 300,canvas.getWidth(),canvas.getHeight());
+            rRed.rect.set(canvas.getWidth()/7 - 80, 70, canvas.getWidth()/7 + 80, 230);
+            rYellow.rect.set( 2 * (canvas.getWidth()/7) - 80, 70, 2 * (canvas.getWidth()/7) + 80, 230);
+            rGreen.rect.set(3 * (canvas.getWidth()/7) - 80, 70, 3 * (canvas.getWidth()/7) + 80, 230);
+            rBlue.rect.set(4 * (canvas.getWidth()/7) - 80, 70, 4 * (canvas.getWidth()/7) + 80, 230);
+            rPurple.rect.set(5 * (canvas.getWidth()/7) - 80, 70, 5 * (canvas.getWidth()/7) + 80, 230);
+            rErase.rect.set(6 * (canvas.getWidth()/7) - 80, 70, 6 * (canvas.getWidth()/7) + 80, 230);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top + 4, rErase.rect.right - 4, rErase.rect.bottom - 4);
             eraseBG.rect.set(rErase.rect);
             rClear.rect.set(40, canvas.getHeight() - 160, 240, canvas.getHeight() - 40);
@@ -220,20 +209,18 @@ public class PBCanvas extends SurfaceView {
 
 
             // Setting all the pixels' bounds, as well as the width of them
-            squareWidth = (canvas.getWidth() - 200)/xDimension;
-            excessSpace = canvas.getHeight() - (yDimension * squareWidth);
-            for (int i = 0; i < yDimension; i++) {
-                for (int j = 0; j < xDimension; j++) {
-                    uiGrid[i * xDimension + j].rect.set(100 + j * squareWidth,
+            squareWidth = (canvas.getWidth() - 200)/xDimWOBorder;
+            excessSpace = canvas.getHeight() - (yDimWOBorder * squareWidth);
+            for (int i = 0; i < yDimWOBorder; i++) {
+                for (int j = 0; j < xDimWOBorder; j++) {
+                    uiGrid[i * xDimWOBorder + j].rect.set(100 + j * squareWidth,
                             (excessSpace / 2) + (i * squareWidth),
                             100 + (j * squareWidth) + squareWidth,
                             (excessSpace / 2) + (i * squareWidth) + squareWidth);
-                    uiGrid[i * xDimension + j].location.set(j,i);
-                    if (i == 0 || j == 0 || i == yDimension - 1 || j == xDimension - 1) {
-                        border.add(uiGrid[i * xDimension + j]);
-                    }
+                    uiGrid[i * xDimWOBorder + j].location.set(j,i);
                 }
             }
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 - (yDimWOBorder/2 * squareWidth), canvas.getWidth()/2 + (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 + (yDimWOBorder/2 * squareWidth));
         }
 
         // Draw all of the LayoutItems
@@ -248,27 +235,24 @@ public class PBCanvas extends SurfaceView {
         paint.setColor(Color.BLACK);
         canvas.drawText("CLEAR", rClear.rect.exactCenterX(), rClear.rect.exactCenterY() + 20, paint);
         canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
-        paint.setColor(Color.WHITE);
 
-        // Writing the amount of colour left to use on the colours
-        for (LayoutItem item : LayoutItemList) {
-            if (pixelAmounts.containsKey(item.colour)) {
-                canvas.drawText("" + pixelAmounts.get(item.colour), item.rect.exactCenterX(), item.rect.exactCenterY() + 10, paint);
-            }
-        }
+
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(75);
+        canvas.drawText(currentBotAmount + "", canvas.getWidth()/2, rClear.rect.exactCenterY(), paint);
 
         // Drawing all the Pixels
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.FILL);
             if (isIn(p, border)) {
-                paint.setColor(Color.DKGRAY);
+                paint.setColor(Color.LTGRAY);
             } else {
                 paint.setColor(p.colour);
             }
             canvas.drawRect(p.rect, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
-            paint.setStrokeWidth(5);
+            paint.setStrokeWidth(3);
             canvas.drawRect(p.rect, paint);
         }
 
@@ -289,13 +273,13 @@ public class PBCanvas extends SurfaceView {
                     //Change the paint colour
                     if (ClickableItems.get(i).rect.contains(xTouch, yTouch)) {
                         newColour = ClickableItems.get(i).colour;
-                        rColourPicked.rect.set(ClickableItems.get(i).rect.left - 8, ClickableItems.get(i).rect.top - 8, ClickableItems.get(i).rect.right + 8, ClickableItems.get(i).rect.bottom + 8);
+                        rColourPicked.rect.set(ClickableItems.get(i).rect.left - 10, ClickableItems.get(i).rect.top - 10, ClickableItems.get(i).rect.right + 10, ClickableItems.get(i).rect.bottom + 10);
                         whiteBox = i;
                         System.out.println(newColour);
                     }
                 }
                 // Colour the pressed rectangle
-                if (pixelAmounts.keySet().contains(newColour) && pixelAmounts.get(newColour) > 0 || newColour == Color.TRANSPARENT) { //TODO
+                if (currentBotAmount > 0) {
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
@@ -325,7 +309,7 @@ public class PBCanvas extends SurfaceView {
             // For a swipe
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
-                if ((pixelAmounts.keySet().contains(newColour)) && pixelAmounts.get(newColour) > 0 || newColour == Color.TRANSPARENT) { //TODO
+                if (currentBotAmount > 0) {
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
                             uiGrid[i].colour = newColour;
@@ -335,7 +319,7 @@ public class PBCanvas extends SurfaceView {
                 }
                 break;
         }
-        updatePixelAmounts();
+        updateBotAmount();
         postInvalidate(); //Redraw
         return true;
     }
@@ -353,7 +337,7 @@ public class PBCanvas extends SurfaceView {
         for (int i = 0; i < uiGrid.length; i++) {
             uiGrid[i].colour = state[i];
         }
-        rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 8, ClickableItems.get(whiteBox).rect.top - 8, ClickableItems.get(whiteBox).rect.right + 8, ClickableItems.get(whiteBox).rect.bottom + 8);
+        rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 10, ClickableItems.get(whiteBox).rect.top - 10, ClickableItems.get(whiteBox).rect.right + 10, ClickableItems.get(whiteBox).rect.bottom + 10);
         postInvalidate();
     }
 }
