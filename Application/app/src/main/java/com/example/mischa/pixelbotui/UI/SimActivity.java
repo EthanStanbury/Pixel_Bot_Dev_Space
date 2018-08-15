@@ -16,7 +16,7 @@ public class SimActivity extends Activity {
         if (simCanvas == null) {
             simCanvas = new Simulation(this);
         }
-        simCanvas.setBackgroundColor(Color.GRAY);
+        simCanvas.setBackgroundColor(Color.WHITE);
         setContentView(simCanvas);
     }
 

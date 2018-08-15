@@ -96,7 +96,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
-            paint.setStrokeWidth(5);
+            paint.setStrokeWidth(3);
             canvas.drawRect(p.rect, paint);
         }
 
