@@ -26,11 +26,16 @@ import static org.junit.Assert.*;
  * Instrumented test, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ *
+ * This is a testing file, it is difficult to create an instance and test it. So most of the instance needs to be created in the testing file
+ * It also needs to be run on a VM to run the test
+ *
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class pathReqCheck {
 
     List<Direction> wrongSolution;
+    int botCreateAmount = 6;
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
 
 
@@ -41,6 +46,8 @@ public class ExampleInstrumentedTest {
         Boolean valid = false;
         for (String key: solutions.keySet()) {
             List<Direction> list = solutions.get(key);
+
+            //checks to see if the destination string is valid. Valid = ["L,D,R,U,L,L,"] or something similar
             for (int i = 0; i < list.size();  i++) {
                 String direction = list.get(i).toString();
                 switch (direction){
@@ -74,28 +81,29 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void pathFindCalcTime() throws Exception {
+    public void pathReqCheck() throws Exception {
 
 
-
-        BotAmounts.put(-1162650, 4); //Red
+        // add the bots
+        BotAmounts.put(-1162650, botCreateAmount); //Red
         BotAmounts.put(-11713, 4); //Yellow
         BotAmounts.put(-15815319, 4); //Green
         BotAmounts.put(-12857684, 4); //Blue
         BotAmounts.put(-11268754, 4); //Purple
         BotAmounts.put(Color.BLACK, 4); //Black
-
+        //set dimensions
         int yDimension = 10;
         int xDimension = 10;
         int noOfSquares = yDimension*xDimension;
         Pixel[] uiGrid;
         uiGrid = new Pixel[noOfSquares];
 
-
+        // create all the null grid
         for (int i = 0; i < noOfSquares; i++) {
             uiGrid[i] = new Pixel(Color.TRANSPARENT, new Point(0,0));
         }
 
+        //set the pixel location to change depending on what pixel it is
         for (int i = 0; i < yDimension; i++) {
             for (int j = 0; j < xDimension; j++) {
                 uiGrid[i * xDimension + j].rect.set((j * 10),
@@ -105,28 +113,37 @@ public class ExampleInstrumentedTest {
                 uiGrid[i * xDimension + j].location.set(j,i);
             }
         }
-
-        for (int i = 4; i <= 4; i++){
+        //create 4 random 'on' pixels
+        for (int i = 0; i < botCreateAmount; i++){
             Random random = new Random();
-            int select = random.nextInt(8) + 1;
 
-            Pixel pixelEdit = uiGrid[select * xDimension + select];
-            pixelEdit.colour = Color.RED;
+            int xSelect = random.nextInt(8) + 1;
+            int ySelect = random.nextInt(8) + 1;
+
+
+            Pixel pixelEdit = uiGrid[xSelect * xDimension + ySelect];
+            pixelEdit.colour = -1162650;
+            uiGrid[xSelect * xDimension + ySelect]  = pixelEdit;
         }
 
-        UIAdapter.createGridWpixel(uiGrid);
+        //create the swarm
         SwarmAdapter.SwarmCreate(BotAmounts);
-
-        long start = System.currentTimeMillis();
+        //create the grid
+        UIAdapter.createGridWpixel(uiGrid);
+        //find solutions
+        long start = System.currentTimeMillis(); //To start to measure the time it takes to get the solutions
         HashMap<String, List<Direction>> solutions =  PathFinder.getSolutions(UIAdapter.destinationGrid);
-        List<Direction> solutionsTest = solutions.get(Color.RED);
         long end = System.currentTimeMillis();
+
+
 
         System.out.println("OIOIOIOI" + solutions);
 
         assertTrue("Got a time greater than 10seconds which was: " + (start - end), start - end < 10000);
-        assertTrue("Output a different amount of solutions than bots got "+  solutions.size() + " solutions", solutions.size() >= 4 );
-        assertTrue("Got an invalid solution string, it was: " + solutionsTest, solutionsCheck(solutions));
+        assertTrue("Got an invalid solution string, it was: " + wrongSolution, solutionsCheck(solutions));
+        assertTrue("Output a different amount of solutions than bots got "+  solutions.size() + " solutions", solutions.size() >= botCreateAmount );
+
+
 
 
     }

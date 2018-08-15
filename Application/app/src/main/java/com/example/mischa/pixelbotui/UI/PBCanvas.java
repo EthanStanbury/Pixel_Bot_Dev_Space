@@ -74,6 +74,8 @@ public class PBCanvas extends SurfaceView {
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
 
+
+
         if (xDimension < 10 || yDimension < 10){
             AlertDialog.Builder alert = new AlertDialog.Builder(context);
             alert.setMessage("Grid dimension below 10. Please restart the app and select grid dimension over 10. ");
@@ -308,6 +310,7 @@ public class PBCanvas extends SurfaceView {
                 if (rSubmit.rect.contains(xTouch, yTouch)) {
                     UIAdapter.createGridWpixel(uiGrid);
                     SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+
                     System.out.println(SwarmAdapter.WholeSwarm.size());
 //                    for (Integer key: SwarmAdapter.WholeSwarm.keySet()) {
 //

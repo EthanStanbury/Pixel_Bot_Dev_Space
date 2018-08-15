@@ -16,9 +16,10 @@ public class SwarmAdapter {
 
 
     public static HashMap<Integer, Swarm> WholeSwarm = new HashMap<>();
+    //@param initialSwarm the first in is the colour the second is how many of that bot you want to create
 
     public static void SwarmCreate(HashMap<Integer, Integer> initialSwarm){
-
+        //For each object in the  initialSwarm create the swarm for the object, add each swarm to the Global Swarm list
         for (int key : initialSwarm.keySet()) {
             Swarm add = new Swarm(key, initialSwarm.get(key));
             WholeSwarm.put(key, add);
