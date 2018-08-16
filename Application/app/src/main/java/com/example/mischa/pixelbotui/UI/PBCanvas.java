@@ -34,8 +34,8 @@ public class PBCanvas extends SurfaceView {
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
 
-    public static int xDimension = 12; // horizontal axis
-    public static int yDimension = 12; // vertical axis
+    public static int xDimension = 27; // horizontal axis
+    public static int yDimension = 23; // vertical axis
     int xDimWOBorder = xDimension - 2;
     int yDimWOBorder = yDimension - 2;
 
@@ -179,16 +179,16 @@ public class PBCanvas extends SurfaceView {
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getHeight() - 200)/yDimWOBorder;
             excessSpace = canvas.getWidth() - (xDimWOBorder * squareWidth);
-            for (int i = 0; i < yDimWOBorder; i++) {
-                for (int j = 0; j < xDimWOBorder; j++) {
-                    uiGrid[i * xDimWOBorder + j].rect.set((excessSpace / 2) + (j * squareWidth),
-                            100 + i * squareWidth,
-                            (excessSpace / 2) + (j * squareWidth) + squareWidth,
-                            100 + (i * squareWidth) + squareWidth);
-                    uiGrid[i * xDimWOBorder + j].location.set(j,i);
+            for (int i = 1; i < yDimension - 1; i++) {
+                for (int j = 1; j < xDimension - 1; j++) {
+                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + ((j - 1) * squareWidth),
+                            100 + (i - 1) * squareWidth,
+                            (excessSpace / 2) + ((j - 1) * squareWidth) + squareWidth,
+                            100 + ((i - 1) * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 - (yDimWOBorder/2 * squareWidth), canvas.getWidth()/2 + (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 + (yDimWOBorder/2 * squareWidth));
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
         }
         /* This is for if the screen is portrait */
         else {
@@ -211,17 +211,16 @@ public class PBCanvas extends SurfaceView {
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimWOBorder;
             excessSpace = canvas.getHeight() - (yDimWOBorder * squareWidth);
-            for (int i = 0; i < yDimWOBorder; i++) {
-                for (int j = 0; j < xDimWOBorder; j++) {
-                    uiGrid[i * xDimWOBorder + j].rect.set(100 + j * squareWidth,
-                            (excessSpace / 2) + (i * squareWidth),
-                            100 + (j * squareWidth) + squareWidth,
-                            (excessSpace / 2) + (i * squareWidth) + squareWidth);
-                    uiGrid[i * xDimWOBorder + j].location.set(j,i);
+            for (int i = 1; i < yDimension - 1; i++) {
+                for (int j = 1; j < xDimension - 1; j++) {
+                    uiGrid[i * xDimension + j].rect.set(100 + (j - 1) * squareWidth,
+                            (excessSpace / 2) + ((i - 1) * squareWidth),
+                            100 + ((j - 1) * squareWidth) + squareWidth,
+                            (excessSpace / 2) + ((i - 1) * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 - (yDimWOBorder/2 * squareWidth), canvas.getWidth()/2 + (xDimWOBorder/2 * squareWidth), canvas.getHeight()/2 + (yDimWOBorder/2 * squareWidth));
-        }
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));        }
 
         // Draw all of the LayoutItems
         for (int i = 0; i < LayoutItemList.size(); i++) {
