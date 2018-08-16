@@ -45,7 +45,8 @@ public class MainActivity extends Activity {
         for (int i = 0; i < saveState.length; i++) {
             state.putInt("" + i, saveState[i]);
         }
-        state.putInt("colour", canvas.newColour);
+        state.putInt("colour", canvas.selectedColour);
+        System.out.println("Save: " + canvas.whiteBox);
         state.putInt("whiteBox", canvas.whiteBox);
     }
 
@@ -55,9 +56,10 @@ public class MainActivity extends Activity {
         for (int i = 0; i < state.size(); i++) {
             restoreState[i] = state.getInt("" + i);
         }
-        canvas.giveRestoreState(restoreState);
-        canvas.newColour = state.getInt("colour");
+        canvas.selectedColour = state.getInt("colour");
         canvas.whiteBox = state.getInt("whiteBox");
+        canvas.giveRestoreState(restoreState);
+
 
     }
 }

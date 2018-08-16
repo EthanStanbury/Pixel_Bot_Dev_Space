@@ -34,17 +34,17 @@ public class PBCanvas extends SurfaceView {
     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
 
-    public static int xDimension = 27; // horizontal axis
-    public static int yDimension = 23; // vertical axis
+    public static int xDimension = 25; // horizontal axis
+    public static int yDimension = 16; // vertical axis
     int xDimWOBorder = xDimension - 2;
     int yDimWOBorder = yDimension - 2;
 
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
-    int newColour = Color.TRANSPARENT;
-    int whiteBox;
-    int botsTotal = 50;
+    int selectedColour = Color.TRANSPARENT;
+    int whiteBox = 1;
+    int botsTotal = 322;
     int currentBotAmount;
 
     Context context;
@@ -96,7 +96,7 @@ public class PBCanvas extends SurfaceView {
         rBlue = new LayoutItem(Color.parseColor("#3BCEAC")); // -12857684
         rPurple = new LayoutItem(Color.parseColor("#540D6E")); // -11268754
         rColourPicked = new LayoutItem(Color.WHITE);
-        rColourPicked.rect.set(-1,0,0,0);
+        rColourPicked.rect.set(-10,-10,-9,-9);
         eraseBG = new LayoutItem(Color.LTGRAY);
         rSubmit = new LayoutItem(Color.LTGRAY);
         rClear = new LayoutItem(Color.LTGRAY);
@@ -158,6 +158,7 @@ public class PBCanvas extends SurfaceView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         paint.setStrokeWidth(5);
+        updateBotAmount();
 
         /* This is for if the screen is landscape, basically */
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
@@ -220,7 +221,10 @@ public class PBCanvas extends SurfaceView {
                     uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));        }
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+        }
+
+        rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 10, ClickableItems.get(whiteBox).rect.top - 10, ClickableItems.get(whiteBox).rect.right + 10, ClickableItems.get(whiteBox).rect.bottom + 10);
 
         // Draw all of the LayoutItems
         for (int i = 0; i < LayoutItemList.size(); i++) {
@@ -238,7 +242,8 @@ public class PBCanvas extends SurfaceView {
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(75);
-        canvas.drawText(currentBotAmount + "", canvas.getWidth()/2, rClear.rect.exactCenterY(), paint);
+        canvas.drawText(currentBotAmount + "", bottom.rect.exactCenterX(), bottom.rect.exactCenterY() - 50, paint);
+        canvas.drawText("bots left", bottom.rect.exactCenterX(), bottom.rect.exactCenterY() + 50, paint);
 
         // Drawing all the Pixels
         for (Pixel p : uiGrid) {
@@ -271,19 +276,18 @@ public class PBCanvas extends SurfaceView {
                 for (int i = 0; i < ClickableItems.size(); i++) {
                     //Change the paint colour
                     if (ClickableItems.get(i).rect.contains(xTouch, yTouch)) {
-                        newColour = ClickableItems.get(i).colour;
+                        selectedColour = ClickableItems.get(i).colour;
                         rColourPicked.rect.set(ClickableItems.get(i).rect.left - 10, ClickableItems.get(i).rect.top - 10, ClickableItems.get(i).rect.right + 10, ClickableItems.get(i).rect.bottom + 10);
                         whiteBox = i;
-                        System.out.println(newColour);
+                        System.out.println("Change: " + whiteBox);
                     }
                 }
                 // Colour the pressed rectangle
-                if (currentBotAmount > 0) {
+                if (currentBotAmount > 0 || selectedColour == Color.TRANSPARENT) {
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
-                            uiGrid[i].colour = newColour;
+                            uiGrid[i].colour = selectedColour;
                         }
-                        System.out.println(uiGrid[i].colour);
                     }
                 }
                 // if they tap clear or submit
@@ -294,7 +298,7 @@ public class PBCanvas extends SurfaceView {
                     UIAdapter.createGridWpixel(uiGrid);
                     SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
 
-                    System.out.println(SwarmAdapter.WholeSwarm.size());
+                    //System.out.println(SwarmAdapter.WholeSwarm.size());
 //                    for (Integer key: SwarmAdapter.WholeSwarm.keySet()) {
 //
 //
@@ -308,12 +312,11 @@ public class PBCanvas extends SurfaceView {
             // For a swipe
             case MotionEvent.ACTION_MOVE:
                 // Colour the rectangles it passes through
-                if (currentBotAmount > 0) {
+                if (currentBotAmount > 0 || selectedColour == Color.TRANSPARENT) {
                     for (int i = 0; i < noOfSquares; i++) {
                         if (uiGrid[i].rect.contains(xTouch, yTouch) && !isIn(uiGrid[i], border)) {
-                            uiGrid[i].colour = newColour;
+                            uiGrid[i].colour = selectedColour;
                         }
-                        System.out.println(uiGrid[i].colour);
                     }
                 }
                 break;
@@ -336,7 +339,7 @@ public class PBCanvas extends SurfaceView {
         for (int i = 0; i < uiGrid.length; i++) {
             uiGrid[i].colour = state[i];
         }
-        rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 10, ClickableItems.get(whiteBox).rect.top - 10, ClickableItems.get(whiteBox).rect.right + 10, ClickableItems.get(whiteBox).rect.bottom + 10);
+        System.out.println("RestoreState: " + whiteBox);
         postInvalidate();
     }
 }
