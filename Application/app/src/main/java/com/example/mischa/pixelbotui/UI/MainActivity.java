@@ -28,11 +28,11 @@ public class MainActivity extends Activity {
         setContentView(canvas);
 
         // The amount of bots we have to work with
-        BotAmounts.put(-1162650,    10); //Red
-        BotAmounts.put(-11713,      10); //Yellow
-        BotAmounts.put(-15815319,   10); //Green
-        BotAmounts.put(-12857684,   10); //Blue
-        BotAmounts.put(-11268754,   10); //Purple
+        BotAmounts.put(-1162650,    30); //Red
+        BotAmounts.put(-11713,      0); //Yellow
+        BotAmounts.put(-15815319,   0); //Green
+        BotAmounts.put(-12857684,   0); //Blue
+        BotAmounts.put(-11268754,   0); //Purple
         BotAmounts.put(Color.BLACK, 0); //Black
 
 
