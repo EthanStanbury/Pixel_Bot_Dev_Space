@@ -44,7 +44,7 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int selectedColour = Color.TRANSPARENT;
     int whiteBox = 1;
-    int botsTotal = 322;
+    int botsTotal = 200;
     int currentBotAmount;
 
     Context context;
@@ -279,7 +279,6 @@ public class PBCanvas extends SurfaceView {
                         selectedColour = ClickableItems.get(i).colour;
                         rColourPicked.rect.set(ClickableItems.get(i).rect.left - 10, ClickableItems.get(i).rect.top - 10, ClickableItems.get(i).rect.right + 10, ClickableItems.get(i).rect.bottom + 10);
                         whiteBox = i;
-                        System.out.println("Change: " + whiteBox);
                     }
                 }
                 // Colour the pressed rectangle
@@ -339,7 +338,6 @@ public class PBCanvas extends SurfaceView {
         for (int i = 0; i < uiGrid.length; i++) {
             uiGrid[i].colour = state[i];
         }
-        System.out.println("RestoreState: " + whiteBox);
         postInvalidate();
     }
 }
