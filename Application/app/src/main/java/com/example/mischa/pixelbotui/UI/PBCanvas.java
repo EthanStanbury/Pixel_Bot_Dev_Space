@@ -44,7 +44,7 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int selectedColour = Color.TRANSPARENT;
     int whiteBox = 1;
-    int botsTotal = 50;
+    int botsTotal = 322;
     int currentBotAmount;
 
     Context context;
