@@ -32,15 +32,57 @@ public class Swarm {
     public Swarm(Integer Colour, Integer numberOfBots){
 
         HashMap<String, Bot> thisSwarmList = new HashMap<>();
+        int side = 1;
+        int counter = 0;
 
-            for (int i = 0; i < numberOfBots; i++){
-                Point defaultLocation = new Point(0, 1+i);
-                String id = (Colour.toString() +"/"+ i);
-                Bot add = new Bot(id, Colour, defaultLocation);
-                thisSwarmList.put(id, add);
-                UIAdapter.destinationGrid.addBot(add);
+        while ( numberOfBots > 0){
+            System.out.println("#botsleft: " + numberOfBots);
+
+
+
+            if (side == 1 && counter == PBCanvas.yDimension - 1){
+                side = 2;
+                System.out.println("side: " +side);
+                counter = 0;
+            }else if(side == 2 && counter == PBCanvas.xDimension - 1) {
+                side = 3;
+                counter = 0;
+                System.out.println("side: " +side);
+            }else if (side == 3 && counter == PBCanvas.yDimension - 1){
+                side = 4;
+                counter = 0;
+                System.out.println("side: " +side);
+
 
             }
+
+            Point defaultLocation = new Point(0,0);
+            if (side == 1 ) {
+                defaultLocation.set(0, 1 + counter);
+                System.out.println("Creating a bot in side 1 with a location of: " + defaultLocation);
+
+            }else if( side == 2) {
+                defaultLocation.set(1 +  counter, PBCanvas.yDimension - 1 );
+                System.out.println("Creating a bot in side 2 with a location of: " + defaultLocation);
+            }else if( side == 3){
+                defaultLocation.set( PBCanvas.xDimension, 1 + counter);
+                System.out.println("Creating a bot in side 3 with a location of: " + defaultLocation);
+            }else if(side == 4){
+                defaultLocation.set( 1 + counter, 0);
+                System.out.println("Creating a bot in side 4 with a location of: " + defaultLocation);
+            }
+
+            String id = (Colour.toString() +"/"+ numberOfBots);
+            Bot add = new Bot(id, Colour, defaultLocation);
+            thisSwarmList.put(id, add);
+            UIAdapter.destinationGrid.addBot(add);
+
+            counter++;
+            numberOfBots--;
+
+
+
+        }
 
         this.SwarmList = thisSwarmList;
 
