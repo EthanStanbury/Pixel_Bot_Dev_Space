@@ -11,12 +11,12 @@ Questacon seeks to promote awareness and interests in science and technology wit
 The project is to build an interactive picture drawing display for Questacon’s upcoming AI and Robotics exhibit. This will be done to highlight and emphasize swarm mechanics to an audience. The way that this exhibit will adhere to Questacon’s educational values will be by creating a picture made up of bots in front of the user, based on a picture drawn by the user. The pattern can be multi-coloured with a pixel art style. Once completed we hope to create an effect that could almost be considered ‘the picture coming to life’, due to the fast movement required to assemble the picture. With these features combined, it will create a fun and interactive display for people to use and enjoy.
 
 ## Team Members and Communications
-| Name       |       Role     | Description  |
+| Name       |       Role     | Responsiblities  |
 | ---------------|-------------| --------------|
 |Ethan Stanbury      | Software |TBD|
 |Mischa Rippon|Software| TBD|
 |Daniel Jang| Software | TBD|
-|Namisha Chabbra | Hardware |TBD|
+|Namisha Chabbra | * Hardware Team * Electronics * Specialist * Secretary and Project Manager |TBD|
 |Liam Highmore | Hardware|TBD|
 |Misha Petkovic| Hardware|TBD|
 
