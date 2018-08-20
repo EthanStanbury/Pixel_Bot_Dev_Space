@@ -74,8 +74,6 @@ public class Grid {
         // Extract the bot coordinates from the bot object
         Point botCoord = bot.Location;
 
-        // Set the grid at certain position to be of type Bot
-        Grid[botCoord.x][botCoord.y].Type = BOT;
         // Set colour
         Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
         // Add time step with bot ID.
@@ -104,7 +102,7 @@ public class Grid {
 
     // Not used yet. It is advised that this is not to be used yet as tests has not been done with it
     public void resetAtCoord(int x, int y) {
-        Grid[x][y].Type = EMPTY;
+        Grid[x][y].Type = GRID;
     }
 
     // Pairs all bots to their individual destinations based on distance.
@@ -229,21 +227,21 @@ public class Grid {
         // Change coordinate according to the specified move (in this case, U)
         Point tempCoord = translateMove(coord, U);
         // Check if this new coordinate is somewhere the bot can move to
-        if (getTypeAtCoord(tempCoord) == EMPTY)
+        if (getTypeAtCoord(tempCoord) == GRID)
             // Add the new 'Node' to the successors list. Save the new coordinate, direction taken and the cost of movement
             successors.add(new Node(tempCoord, U, 1));
 
         // Repeat for all other directions
         tempCoord = translateMove(coord, D);
-        if (getTypeAtCoord(tempCoord) == EMPTY)
+        if (getTypeAtCoord(tempCoord) == GRID)
             successors.add(new Node(tempCoord, D, 1));
 
         tempCoord = translateMove(coord, L);
-        if (getTypeAtCoord(tempCoord) == EMPTY)
+        if (getTypeAtCoord(tempCoord) == GRID)
             successors.add(new Node(tempCoord, L, 1));
 
         tempCoord = translateMove(coord, R);
-        if (getTypeAtCoord(tempCoord) == EMPTY)
+        if (getTypeAtCoord(tempCoord) == GRID)
             successors.add(new Node(tempCoord, R, 1));
 
         // Staying at current position will always be a valid move.
@@ -257,7 +255,6 @@ public class Grid {
     // so that it could be used to make that coordinate inaccessible at certain time steps.
     public void updateBoard(Point currentPos, int timeStep, String botID, boolean reachedDestFlag) {
         Position pos = Grid[currentPos.x][currentPos.y];
-        pos.Type = BOT;
         pos.OccupiedTimeSteps.put(timeStep, botID);
 
         pos.IsPushable = reachedDestFlag;
@@ -272,10 +269,8 @@ public class Grid {
     public boolean checkAvailability(Point position, int timeStep) {
         Position pos = Grid[position.x][position.y];
 
-        if (pos.Type != EMPTY && pos.Type != BOT)
+        if (pos.Type == OFF_GRID)
             return false;
-        else if (pos.Type == EMPTY)
-            return true;
         else {
             // Return false if it is occupied. OR a bot has reached its destination and is resting at that spot (can be determined by the value of IsPushable).
             if (pos.OccupiedTimeSteps.containsKey(timeStep) || (timeStep > pos.lastOccupiedTimeStep && pos.IsPushable))
@@ -292,6 +287,49 @@ public class Grid {
     public String returnPushableBotID(Point position) {
         return Grid[position.x][position.y].lastOccupiedID;
     }
+
+    public Point determineNewDestination(Point pushing, Point pushed, int timeStep) {
+        Position pushingPos = Grid[pushing.x][pushing.y];
+        Position pushedPos = Grid[pushed.x][pushed.y];
+
+        // First, set the pushable flag to be false:
+        pushedPos.IsPushable = false;
+
+        // Create Hashmap with all the destination points minus the pushed bot's position (and pushing bot's, if applicable) with scores
+        HashMap<Point, Integer> destScore = new HashMap<>();
+
+        for (int i = 0; i < Destinations.size(); i++) {
+            Point currentDest = Destinations.get(i);
+
+            if (currentDest.equals(pushed) || currentDest.equals(pushing))
+                continue;
+
+            Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0);
+
+            destScore.put(currentDest, score);
+        }
+
+        List<Point> destWithLowestScores = new ArrayList<>();
+        int lowestScore = Integer.MAX_VALUE;
+
+        for (HashMap.Entry<Point, Integer> pair : destScore.entrySet()) {
+            // If the score is lower than the lowest known score, clear the array and store the destination coordinate paired with the score.
+            if (pair.getValue() < lowestScore) {
+                destWithLowestScores = new ArrayList<>();
+                destWithLowestScores.add(pair.getKey());
+
+                lowestScore = pair.getValue(); // update the lowest known score
+
+            // If equal, then simply append the destination coordinate to the existing list of coordinates with same score.
+            } else if (pair.getValue() == lowestScore) {
+                destWithLowestScores.add(pair.getKey());
+            }
+        }
+
+        // Currently, it is set to return the first item in the list
+        return destWithLowestScores.get(0);
+    }
+
 
     //-------------------------
     //-----Private Methods-----
@@ -336,12 +374,21 @@ public class Grid {
             return Grid[x][y].Type;
     }
 
+    private int getManhattanDist(Point a, Point b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+    }
+
+    private boolean isOccupied(Point coord, int timeStep) {
+        Position coordPosObj = Grid[coord.x][coord.y];
+        return  coordPosObj.OccupiedTimeSteps.containsKey(timeStep) || coordPosObj.IsPushable;
+    }
+
 }
 
 // For every position on the grid, it will have a type and a colour.
 class Position {
     // Default values for every new Position object are as follows:
-    Type Type = EMPTY;
+    Type Type = GRID;
     boolean IsDestination = false;
     int Colour = Color.TRANSPARENT; // Only should be considered when IsDestination flag is set to true.
 
@@ -356,11 +403,10 @@ class Position {
     Position() {}
 }
 
-// Each points on the grid will only ever have 3 different states:
-// either it is empty, off the grid or contains a bot for at least 1 time step.
+// Each points on the grid will only ever have 2 different states:
+// either it is part of the grid or off the grid.
 enum Type {
-    EMPTY,      // Used if a position is NEVER ever occupied.
+    GRID,
     OFF_GRID,
-    BOT         // Used if a position is occupied by a bot at least for 1 time step.
 }
 
