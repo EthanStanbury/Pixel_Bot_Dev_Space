@@ -26,7 +26,7 @@ The project is to build an interactive picture drawing display for Questacon’s
 |Misha Petkovic|<ul> <li>Hardware Team</li><li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
 
 ## Team Work Items
-Currently the team is using Trello to track and breakdown each memebers work. This board can be found [here].(https://trello.com/b/XjNQ2fzg)
+
 
 ## Timeline
 ![alt text](https://drive.google.com/file/d/1Nu1jWHesY5vrP_Zxgi8djqaZNjo4sFp2/view?usp=sharing)
