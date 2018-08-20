@@ -26,10 +26,12 @@ The project is to build an interactive picture drawing display for Questacon’s
 |Misha Petkovic|<ul> <li>Hardware Team</li><li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
 
 ## Team Work Items
+You can check out what we are working on here: (https://docs.google.com/spreadsheets/d/1nI-3kYul25-Fhbc1EoQdR72bFK5e49feOA_yQ-Pt9R8/edit?usp=sharing)
 
 
-## Timeline
-![alt text](https://drive.google.com/file/d/1Nu1jWHesY5vrP_Zxgi8djqaZNjo4sFp2/view?usp=sharing)
+
+## Timeline + WBS
+![alt text] (https://drive.google.com/drive/folders/1feu6KT40Z2-7rPlIgHI3FoHUVEYK9hZu)
 
 ### Google Drive
 [Home Folder](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)  
