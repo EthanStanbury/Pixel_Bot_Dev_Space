@@ -1,4 +1,6 @@
-### Note: This is our GitHub, where all of our code is stored and logged. If you are looking for documetation head over to our [Google Drive Repository] (https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q)
+### Note: This is our GitHub, where all of our code is stored and logged. If you are looking for documetation head over to our [Google Drive Repository] (https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)
+
+## Weekly update
 
 
 ## Background & Questacon's Vision
@@ -24,7 +26,7 @@ The project is to build an interactive picture drawing display for Questacon’s
 Currently the team is using Trello to track and breakdown each memebers work. This board can be found [here].(https://trello.com/b/XjNQ2fzg)
 
 ## Timeline
-[[https://drive.google.com/drive/folders/1feu6KT40Z2-7rPlIgHI3FoHUVEYK9hZu]]
+![alt text](https://drive.google.com/file/d/1Nu1jWHesY5vrP_Zxgi8djqaZNjo4sFp2/view?usp=sharing)
 
 ### Google Drive
 [Home Folder](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)  
@@ -33,7 +35,7 @@ Currently the team is using Trello to track and breakdown each memebers work. Th
 [Meeting Minutes](https://drive.google.com/drive/folders/18v9_FrPEqhdVfAXGsNukwnxbwYojEl2e?usp=sharing) Notes on the meetings that the group has undetaken.  
 
 ## Current ConOPs
-Our ConOPs will always be a work in progress as is the state of a project, however, with this is mind [this](https://docs.google.com/document/d/1sThocCKHGf8yNY0YuaVayGSsTGbUI6hAh3Tgp54mBBg/edit?usp=sharing) is our most up-to-date ConOPs.
+Our ConOPs will always be a work in progress as is the state of a project, however, with this is mind [this](https://drive.google.com/file/d/1j5KhOBmlKu8sYWbr89peX3zaD081nE_w/view?usp=sharing) is our most up-to-date ConOPs.
 
 ### Tools for software development 
 The software development tools for our development are:
