@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Swarm.Bot;
@@ -23,16 +26,27 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FrameLayout frame = new FrameLayout(this);
         canvas = new PBCanvas(this);
+        LinearLayout appWidgets = new LinearLayout(this);
+
+        Button submit = new Button(this);
+
+        appWidgets.addView(submit);
+
+        frame.addView(canvas);
+        frame.addView(appWidgets);
+
         canvas.setBackgroundColor(Color.WHITE);
-        setContentView(canvas);
+        setContentView(frame);
 
         // The amount of bots we have to work with
         BotAmounts.put(-1162650,    30); //Red
-        BotAmounts.put(-11713,      0); //Yellow
-        BotAmounts.put(-15815319,   0); //Green
-        BotAmounts.put(-12857684,   0); //Blue
-        BotAmounts.put(-11268754,   0); //Purple
+        BotAmounts.put(-11713,      30); //Yellow
+        BotAmounts.put(-15815319,   30); //Green
+        BotAmounts.put(-12857684,   30); //Blue
+        BotAmounts.put(-11268754,   30); //Purple
         BotAmounts.put(Color.BLACK, 0); //Black
 
 

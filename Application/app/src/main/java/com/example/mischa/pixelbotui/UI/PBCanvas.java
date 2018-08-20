@@ -62,6 +62,7 @@ public class PBCanvas extends SurfaceView {
     LayoutItem rSubmit;
     LayoutItem rClear;
     LayoutItem gridBG;
+    LayoutItem rBT;
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
@@ -100,6 +101,7 @@ public class PBCanvas extends SurfaceView {
         eraseBG = new LayoutItem(Color.LTGRAY);
         rSubmit = new LayoutItem(Color.LTGRAY);
         rClear = new LayoutItem(Color.LTGRAY);
+        rBT = new LayoutItem(Color.LTGRAY);
         gridBG = new LayoutItem(Color.LTGRAY);
 
         LayoutItemList.add(top);
@@ -115,6 +117,7 @@ public class PBCanvas extends SurfaceView {
         LayoutItemList.add(rSubmit);
         LayoutItemList.add(rClear);
         LayoutItemList.add(gridBG);
+        LayoutItemList.add(rBT);
 
         ClickableItems.add(rErase);
         ClickableItems.add(rRed);
@@ -175,6 +178,7 @@ public class PBCanvas extends SurfaceView {
             eraseBG.rect.set(rErase.rect);
             rClear.rect.set(canvas.getWidth() - 240, 40, canvas.getWidth() - 40, 160);
             rSubmit.rect.set(canvas.getWidth() - 240, canvas.getHeight() - 160, canvas.getWidth() - 40, canvas.getHeight() - 40);
+            rBT.rect.set(canvas.getWidth() - 240, canvas.getHeight()/3 + 60, canvas.getWidth() - 40, canvas.getHeight()/3 - 60);
 
 
             // Setting all the pixels' bounds, as well as the width of them
@@ -206,6 +210,7 @@ public class PBCanvas extends SurfaceView {
             eraseBG.rect.set(rErase.rect);
             rClear.rect.set(40, canvas.getHeight() - 160, 240, canvas.getHeight() - 40);
             rSubmit.rect.set(canvas.getWidth() - 240, canvas.getHeight() - 160, canvas.getWidth() - 40, canvas.getHeight() - 40);
+            rBT.rect.set(2 * canvas.getWidth() / 3 - 100, canvas.getHeight() - 160, 2 * canvas.getWidth() / 3 + 100, canvas.getHeight() - 40);
 
 
 
@@ -238,12 +243,18 @@ public class PBCanvas extends SurfaceView {
         paint.setColor(Color.BLACK);
         canvas.drawText("CLEAR", rClear.rect.exactCenterX(), rClear.rect.exactCenterY() + 20, paint);
         canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
-
+        canvas.drawText("BT", rBT.rect.exactCenterX(), rBT.rect.exactCenterY() + 20, paint);
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(75);
-        canvas.drawText(currentBotAmount + "", bottom.rect.exactCenterX(), bottom.rect.exactCenterY() - 50, paint);
-        canvas.drawText("bots left", bottom.rect.exactCenterX(), bottom.rect.exactCenterY() + 50, paint);
+        // If the screen is landscape
+        if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
+            canvas.drawText(currentBotAmount + "", bottom.rect.exactCenterX(), 4 * bottom.rect.exactCenterY() / 3 - 50, paint);
+            canvas.drawText("bots left", bottom.rect.exactCenterX(), 4 * bottom.rect.exactCenterY() / 3 + 50, paint);
+        } else { // If the screen is portrait
+            canvas.drawText(currentBotAmount + "", 2 * bottom.rect.exactCenterX() / 3, bottom.rect.exactCenterY() - 50, paint);
+            canvas.drawText("bots left", 2 * bottom.rect.exactCenterX() / 3, bottom.rect.exactCenterY() + 50, paint);
+        }
 
         // Drawing all the Pixels
         for (Pixel p : uiGrid) {
@@ -290,7 +301,7 @@ public class PBCanvas extends SurfaceView {
                         }
                     }
                 }
-                // if they tap clear or submit
+                // if they tap clear or submit or BT
                 if (rClear.rect.contains(xTouch, yTouch)) {
                     clear();
                 }
@@ -307,6 +318,12 @@ public class PBCanvas extends SurfaceView {
                     // start the new activity
                     Intent intent = new Intent(context, SimActivity.class);
                     context.startActivity(intent);
+                }
+                if (rBT.rect.contains(xTouch, yTouch)) {
+                    //ETHAN PUT YOUR CODE HERE
+                    //ATTENTION
+                    //IDK HOW TO GET YOUR ATTENTION IN A COMMENT
+                    //RAWR XD
                 }
                 break;
             // For a swipe
