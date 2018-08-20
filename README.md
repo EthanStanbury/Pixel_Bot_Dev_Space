@@ -13,8 +13,7 @@ The project is to build an interactive picture drawing display for Questacon’s
 ## Team Members and Communications
 | Name       |       Role     | Responsiblities  |
 | ---------------|-------------| --------------|
-|Ethan Stanbury| <ul><li>Tech lead</li><li>Software Team</li><li>Integrationspecialist</li><li>Hardware team liaison</li></ul> |<ul><li>Creating software to allow for the integration/communication  between the robot and the App and the robots with themselves</li><li>
-Communicate with hardware team about updates</li><li>Interfacing between hardware and software</li></ul>|
+|Ethan Stanbury| <ul><li>Tech lead</li><li>Software Team</li><li>Integrationspecialist</li><li>Hardware team liaison</li></ul> |<ul><li>Creating software to allow for the integration/communication  between the robot and the App and the robots with themselves</li><li>Communicate with hardware team about updates</li><li>Interfacing between hardware and software</li></ul>|
 |Mischa Rippon|<ul><li>Software Team</li><li>UI Specialist</li></ul>|<ul> <li>UI Development</li><li>Interfacing between UI and code</li></ul>|
 |Daniel Jang| <ul><li>Software Team</li><li>Pathfinding Specialist</li> </ul>|<ul> <li>Pathfinding and Anti-Collision algorithm Development</li><li> Ensure proper integration with UI</li><li> Overseeing the interaction between the pathfinding algorithm and the physical bots</li></ul>|
 |Namisha Chabbra | </ul><li>Hardware Team</li><li>Electronics Specialist</li><li>Secretary and Project Manager</li> <ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design charging/power sub system</li><li> Keep repository and landing page updated </li><li>Document project and systems engineering processes </li></ul>|
