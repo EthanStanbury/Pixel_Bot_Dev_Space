@@ -1,4 +1,4 @@
-### Note: This is our GitHub, where all of our code is stored and logged. If you are looking for documetation head over to our [Google Drive Repository] (https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)
+### Note: This is our GitHub, where all of our code is stored and logged. If you are looking for documetation head over to our [Google Drive Repository](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)
 
 ## Weekly update
 
