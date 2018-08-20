@@ -24,7 +24,7 @@ The project is to build an interactive picture drawing display for Questacon’s
 Currently the team is using Trello to track and breakdown each memebers work. This board can be found [here].(https://trello.com/b/XjNQ2fzg)
 
 ## Timeline
-TBD We are still figuring out our ConOPs so once that has been signed off we will have something here. 
+[[https://drive.google.com/drive/folders/1feu6KT40Z2-7rPlIgHI3FoHUVEYK9hZu]]
 
 ### Google Drive
 [Home Folder](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)  
