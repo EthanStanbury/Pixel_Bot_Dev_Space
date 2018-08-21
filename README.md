@@ -31,7 +31,7 @@ You can check out what we are working on here: (https://docs.google.com/spreadsh
 
 
 ## Timeline + WBS
-![alt text] (https://drive.google.com/drive/folders/1feu6KT40Z2-7rPlIgHI3FoHUVEYK9hZu)
+![alt text](https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/Gantt%20Chart%20v1%20ProjectSchedule%20WK%201-12-1.png)
 
 ### Google Drive
 [Home Folder](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)  
