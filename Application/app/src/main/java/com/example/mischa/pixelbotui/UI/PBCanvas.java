@@ -1,6 +1,9 @@
 package com.example.mischa.pixelbotui.UI;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -12,6 +15,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
@@ -21,9 +28,13 @@ import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.Grid;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by Mischa on 10/03/2018.
@@ -31,7 +42,7 @@ import java.util.List;
 
 public class PBCanvas extends SurfaceView {
 
-    Paint paint;
+     Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
 
     public static int xDimension = 25; // horizontal axis
@@ -44,7 +55,8 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int selectedColour = Color.TRANSPARENT;
     int whiteBox = 1;
-    int botsTotal = 322;
+
+    int botsTotal = 365;
     int currentBotAmount;
 
     Context context;
@@ -290,7 +302,6 @@ public class PBCanvas extends SurfaceView {
                         selectedColour = ClickableItems.get(i).colour;
                         rColourPicked.rect.set(ClickableItems.get(i).rect.left - 10, ClickableItems.get(i).rect.top - 10, ClickableItems.get(i).rect.right + 10, ClickableItems.get(i).rect.bottom + 10);
                         whiteBox = i;
-                        System.out.println("Change: " + whiteBox);
                     }
                 }
                 // Colour the pressed rectangle
@@ -320,10 +331,7 @@ public class PBCanvas extends SurfaceView {
                     context.startActivity(intent);
                 }
                 if (rBT.rect.contains(xTouch, yTouch)) {
-                    //ETHAN PUT YOUR CODE HERE
-                    //ATTENTION
-                    //IDK HOW TO GET YOUR ATTENTION IN A COMMENT
-                    //RAWR XD
+                    //TODO ETHAN
                 }
                 break;
             // For a swipe
@@ -356,7 +364,8 @@ public class PBCanvas extends SurfaceView {
         for (int i = 0; i < uiGrid.length; i++) {
             uiGrid[i].colour = state[i];
         }
-        System.out.println("RestoreState: " + whiteBox);
         postInvalidate();
     }
+
+
 }

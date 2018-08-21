@@ -55,6 +55,7 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
 
         for (String key:  Solution.keySet()) {
+            System.out.println(Solution.get(key).toString());
             botMoves.put(key, Solution.get(key).toString());
         }
 
