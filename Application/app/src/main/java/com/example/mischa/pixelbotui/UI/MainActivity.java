@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +35,7 @@ public class MainActivity extends Activity {
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Button startButton, sendButton,clearButton,stopButton;
+    Button clear, connectBT, submit;
     TextView textView;
     EditText editText;
     boolean deviceConnected=false;
@@ -50,14 +51,42 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         FrameLayout frame = new FrameLayout(this);
         canvas = new PBCanvas(this);
         LinearLayout appWidgets = new LinearLayout(this);
 
-        Button submit = new Button(this);
+        submit = new Button(this);
+        submit.setText("SUBMIT");
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("SUBMIT");
+            }
+        });
+
+        connectBT = new Button(this);
+        connectBT.setText("CONNECT BT");
+        connectBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("CONNECT");
+            }
+        });
+
+        clear = new Button(this);
+        clear.setText("CLEAR");
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.clear();
+                System.out.println("CLEAR");
+            }
+        });
 
         appWidgets.addView(submit);
+        appWidgets.addView(clear);
+        appWidgets.addView(connectBT);
 
         frame.addView(canvas);
         frame.addView(appWidgets);
