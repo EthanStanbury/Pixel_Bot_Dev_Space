@@ -40,15 +40,15 @@ public class Swarm {
 
 
 
-            if (side == 1 && counter == PBCanvas.yDimension - 1){
+            if (side == 1 && counter == PBCanvas.yDimension - 2){
                 side = 2;
                 System.out.println("side: " +side);
                 counter = 0;
-            }else if(side == 2 && counter == PBCanvas.xDimension - 1) {
+            }else if(side == 2 && counter == PBCanvas.xDimension - 2) {
                 side = 3;
                 counter = 0;
                 System.out.println("side: " +side);
-            }else if (side == 3 && counter == PBCanvas.yDimension - 1){
+            }else if (side == 3 && counter == PBCanvas.yDimension - 2){
                 side = 4;
                 counter = 0;
                 System.out.println("side: " +side);
@@ -65,7 +65,7 @@ public class Swarm {
                 defaultLocation.set(1 +  counter, PBCanvas.yDimension - 1 );
                 System.out.println("Creating a bot in side 2 with a location of: " + defaultLocation);
             }else if( side == 3){
-                defaultLocation.set( PBCanvas.xDimension, 1 + counter);
+                defaultLocation.set( PBCanvas.xDimension - 1, 1 + counter);
                 System.out.println("Creating a bot in side 3 with a location of: " + defaultLocation);
             }else if(side == 4){
                 defaultLocation.set( 1 + counter, 0);
@@ -83,6 +83,7 @@ public class Swarm {
 
 
         }
+
 
         this.SwarmList = thisSwarmList;
 
