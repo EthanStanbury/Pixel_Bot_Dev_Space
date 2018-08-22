@@ -51,8 +51,7 @@ public class MainActivity extends Activity {
     int[] saveState;
     int[] restoreState;
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
-    FrameLayout main_layout;
-    ConstraintLayout constraintLayout;
+    ConstraintLayout main_layout;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +59,10 @@ public class MainActivity extends Activity {
 
         LayoutInflater inflater = getLayoutInflater();
 
-        main_layout = (FrameLayout) inflater.inflate(R.layout.activity_main, null);
+        main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
         canvas = new PBCanvas(this);
 
-
-        constraintLayout = main_layout.findViewById(R.id.constraint_layout);
-        constraintLayout.addView(canvas);
+        main_layout.addView(canvas);
 
         submit = main_layout.findViewById(R.id.bSubmit);
         submit.bringToFront();
@@ -105,11 +102,11 @@ public class MainActivity extends Activity {
         setContentView(main_layout);
 
         // The amount of bots we have to work with
-        BotAmounts.put(-1162650,    73); //Red
-        BotAmounts.put(-11713,      73); //Yellow
-        BotAmounts.put(-15815319,   73); //Green
-        BotAmounts.put(-12857684,   73); //Blue
-        BotAmounts.put(-11268754,   73); //Purple
+        BotAmounts.put(-1162650,    70); //Red
+        BotAmounts.put(-11713,      70); //Yellow
+        BotAmounts.put(-15815319,   70); //Green
+        BotAmounts.put(-12857684,   70); //Blue
+        BotAmounts.put(-11268754,   70); //Purple
         BotAmounts.put(Color.BLACK, 0); //Black
 
 

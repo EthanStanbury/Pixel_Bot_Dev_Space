@@ -42,8 +42,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     ArrayList<SimBot> finishedBots = new ArrayList<>();
     boolean runThread = true;
 
-    LayoutItem backButton;
-
     MainThread thread;
 
     Activity activity = (Activity) getContext();
@@ -60,8 +58,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         createBots(botMoves);
-
-        backButton = new LayoutItem(Color.LTGRAY);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -96,14 +92,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             paint.setStrokeWidth(3);
             canvas.drawRect(p.rect, paint);
         }
-
-        backButton.rect.set(50, 50, 400, 175);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(backButton.colour);
-        canvas.drawRect(backButton.rect, paint);
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(50);
-        canvas.drawText("DRAW AGAIN", backButton.rect.exactCenterX() - 150, backButton.rect.exactCenterY() + 20, paint);
     }
 
     // Get the colour from an input string, up until '/'
@@ -187,21 +175,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         return point;
-    }
-
-
-    // Handles the touch events
-    public boolean onTouchEvent(MotionEvent e) {
-        int xTouch = (int) e.getX();
-        int yTouch = (int) e.getY();
-
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            if (backButton.rect.contains(xTouch,yTouch)) {
-                activity.finish();
-                runThread = false;
-            }
-        }
-        return true;
     }
 
     // The method that is called over and over to move the bots

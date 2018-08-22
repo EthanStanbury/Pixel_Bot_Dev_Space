@@ -45,7 +45,7 @@ public class PBCanvas extends SurfaceView {
      Paint paint;
     public static Pixel[] uiGrid;  //the grid of squares
 
-    public static int xDimension = 25; // horizontal axis
+    public static int xDimension = 23; // horizontal axis
     public static int yDimension = 16; // vertical axis
     int xDimWOBorder = xDimension - 2;
     int yDimWOBorder = yDimension - 2;
@@ -128,6 +128,8 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rGreen);
         ClickableItems.add(rBlue);
         ClickableItems.add(rPurple);
+
+        selectedColour = Color.parseColor("#EE4266");
     }
 
     // Clears the grid of any current drawing
