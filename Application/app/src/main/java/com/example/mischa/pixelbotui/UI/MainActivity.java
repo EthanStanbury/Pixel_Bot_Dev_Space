@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentTabHost;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+import com.example.mischa.pixelbotui.R;
 import com.example.mischa.pixelbotui.Swarm.Bot;
 
 import java.io.IOException;
@@ -26,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+import java.util.zip.Inflater;
 
 public class MainActivity extends Activity {
 
@@ -45,28 +51,38 @@ public class MainActivity extends Activity {
     int[] saveState;
     int[] restoreState;
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
-
-
+    FrameLayout main_layout;
+    ConstraintLayout constraintLayout;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        FrameLayout frame = new FrameLayout(this);
-        canvas = new PBCanvas(this);
-        LinearLayout appWidgets = new LinearLayout(this);
 
-        submit = new Button(this);
-        submit.setText("SUBMIT");
+        LayoutInflater inflater = getLayoutInflater();
+
+        main_layout = (FrameLayout) inflater.inflate(R.layout.activity_main, null);
+        canvas = new PBCanvas(this);
+
+
+        constraintLayout = main_layout.findViewById(R.id.constraint_layout);
+        constraintLayout.addView(canvas);
+
+        submit = main_layout.findViewById(R.id.bSubmit);
+        submit.bringToFront();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("SUBMIT");
+                UIAdapter.createGridWpixel(canvas.uiGrid);
+                SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+
+                // start the new activity
+                Intent intent = new Intent(canvas.context, SimActivity.class);
+                canvas.context.startActivity(intent);
             }
         });
 
-        connectBT = new Button(this);
-        connectBT.setText("CONNECT BT");
+        connectBT = main_layout.findViewById(R.id.bConnect);
+        connectBT.bringToFront();
         connectBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,25 +90,19 @@ public class MainActivity extends Activity {
             }
         });
 
-        clear = new Button(this);
-        clear.setText("CLEAR");
+        clear = main_layout.findViewById(R.id.bClear);
+        clear.bringToFront();
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 canvas.clear();
-                System.out.println("CLEAR");
             }
         });
 
-        appWidgets.addView(submit);
-        appWidgets.addView(clear);
-        appWidgets.addView(connectBT);
-
-        frame.addView(canvas);
-        frame.addView(appWidgets);
+//        main_layout.addView(frame);
 
         canvas.setBackgroundColor(Color.WHITE);
-        setContentView(frame);
+        setContentView(main_layout);
 
         // The amount of bots we have to work with
         BotAmounts.put(-1162650,    73); //Red
