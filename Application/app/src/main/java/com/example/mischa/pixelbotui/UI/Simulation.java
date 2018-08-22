@@ -73,14 +73,10 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.TRANSPARENT);
         //Draw the grid, and border
         for (Pixel p : uiGrid) {
-            paint.setStyle(Paint.Style.FILL);
-            if (PBCanvas.isIn(p, PBCanvas.border)) {
-                paint.setColor(Color.DKGRAY);
-            } else {
-                paint.setColor(Color.TRANSPARENT);
-            }
             canvas.drawRect(p.rect, paint);
         }
 
