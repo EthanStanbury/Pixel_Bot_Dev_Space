@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.SimActivity"></activity>
+        <activity android:name=".UI.SimActivity"
+            android:screenOrientation="locked">
+        </activity>
     </application>
 
 </manifest>
