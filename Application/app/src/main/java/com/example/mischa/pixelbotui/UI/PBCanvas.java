@@ -71,10 +71,7 @@ public class PBCanvas extends SurfaceView {
     LayoutItem rErase; // eraser, transparent
     LayoutItem rColourPicked; // Current colour
     LayoutItem eraseBG;
-    LayoutItem rSubmit;
-    LayoutItem rClear;
     LayoutItem gridBG;
-    LayoutItem rBT;
     int[] saveState = new int[noOfSquares];
     Drawable eraser = getResources().getDrawable(R.drawable.eraserpic);
 
@@ -111,9 +108,6 @@ public class PBCanvas extends SurfaceView {
         rColourPicked = new LayoutItem(Color.WHITE);
         rColourPicked.rect.set(-10,-10,-9,-9);
         eraseBG = new LayoutItem(Color.LTGRAY);
-        rSubmit = new LayoutItem(Color.LTGRAY);
-        rClear = new LayoutItem(Color.LTGRAY);
-        rBT = new LayoutItem(Color.LTGRAY);
         gridBG = new LayoutItem(Color.LTGRAY);
 
         LayoutItemList.add(top);
@@ -126,10 +120,7 @@ public class PBCanvas extends SurfaceView {
         LayoutItemList.add(rPurple);
         LayoutItemList.add(rErase);
         LayoutItemList.add(eraseBG);
-        LayoutItemList.add(rSubmit);
-        LayoutItemList.add(rClear);
         LayoutItemList.add(gridBG);
-        LayoutItemList.add(rBT);
 
         ClickableItems.add(rErase);
         ClickableItems.add(rRed);
@@ -188,9 +179,6 @@ public class PBCanvas extends SurfaceView {
             rErase.rect.set(70, 6 * (canvas.getHeight()/7) - 80, 230, 6 * (canvas.getHeight()/7) + 80);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top - 4, rErase.rect.right - 4, rErase.rect.bottom + 4);
             eraseBG.rect.set(rErase.rect);
-            rClear.rect.set(canvas.getWidth() - 240, 40, canvas.getWidth() - 40, 160);
-            rSubmit.rect.set(canvas.getWidth() - 240, canvas.getHeight() - 160, canvas.getWidth() - 40, canvas.getHeight() - 40);
-            rBT.rect.set(canvas.getWidth() - 240, canvas.getHeight()/3 + 60, canvas.getWidth() - 40, canvas.getHeight()/3 - 60);
 
 
             // Setting all the pixels' bounds, as well as the width of them
@@ -220,11 +208,6 @@ public class PBCanvas extends SurfaceView {
             rErase.rect.set(6 * (canvas.getWidth()/7) - 80, 70, 6 * (canvas.getWidth()/7) + 80, 230);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top + 4, rErase.rect.right - 4, rErase.rect.bottom - 4);
             eraseBG.rect.set(rErase.rect);
-            rClear.rect.set(40, canvas.getHeight() - 160, 240, canvas.getHeight() - 40);
-            rSubmit.rect.set(canvas.getWidth() - 240, canvas.getHeight() - 160, canvas.getWidth() - 40, canvas.getHeight() - 40);
-            rBT.rect.set(2 * canvas.getWidth() / 3 - 100, canvas.getHeight() - 160, 2 * canvas.getWidth() / 3 + 100, canvas.getHeight() - 40);
-
-
 
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimWOBorder;
@@ -253,9 +236,6 @@ public class PBCanvas extends SurfaceView {
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(50);
         paint.setColor(Color.BLACK);
-        canvas.drawText("CLEAR", rClear.rect.exactCenterX(), rClear.rect.exactCenterY() + 20, paint);
-        canvas.drawText("SUBMIT", rSubmit.rect.exactCenterX(), rSubmit.rect.exactCenterY() + 20, paint);
-        canvas.drawText("BT", rBT.rect.exactCenterX(), rBT.rect.exactCenterY() + 20, paint);
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(75);
@@ -311,27 +291,6 @@ public class PBCanvas extends SurfaceView {
                             uiGrid[i].colour = selectedColour;
                         }
                     }
-                }
-                // if they tap clear or submit or BT
-                if (rClear.rect.contains(xTouch, yTouch)) {
-                    clear();
-                }
-                if (rSubmit.rect.contains(xTouch, yTouch)) {
-                    UIAdapter.createGridWpixel(uiGrid);
-                    SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
-
-                    //System.out.println(SwarmAdapter.WholeSwarm.size());
-//                    for (Integer key: SwarmAdapter.WholeSwarm.keySet()) {
-//
-//
-//                    }
-
-                    // start the new activity
-                    Intent intent = new Intent(context, SimActivity.class);
-                    context.startActivity(intent);
-                }
-                if (rBT.rect.contains(xTouch, yTouch)) {
-                    //TODO ETHAN
                 }
                 break;
             // For a swipe
