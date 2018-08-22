@@ -304,7 +304,7 @@ public class Grid {
             if (currentDest.equals(pushed) || currentDest.equals(pushing))
                 continue;
 
-            Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0);
+            Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
 
             destScore.put(currentDest, score);
         }
@@ -328,6 +328,10 @@ public class Grid {
 
         // Currently, it is set to return the first item in the list
         return destWithLowestScores.get(0);
+    }
+
+    public int getColourFromPos(Point pos) {
+        return Grid[pos.x][pos.y].Colour;
     }
 
 
@@ -381,6 +385,11 @@ public class Grid {
     private boolean isOccupied(Point coord, int timeStep) {
         Position coordPosObj = Grid[coord.x][coord.y];
         return  coordPosObj.OccupiedTimeSteps.containsKey(timeStep) || coordPosObj.IsPushable;
+    }
+
+    private boolean isOccupiedButUnpushable(Point coord, int timeStep) {
+        Position coordPosObj = Grid[coord.x][coord.y];
+        return  coordPosObj.OccupiedTimeSteps.containsKey(timeStep) && !coordPosObj.IsPushable;
     }
 
 }

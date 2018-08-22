@@ -31,6 +31,8 @@ public class PathFinder {
 
         // Saves a list of all bots that have been paired to a destination.
         List<Bot> pairedBotList = new ArrayList<>();
+        // Saves a virtual copy of the bots, so that we can perform push functionality
+        List<Bot> botDuplicates = new ArrayList<>();
 
         // Stores all bot-dest pair solutions into this hashmap
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
@@ -40,8 +42,10 @@ public class PathFinder {
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
             Bot bot = pair.getKey();
+            Bot botCopy = new Bot(bot.BotID, bot.Colour, bot.Location);
 
             pairedBotList.add(bot);
+            botDuplicates.add(botCopy);
 
             CoordActionOutput aStarOutput = solve(bot, pair.getValue());
 
@@ -77,7 +81,8 @@ public class PathFinder {
 
                     if (posAvailable) {
                         Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
-                        // pairedBotList.get(i).Location = currentPos;
+                        botDuplicates.get(i).Location = currentPos;
+                        pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
                         // Add code here to update bot's colour when it reaches its destination.
                     } else {
                         System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
@@ -92,8 +97,6 @@ public class PathFinder {
                             // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
 
                             // Match the sequence length of the pushing and pushed bot so they are in sync (in the right time step).
-
-
                             String pushedBotID = Problem.returnPushableBotID(currentPos);
                             int indexOfLastEvent = allBotsPositions.get(pushedBotID).size() - 1;
                             int catchupsCounter = (timeStep - 1) - indexOfLastEvent;
@@ -119,18 +122,20 @@ public class PathFinder {
             for (int j = 0; j < pushingBots.size(); j++) {
                 String pushedID = pushedBotsID.get(j);
                 Point newTarget = Problem.determineNewDestination(pushingBots.get(j), pushedBotsPos.get(j), timeStep);
-                Bot pushedBot = getBotObject(pushedID, pairedBotList);
+                Bot pushedBot = getBotObject(pushedID, botDuplicates);
 
-                // NEED TO FIX ISSUE WHERE pushedBot Bot object is in a catch 22 situation: can't set its coordinates, or it will destroy the simulation, but if coordinates is not set, then it will return the wrong thing.
                 CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
                 System.out.println(pushedBot.Location);
                 System.out.println(newTarget);
                 allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
                 allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
-
             }
 
-            timeStep += 1;
+            if (pushingBots.size() == 0)
+                timeStep += 1;
+
+            if (timeStep > 100)
+                break;
         }
 
         return allBotsSolutions;
