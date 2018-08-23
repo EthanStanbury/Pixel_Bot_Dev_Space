@@ -96,7 +96,7 @@ public class PathFinder {
                         if (!Problem.getPushableStatus(currentPos)) {
                             // Add an additional step to the bot's path sequence (stop for 1 time step)
                             System.out.println("Adding a 'stop' command in the sequence at this timestep(" + timeStep + ")...");
-                            currentBotPositions.add(timeStep, currentPos);
+                            currentBotPositions.add(timeStep, currentBotPositions.get(timeStep - 1));
                             currentBotPath.add(timeStep, S);
                         } else { // A temporary solution - until the 'push' method is implemented, the bot should just walk over other bots that have stopped to prevent the program from 'hanging'.
                             // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
