@@ -6,6 +6,7 @@ import android.location.Location;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
+import com.example.mischa.pixelbotui.UI.MainActivity;
 import com.example.mischa.pixelbotui.UI.PBCanvas;
 
 import java.lang.reflect.Array;
@@ -72,8 +73,8 @@ public class Swarm {
                 System.out.println("Creating a bot in side 4 with a location of: " + defaultLocation);
             }
 
-            String id = (Colour.toString() +"/"+ numberOfBots);
-            Bot add = new Bot(id, Colour, defaultLocation);
+            String id = ( DEVICE ADDRESS +"/"+ numberOfBots);
+            Bot add = new Bot(id,defaultLocation);
             thisSwarmList.put(id, add);
             UIAdapter.destinationGrid.addBot(add);
 

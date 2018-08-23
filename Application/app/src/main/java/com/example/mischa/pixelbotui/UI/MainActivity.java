@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+                SwarmAdapter.SwarmCreate(MainActivity.BotAmounts,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
                     System.out.println("KEY IS HERE" + key);
@@ -153,9 +154,6 @@ public class MainActivity extends Activity {
 
     }
 
-    public void BluetoothConnect(){
-
-    }
 
 
     public boolean BTinit()
@@ -186,9 +184,8 @@ public class MainActivity extends Activity {
             {
                 if(iterator.getName().equals(DEVICE_NAME))
                 {
-                    device=iterator;
+                    devices.put(iterator.getAddress(), iterator);
                     found=true;
-                    break;
                 }
             }
         }
@@ -197,35 +194,41 @@ public class MainActivity extends Activity {
 
     public boolean BTconnect()
     {
+
         boolean connected=true;
-        try {
-//            for (String deviceAddress: devices.keySet()) {
-//                BluetoothSocket tempSock = devices.get(deviceAddress).createRfcommSocketToServiceRecord(PORT_UUID);
-//
-//
-//            }
-            socket = device.createRfcommSocketToServiceRecord(PORT_UUID);
-            socket.connect();
-        } catch (IOException e) {
+
+        for (String deviceAddress: devices.keySet()) {
+            try{
+                BluetoothSocket tempSock = devices.get(deviceAddress).createRfcommSocketToServiceRecord(PORT_UUID);
+                tempSock.connect();
+                sockets.put(deviceAddress, tempSock);
+            } catch (IOException e){
             e.printStackTrace();
-            connected=false;
+            devices.remove(deviceAddress);
+            }
         }
-        if(connected)
+        if(!devices.isEmpty())
         {
-            try {
-                outputStream=socket.getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                inputStream=socket.getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (String deviceAddress: sockets.keySet()) {
+                try {
+                    outputStream = sockets.get(deviceAddress).getOutputStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    sockets.remove(deviceAddress);
+                }
+                try {
+                    inputStream = sockets.get(deviceAddress).getInputStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    sockets.remove(deviceAddress);
+                }
             }
 
         }
 
-
+        if (sockets.isEmpty()){
+            connected = false;
+        }
         return connected;
     }
 
@@ -236,17 +239,10 @@ public class MainActivity extends Activity {
             if(BTconnect())
             {
                 Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-//                 setUiEnabled(true);
                 deviceConnected=true;
-//                textView.append("\nConnection Opened to these addresses: \n");
-//                for (BluetoothDevice iterator : bondedDevices)
-//                {
-//                    textView.append(iterator.getAddress() + "\n");
-//                    textView.append(iterator.getName()+ "\n");
-//                }
 
                 Context context = getApplicationContext();
-                CharSequence text = "Connected to device: " + device.getName();
+                CharSequence text = "Connected to device: " + devices.keySet();
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -261,6 +257,7 @@ public class MainActivity extends Activity {
 
 
     public void onClickSend(View view, HashMap<String, List<Direction>> Solution) {
+        //TODO create the output stream for the socket that is associated with the bot in the solution's ID (foreach one) then send
         String string = Solution.get("-1162650/1").toString();
         string.concat("\n");
         System.out.println("trying to send: " + string);
@@ -269,7 +266,6 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        textView.append("\nSent Data:"+string+"\n");
 
     }
 
