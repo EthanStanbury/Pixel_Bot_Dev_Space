@@ -10,6 +10,8 @@ import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import static com.example.mischa.pixelbotui.Swarm.Type.*;
 import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 
@@ -301,12 +303,11 @@ public class Grid {
         for (int i = 0; i < Destinations.size(); i++) {
             Point currentDest = Destinations.get(i);
 
-            if (currentDest.equals(pushed) || currentDest.equals(pushing))
-                continue;
-
-            Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
-
-            destScore.put(currentDest, score);
+            if (!(currentDest.equals(pushed) || currentDest.equals(pushing))) {
+                Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
+                System.out.println(pushed + " " + currentDest + " " + score);
+                destScore.put(currentDest, score);
+            }
         }
 
         List<Point> destWithLowestScores = new ArrayList<>();
@@ -332,6 +333,30 @@ public class Grid {
 
     public int getColourFromPos(Point pos) {
         return Grid[pos.x][pos.y].Colour;
+    }
+
+    // Used when pushed bots need to have their footprint on the grid removed for a certain time step.
+    public void removeOccupation(Point pos, int timeStep) {
+        Position posObj = Grid[pos.x][pos.y];
+        posObj.OccupiedTimeSteps.remove(timeStep);
+        posObj.IsPushable = false;
+
+        // After deleting the pushed bot's occupation, bring up the details of the last bot that occupied the position.
+        for (int dec = timeStep - 1; dec >= 0; dec--){
+            if (posObj.OccupiedTimeSteps.containsKey(dec)) {
+                posObj.lastOccupiedTimeStep = dec;
+                posObj.lastOccupiedID = posObj.OccupiedTimeSteps.get(dec);
+
+                // Only needs to do this once, break.
+                break;
+            }
+
+            // If there was no other bot that occupied the position, set default values
+            if (dec == 0) {
+                posObj.lastOccupiedTimeStep = 0;
+                posObj.lastOccupiedID = "";
+            }
+        }
     }
 
 

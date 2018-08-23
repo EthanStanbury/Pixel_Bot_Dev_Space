@@ -69,6 +69,12 @@ public class PathFinder {
                 // Don't simply copy the contents of the lists, but instead enable direct editing to the list that is about to be sent.
                 List<Point> currentBotPositions = allBotsPositions.get(currentBotID);
                 List<Direction> currentBotPath = allBotsSolutions.get(currentBotID);
+                /*
+                System.out.println(currentBotPositions.size() + " " + currentBotPath.size());
+                for (int x = 0; x < currentBotPositions.size(); x++) {
+                    System.out.println(currentBotPositions.get(x) + " " + currentBotPath.get(x));
+                }
+                */
                 if (timeStep < currentBotPositions.size()) {
                     anyStepsLeft = true;
 
@@ -83,9 +89,8 @@ public class PathFinder {
                         Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
                         botDuplicates.get(i).Location = currentPos;
                         pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
-                        // Add code here to update bot's colour when it reaches its destination.
                     } else {
-                        System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " AT TIME STEP " + timeStep);
+                        System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " " + currentPos + " AT TIME STEP " + timeStep);
 
                         // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
                         if (!Problem.getPushableStatus(currentPos)) {
@@ -106,14 +111,18 @@ public class PathFinder {
                             while (catchupsCounter > 0) {
                                 pushBotPosList.add(pushBotPosList.get(indexOfLastEvent));
                                 pushBotPathList.add(S);
+                                Problem.updateBoard(pushBotPosList.get(indexOfLastEvent), (timeStep - catchupsCounter), pushedBotID, true);
                                 catchupsCounter -= 1;
                             }
 
                             pushingBots.add(currentBotPositions.get(timeStep - 1));
                             pushedBotsID.add(pushedBotID);
-                            pushedBotsPos.add(pushBotPosList.get(timeStep - 1));
+                            pushedBotsPos.add(new Point(pushBotPosList.get(timeStep - 1)));
 
-                            Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
+                            System.out.println("PUSHED BOT " + pushedBotID + " AT POS: " + pushBotPosList.get(indexOfLastEvent));
+
+                            Problem.removeOccupation(pushBotPosList.get(indexOfLastEvent), timeStep);
+                            // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
                         }
                     }
                 }
@@ -125,16 +134,33 @@ public class PathFinder {
                 Bot pushedBot = getBotObject(pushedID, botDuplicates);
 
                 CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
+                pushedBot.Location = pushedBotsPos.get(j);
                 System.out.println(pushedBot.Location);
                 System.out.println(newTarget);
+
+                // Remove the starting coordinate, or we will enter an infinite loop
+                //aStarOutput.Coordinates.remove(0);
                 allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
                 allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
+                System.out.println(allBotsPositions.get(pushedID).get(allBotsPositions.get(pushedID).size() - 1));
+                System.out.println(aStarOutput.Coordinates.size());
             }
 
-            if (pushingBots.size() == 0)
+            if (pushingBots.size() == 0) {
+                /*
+                for (int i = 0; i < pairedBotList.size(); i++) {
+                    String currentBotID = pairedBotList.get(i).BotID;
+                    List<Point> currentBotPositions = allBotsPositions.get(currentBotID);
+                    Point currentPos = currentBotPositions.get(currentBotPositions.size() - 1);
+                    botDuplicates.get(i).Location = currentPos;
+                    pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
+                }
+                */
                 timeStep += 1;
+            }
 
-            if (timeStep > 100)
+
+            if (timeStep > 20)
                 break;
         }
 
@@ -216,6 +242,7 @@ public class PathFinder {
                 }
             }
         }
+        // return new CoordActionOutput(new ArrayList<Point>(), new ArrayList<Direction>());
         return null;
     }
 
@@ -256,8 +283,8 @@ public class PathFinder {
         // Saved in reverse order though, since we are searching from finish to start.
         while (!state_coord.equals(initial_coord)) {
             BackTrack prev = back_track.get(state_coord);
+            pos.add(state_coord);
             state_coord = prev.Coord;
-            pos.add(prev.Coord);
             sequence.add(prev.Action);
         }
 
