@@ -1,5 +1,6 @@
 package com.example.mischa.pixelbotui.Swarm;
 
+import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
@@ -12,6 +13,7 @@ import com.example.mischa.pixelbotui.UI.PBCanvas;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Ethan on 16/03/2018.
@@ -20,7 +22,7 @@ import java.util.HashMap;
 // This Class will be used to build a swarm which consists of individual pixels.
 
 public class Swarm {
-    public HashMap<String, Bot> SwarmList;
+    public HashMap<String, Bot> currentSwarm;
     // @param Colour, is the colour of the swarm that you are creating, each swarm is unique by its colour if a bot is the same as the colour as a swarm it should be in that swarm
     // @param NumberOfBots, This is the numberOfBots that you want to add to the swarm
     // Each bot is uniquely made for each swarm
@@ -30,15 +32,17 @@ public class Swarm {
     //adds the bot to the current swarm
     // adds the bot to the Grid
 
-    public Swarm(Integer Colour, Integer numberOfBots){
+    public static void SwarmCreate(Integer numberOfBots, LinkedHashMap<String, BluetoothDevice> devices){
 
-        HashMap<String, Bot> thisSwarmList = new HashMap<>();
+        if (numberOfBots > devices.size()){
+            throw new IllegalStateException("FATAL ERROR: The number of bots you have spawned do not match the physical bots that are connected");
+        }
+
         int side = 1;
         int counter = 0;
 
         while ( numberOfBots > 0){
             System.out.println("#botsleft: " + numberOfBots);
-
 
 
             if (side == 1 && counter == PBCanvas.yDimension - 2){
@@ -73,9 +77,9 @@ public class Swarm {
                 System.out.println("Creating a bot in side 4 with a location of: " + defaultLocation);
             }
 
-            String id = ( DEVICE ADDRESS +"/"+ numberOfBots);
+            String id = (devices.);
             Bot add = new Bot(id,defaultLocation);
-            thisSwarmList.put(id, add);
+            currentSwarm.put(id, add);
             UIAdapter.destinationGrid.addBot(add);
 
             counter++;
@@ -86,7 +90,6 @@ public class Swarm {
         }
 
 
-        this.SwarmList = thisSwarmList;
 
 
     }

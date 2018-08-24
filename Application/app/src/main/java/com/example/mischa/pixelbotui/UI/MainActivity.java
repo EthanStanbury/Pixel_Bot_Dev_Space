@@ -25,6 +25,7 @@ import com.example.mischa.pixelbotui.R;
 import com.example.mischa.pixelbotui.Swarm.Bot;
 import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
+import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -42,7 +44,7 @@ public class MainActivity extends Activity {
     // 98:D3:32:31:7A:19 address
     private final String DEVICE_NAME="HC-05";
     private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
-    private HashMap<String, BluetoothDevice> devices;
+    private LinkedHashMap<String, BluetoothDevice> devices;
     private HashMap<String, BluetoothSocket> sockets;
     private BluetoothDevice device;
     private BluetoothSocket socket;
@@ -79,7 +81,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                SwarmAdapter.SwarmCreate(MainActivity.BotAmounts,  devices);
+                Swarm.SwarmCreate(MainActivity.BotAmounts,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
                     System.out.println("KEY IS HERE" + key);
