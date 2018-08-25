@@ -349,13 +349,3 @@ class CoordActionOutput {
         Actions = new ArrayList<>(actions);
     }
 }
-
-class Solution {
-    int Colour;
-    List<Direction> Moves;
-
-    Solution(int colour, List<Direction> moves) {
-        Colour = colour;
-        Moves = moves;
-    }
-}

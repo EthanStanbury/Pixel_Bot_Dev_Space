@@ -25,6 +25,7 @@ import com.example.mischa.pixelbotui.R;
 import com.example.mischa.pixelbotui.Swarm.Bot;
 import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
+import com.example.mischa.pixelbotui.Swarm.Solution;
 import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class MainActivity extends Activity {
     int[] saveState;
     int[] restoreState;
     ConstraintLayout main_layout;
-    public static HashMap<String, List<Direction>> Solution;
+    public static HashMap<String, Solution> Solution;
     public int botsTotal = 2;
     // Called when activity is created
     @Override
@@ -259,7 +260,7 @@ public class MainActivity extends Activity {
 
 
 
-    public void onClickSend(View view, HashMap<String, List<Direction>> Solution, HashMap<String, BluetoothSocket> sockets) {
+    public void onClickSend(View view, HashMap<String, Solution> Solution, HashMap<String, BluetoothSocket> sockets) {
 
         for (String address : Solution.keySet()) {
             String string = Solution.get(address).toString();

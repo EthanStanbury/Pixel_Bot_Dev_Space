@@ -24,7 +24,7 @@ import java.util.Set;
 // This Class will be used to build a swarm which consists of individual pixels.
 
 public class Swarm {
-    public static HashMap<String, Bot> currentSwarm = new HashMap<String, Bot>();
+    public static HashMap<String, Bot> currentSwarm = new HashMap<>();
     // @param Colour, is the colour of the swarm that you are creating, each swarm is unique by its colour if a bot is the same as the colour as a swarm it should be in that swarm
     // @param NumberOfBots, This is the numberOfBots that you want to add to the swarm
     // Each bot is uniquely made for each swarm
