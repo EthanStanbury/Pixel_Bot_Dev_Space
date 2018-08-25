@@ -42,8 +42,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     ArrayList<SimBot> finishedBots = new ArrayList<>();
     boolean runThread = true;
 
-    LayoutItem backButton;
-
     MainThread thread;
 
     Activity activity = (Activity) getContext();
@@ -60,8 +58,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
         createBots(botMoves);
 
-        backButton = new LayoutItem(Color.LTGRAY);
-
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
 
@@ -72,14 +68,10 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.TRANSPARENT);
         //Draw the grid, and border
         for (Pixel p : uiGrid) {
-            paint.setStyle(Paint.Style.FILL);
-            if (PBCanvas.isIn(p, PBCanvas.border)) {
-                paint.setColor(Color.DKGRAY);
-            } else {
-                paint.setColor(Color.TRANSPARENT);
-            }
             canvas.drawRect(p.rect, paint);
         }
 
@@ -96,17 +88,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.STROKE);
             paint.setColor(Color.BLACK);
-            paint.setStrokeWidth(5);
+            paint.setStrokeWidth(3);
             canvas.drawRect(p.rect, paint);
         }
-
-        backButton.rect.set(50, 50, 400, 175);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setColor(backButton.colour);
-        canvas.drawRect(backButton.rect, paint);
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(50);
-        canvas.drawText("DRAW AGAIN", backButton.rect.exactCenterX() - 150, backButton.rect.exactCenterY() + 20, paint);
     }
 
     // Get the colour from an input string, up until '/'
@@ -125,14 +109,14 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (String key : moves.keySet()) {
             Point botLocation;
 
-            botColour = Integer.parseInt(parseColour(key));
+
             //TODO this needs to be changed to a variable
-            for (Integer swarmColour: SwarmAdapter.WholeSwarm.keySet()) {
-                if (swarmColour == botColour) {
-                        botLocation = SwarmAdapter.WholeSwarm.get(swarmColour).SwarmList.get(key).Location;
-                        SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
-                        unfinishedBots.add(newBot);
-                }
+            for (String swarmColour: Swarm.currentSwarm.keySet()) {
+                botColour = Color.MAGENTA;
+                botLocation = Swarm.currentSwarm.get(swarmColour).Location;
+                SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
+                unfinishedBots.add(newBot);
+
 
 
 
@@ -145,9 +129,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     // Update the positions of the bots according to the next moves in their strings
     public void nextMoves() {
         for (int i = 0; i < unfinishedBots.size(); i++) {
-         //   System.out.println(unfinishedBots.get(i).path);
+            //   System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
-          //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
+            //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
 
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));
@@ -190,21 +174,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         return point;
-    }
-
-
-    // Handles the touch events
-    public boolean onTouchEvent(MotionEvent e) {
-        int xTouch = (int) e.getX();
-        int yTouch = (int) e.getY();
-
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            if (backButton.rect.contains(xTouch,yTouch)) {
-                activity.finish();
-                runThread = false;
-            }
-        }
-        return true;
     }
 
     // The method that is called over and over to move the bots
