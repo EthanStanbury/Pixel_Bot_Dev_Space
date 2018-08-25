@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
                 Swarm.SwarmCreate(botsTotal,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
-                    System.out.println("KEY IS HERE" + key);
+                    System.out.println("id is " + key + "With Path: " + Solution.get(key));
 
                 }
                 if (deviceConnected && BTinit()) {

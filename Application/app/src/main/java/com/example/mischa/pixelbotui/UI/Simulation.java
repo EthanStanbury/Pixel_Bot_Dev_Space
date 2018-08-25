@@ -172,6 +172,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
                 point.y += 1;
                 break;
             }
+            case 'S': {
+                break;
+            }
         }
         return point;
     }
