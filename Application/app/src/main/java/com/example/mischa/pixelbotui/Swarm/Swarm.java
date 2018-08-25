@@ -36,9 +36,9 @@ public class Swarm {
 
     public static void SwarmCreate(Integer numberOfBots, LinkedHashMap<String, BluetoothDevice> devices){
         LinkedHashMap<String, BluetoothDevice> deviceList = devices;
-        if (numberOfBots > devices.size()){
-            throw new IllegalStateException("FATAL ERROR: The number of bots you have spawned do not match the physical bots that are connected");
-        }
+//        if (numberOfBots > devices.size()){
+//            throw new IllegalStateException("FATAL ERROR: The number of bots you have spawned do not match the physical bots that are connected");
+//        }
 
         int side = 1;
         int counter = 0;
@@ -80,14 +80,24 @@ public class Swarm {
             }
 
 
-            String first = deviceList.keySet().iterator().next();
-            System.out.println("Devices size: " + deviceList.size());
-            System.out.println("Devices: " + deviceList.get(first).getAddress());
-            String id = (deviceList.get(first).getAddress());
-            Bot add = new Bot(id,defaultLocation);
-            currentSwarm.put(id, add);
-            UIAdapter.destinationGrid.addBot(add);
-            deviceList.remove(first);
+            if (!deviceList.isEmpty()){
+                String first = deviceList.keySet().iterator().next();
+                System.out.println("Devices size: " + deviceList.size());
+                System.out.println("Devices: " + deviceList.get(first).getAddress());
+                String id = (deviceList.get(first).getAddress());
+                Bot add = new Bot(id,defaultLocation);
+                currentSwarm.put(id, add);
+                UIAdapter.destinationGrid.addBot(add);
+                deviceList.remove(first);
+
+            }else {
+                String id = numberOfBots.toString();
+                Bot add = new Bot(id,defaultLocation);
+                currentSwarm.put(id, add);
+                UIAdapter.destinationGrid.addBot(add);
+            }
+
+
 
             counter++;
             numberOfBots--;

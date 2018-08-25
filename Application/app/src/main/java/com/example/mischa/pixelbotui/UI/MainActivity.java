@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
     int[] restoreState;
     ConstraintLayout main_layout;
     public static HashMap<String, List<Direction>> Solution;
-    public int botsTotal = 1;
+    public int botsTotal = 2;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +88,9 @@ public class MainActivity extends Activity {
                     System.out.println("KEY IS HERE" + key);
 
                 }
-                onClickSend(view, Solution, sockets);
-
+                if (deviceConnected && BTinit()) {
+                    onClickSend(view, Solution, sockets);
+                }
 
                 // start the new activity
                 Intent intent = new Intent(canvas.context, SimActivity.class);
@@ -224,6 +225,8 @@ public class MainActivity extends Activity {
                 }
             }
 
+        }else{
+            Toast.makeText(getApplicationContext(),"Please pair a device",Toast.LENGTH_SHORT).show();
         }
 
         if (sockets.isEmpty()){
