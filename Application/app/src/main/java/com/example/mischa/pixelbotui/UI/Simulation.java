@@ -53,7 +53,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
 
         for (String key:  Solution.keySet()) {
-            System.out.println(Solution.get(key).toString());
             botMoves.put(key, Solution.get(key).toString());
         }
 
@@ -110,14 +109,14 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (String key : moves.keySet()) {
             Point botLocation;
 
-            botColour = Integer.parseInt(parseColour(key));
+
             //TODO this needs to be changed to a variable
-            for (Integer swarmColour: SwarmAdapter.WholeSwarm.keySet()) {
-                if (swarmColour == botColour) {
-                        botLocation = SwarmAdapter.WholeSwarm.get(swarmColour).SwarmList.get(key).Location;
-                        SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
-                        unfinishedBots.add(newBot);
-                }
+            for (String swarmColour: Swarm.currentSwarm.keySet()) {
+                botColour = Color.MAGENTA;
+                botLocation = Swarm.currentSwarm.get(swarmColour).Location;
+                SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
+                unfinishedBots.add(newBot);
+
 
 
 
@@ -130,9 +129,9 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     // Update the positions of the bots according to the next moves in their strings
     public void nextMoves() {
         for (int i = 0; i < unfinishedBots.size(); i++) {
-         //   System.out.println(unfinishedBots.get(i).path);
+            //   System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
-          //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
+            //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
 
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));

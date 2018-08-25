@@ -14,6 +14,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ethan on 16/03/2018.
@@ -22,7 +24,7 @@ import java.util.LinkedHashMap;
 // This Class will be used to build a swarm which consists of individual pixels.
 
 public class Swarm {
-    public HashMap<String, Bot> currentSwarm;
+    public static HashMap<String, Bot> currentSwarm = new HashMap<String, Bot>();
     // @param Colour, is the colour of the swarm that you are creating, each swarm is unique by its colour if a bot is the same as the colour as a swarm it should be in that swarm
     // @param NumberOfBots, This is the numberOfBots that you want to add to the swarm
     // Each bot is uniquely made for each swarm
@@ -33,7 +35,7 @@ public class Swarm {
     // adds the bot to the Grid
 
     public static void SwarmCreate(Integer numberOfBots, LinkedHashMap<String, BluetoothDevice> devices){
-
+        LinkedHashMap<String, BluetoothDevice> deviceList = devices;
         if (numberOfBots > devices.size()){
             throw new IllegalStateException("FATAL ERROR: The number of bots you have spawned do not match the physical bots that are connected");
         }
@@ -77,10 +79,15 @@ public class Swarm {
                 System.out.println("Creating a bot in side 4 with a location of: " + defaultLocation);
             }
 
-            String id = (devices.);
+
+            String first = deviceList.keySet().iterator().next();
+            System.out.println("Devices size: " + deviceList.size());
+            System.out.println("Devices: " + deviceList.get(first).getAddress());
+            String id = (deviceList.get(first).getAddress());
             Bot add = new Bot(id,defaultLocation);
             currentSwarm.put(id, add);
             UIAdapter.destinationGrid.addBot(add);
+            deviceList.remove(first);
 
             counter++;
             numberOfBots--;

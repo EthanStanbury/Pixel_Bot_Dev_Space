@@ -55,8 +55,9 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int selectedColour = Color.TRANSPARENT;
     int whiteBox = 1;
+    private int TotalBots;
 
-    int botsTotal = 1;
+
     int currentBotAmount;
 
     Context context;
@@ -80,11 +81,13 @@ public class PBCanvas extends SurfaceView {
 
     public static ArrayList<Pixel> border = new ArrayList<>();
 
-    public PBCanvas(Context context) {
+    public PBCanvas(Context context,  int botsTotal) {
         super(context);
         this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
+
+        TotalBots = botsTotal;
 
 
 
@@ -148,7 +151,7 @@ public class PBCanvas extends SurfaceView {
                 count++;
             }
         }
-        currentBotAmount = botsTotal - count;
+        currentBotAmount = TotalBots - count;
     }
 
     // Test if a pixel is in a list

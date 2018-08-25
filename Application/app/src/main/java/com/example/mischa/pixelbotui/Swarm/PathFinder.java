@@ -42,7 +42,7 @@ public class PathFinder {
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
             Bot bot = pair.getKey();
-            Bot botCopy = new Bot(bot.BotID, bot.Colour, bot.Location);
+            Bot botCopy = new Bot(bot.BotID, bot.Location);
 
             pairedBotList.add(bot);
             botDuplicates.add(botCopy);
@@ -58,7 +58,7 @@ public class PathFinder {
         int timeStep = 1; // Ignore saving the initial step, as it is already done (during bot initialisation)
         while (anyStepsLeft) {
             anyStepsLeft = false;   // Assume that there are no actions left, unless found.
-            System.out.println("TIME STEP: " + timeStep);
+           // System.out.println("TIME STEP: " + timeStep);
 
             List<Point> pushingBots = new ArrayList<>();
             List<String> pushedBotsID = new ArrayList<>();
@@ -83,19 +83,19 @@ public class PathFinder {
                     boolean posAvailable = Problem.checkAvailability(currentPos, timeStep);
                     // System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
                     boolean reachedDestination = timeStep == currentBotPositions.size() - 1;
-                    System.out.println(reachedDestination);
+                    //System.out.println(reachedDestination);
 
                     if (posAvailable) {
                         Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
                         botDuplicates.get(i).Location = currentPos;
-                        pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
+//                        pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
                     } else {
-                        System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " " + currentPos + " AT TIME STEP " + timeStep);
+                       // System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " " + currentPos + " AT TIME STEP " + timeStep);
 
                         // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
                         if (!Problem.getPushableStatus(currentPos)) {
                             // Add an additional step to the bot's path sequence (stop for 1 time step)
-                            System.out.println("Adding a 'stop' command in the sequence at this timestep(" + timeStep + ")...");
+                            //System.out.println("Adding a 'stop' command in the sequence at this timestep(" + timeStep + ")...");
                             currentBotPositions.add(timeStep, currentBotPositions.get(timeStep - 1));
                             currentBotPath.add(timeStep, S);
                         } else { // A temporary solution - until the 'push' method is implemented, the bot should just walk over other bots that have stopped to prevent the program from 'hanging'.
@@ -119,7 +119,7 @@ public class PathFinder {
                             pushedBotsID.add(pushedBotID);
                             pushedBotsPos.add(new Point(pushBotPosList.get(timeStep - 1)));
 
-                            System.out.println("PUSHED BOT " + pushedBotID + " AT POS: " + pushBotPosList.get(indexOfLastEvent));
+                           // System.out.println("PUSHED BOT " + pushedBotID + " AT POS: " + pushBotPosList.get(indexOfLastEvent));
 
                             Problem.removeOccupation(pushBotPosList.get(indexOfLastEvent), timeStep);
                             // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
@@ -135,15 +135,15 @@ public class PathFinder {
 
                 CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
                 pushedBot.Location = pushedBotsPos.get(j);
-                System.out.println(pushedBot.Location);
-                System.out.println(newTarget);
+             //   System.out.println(pushedBot.Location);
+              //  System.out.println(newTarget);
 
                 // Remove the starting coordinate, or we will enter an infinite loop
                 //aStarOutput.Coordinates.remove(0);
                 allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
                 allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
-                System.out.println(allBotsPositions.get(pushedID).get(allBotsPositions.get(pushedID).size() - 1));
-                System.out.println(aStarOutput.Coordinates.size());
+              //  System.out.println(allBotsPositions.get(pushedID).get(allBotsPositions.get(pushedID).size() - 1));
+              //  System.out.println(aStarOutput.Coordinates.size());
             }
 
             if (pushingBots.size() == 0) {

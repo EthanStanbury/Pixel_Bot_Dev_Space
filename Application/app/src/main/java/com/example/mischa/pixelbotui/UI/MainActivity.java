@@ -42,10 +42,11 @@ import java.util.zip.Inflater;
 
 public class MainActivity extends Activity {
     // 98:D3:32:31:7A:19 address
+    // 98:D3:32:31:7A:6D address
     private final String DEVICE_NAME="HC-05";
     private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
-    private LinkedHashMap<String, BluetoothDevice> devices;
-    private HashMap<String, BluetoothSocket> sockets;
+    private LinkedHashMap<String, BluetoothDevice> devices = new LinkedHashMap<>();
+    private HashMap<String, BluetoothSocket> sockets = new LinkedHashMap<>();
     private BluetoothDevice device;
     private BluetoothSocket socket;
     private OutputStream outputStream;
@@ -60,9 +61,9 @@ public class MainActivity extends Activity {
     PBCanvas canvas;
     int[] saveState;
     int[] restoreState;
-    public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
     ConstraintLayout main_layout;
     public static HashMap<String, List<Direction>> Solution;
+    public int botsTotal = 1;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class MainActivity extends Activity {
         LayoutInflater inflater = getLayoutInflater();
 
         main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
-        canvas = new PBCanvas(this);
+        canvas = new PBCanvas(this, botsTotal);
 
         main_layout.addView(canvas);
 
@@ -81,13 +82,13 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                Swarm.SwarmCreate(MainActivity.BotAmounts,  devices);
+                Swarm.SwarmCreate(botsTotal,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
                     System.out.println("KEY IS HERE" + key);
 
                 }
-                onClickSend(view, Solution);
+                onClickSend(view, Solution, sockets);
 
 
                 // start the new activity
@@ -121,12 +122,7 @@ public class MainActivity extends Activity {
         setContentView(main_layout);
 
         // The amount of bots we have to work with
-        BotAmounts.put(-1162650,    1); //Red
-        BotAmounts.put(-11713,      70); //Yellow
-        BotAmounts.put(-15815319,   70); //Green
-        BotAmounts.put(-12857684,   70); //Blue
-        BotAmounts.put(-11268754,   70); //Purple
-        BotAmounts.put(Color.BLACK, 0); //Black
+
 
 
     }
@@ -184,8 +180,10 @@ public class MainActivity extends Activity {
         {
             for (BluetoothDevice iterator : bondedDevices)
             {
+
                 if(iterator.getName().equals(DEVICE_NAME))
                 {
+
                     devices.put(iterator.getAddress(), iterator);
                     found=true;
                 }
@@ -244,7 +242,7 @@ public class MainActivity extends Activity {
                 deviceConnected=true;
 
                 Context context = getApplicationContext();
-                CharSequence text = "Connected to device: " + devices.keySet();
+                CharSequence text = "Connected to: " + devices.size()+ " Device(s)";
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -258,15 +256,32 @@ public class MainActivity extends Activity {
 
 
 
-    public void onClickSend(View view, HashMap<String, List<Direction>> Solution) {
-        //TODO create the output stream for the socket that is associated with the bot in the solution's ID (foreach one) then send
-        String string = Solution.get("-1162650/1").toString();
-        string.concat("\n");
-        System.out.println("trying to send: " + string);
-        try {
-            outputStream.write(string.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void onClickSend(View view, HashMap<String, List<Direction>> Solution, HashMap<String, BluetoothSocket> sockets) {
+
+        for (String address : Solution.keySet()) {
+            String string = Solution.get(address).toString();
+            string.concat("\n");
+
+            try {
+                outputStream = sockets.get(address).getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+                sockets.remove(address);
+            }
+            try {
+                inputStream = sockets.get(address).getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+                sockets.remove(address);
+            }
+
+            try {
+                outputStream.write(string.getBytes());
+                System.out.println("Sending message to Device: " + address + " Message is: " + string);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }

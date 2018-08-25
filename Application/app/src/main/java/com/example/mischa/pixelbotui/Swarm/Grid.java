@@ -77,7 +77,7 @@ public class Grid {
         Point botCoord = bot.Location;
 
         // Set colour
-        Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
+//        Grid[botCoord.x][botCoord.y].Colour = bot.Colour;
         // Add time step with bot ID.
         Grid[botCoord.x][botCoord.y].OccupiedTimeSteps.put(0, bot.BotID);
         // Add to Bots list

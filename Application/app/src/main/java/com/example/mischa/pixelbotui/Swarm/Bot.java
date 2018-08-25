@@ -9,7 +9,6 @@ import android.graphics.Point; // Refer to: https://developer.android.com/refere
 
 public class Bot {
     public String BotID;           // The ID of this bot. May be useful in identifying which bot to talk to by just calling ID. May also be completely useless.
-//    public int Colour;             // The Colour of the bot
     public Point Location;          //The intial location of the bot
     public Path Path;               // The path for each bot
     public Boolean IsAvailable; //Created as false on start, as it shouldn't be moving or part of a picture. The way the swarm will work is it will look for available bots and move them.
@@ -20,7 +19,6 @@ public class Bot {
     public Bot(String id, Point Location){
 
         this.BotID = id;
-//        this.Colour = Colour;
         this.Location = Location;
         IsAvailable = true;
 
