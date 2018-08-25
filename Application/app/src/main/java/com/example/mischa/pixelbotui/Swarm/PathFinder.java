@@ -20,7 +20,7 @@ public class PathFinder {
     private static Grid Problem;
     // private static Point CurrentDest;
 
-    public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
+    public static HashMap<String, Solution> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs, solve for a solution with the A* algorithm.
         Problem = problem;      // Grid with all the bots and destinations are defined as the 'Problem' that needs solving.
         Problem.mapBotToDest(); // When getSolutions() method was called, it is assumed that all bots and destinations were added.
@@ -34,10 +34,14 @@ public class PathFinder {
         // Saves a virtual copy of the bots, so that we can perform push functionality
         List<Bot> botDuplicates = new ArrayList<>();
 
-        // Stores all bot-dest pair solutions into this hashmap
+        // Stores the solution (which contains colour and sequence of moves).
+        HashMap<String, Solution> finalSolution = new HashMap<>();
+        // Stores the moves history of each bots (that are moving).
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
         // Stores the position history of each bots (that are moving).
         HashMap<String, List<Point>> allBotsPositions = new HashMap<>();
+        // Stores the colour of each bot.
+        HashMap<String, Integer> allBotsColour = new HashMap<>();
 
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
@@ -51,6 +55,8 @@ public class PathFinder {
 
             allBotsSolutions.put(bot.BotID, aStarOutput.Actions);
             allBotsPositions.put(bot.BotID, aStarOutput.Coordinates);
+            allBotsColour.put(bot.BotID, 0); // Set all bots' colour to 0 for now. This will be changed in the step-by-step analysis.
+            // May not even be necessary.
         }
 
         // This is a step by step checker: it checks the bots' positions for any collisions and resolves them.
@@ -89,6 +95,7 @@ public class PathFinder {
                         Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
                         botDuplicates.get(i).Location = currentPos;
 //                        pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
+                        allBotsColour.put(currentBotID, Problem.getColourFromPos(currentPos));
                     } else {
                        // System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " " + currentPos + " AT TIME STEP " + timeStep);
 
@@ -164,7 +171,17 @@ public class PathFinder {
                 break;
         }
 
-        return allBotsSolutions;
+        for (HashMap.Entry<String, List<Direction>> pair : allBotsSolutions.entrySet()) {
+            String currentBotID = pair.getKey();
+            List<Direction> currentBotPathSequence = pair.getValue();
+            int currentBotColour = allBotsColour.get(currentBotID);
+
+            Solution colourMovePair = new Solution(currentBotColour, currentBotPathSequence);
+
+            finalSolution.put(currentBotID, colourMovePair);
+        }
+
+        return finalSolution;
     }
 
     private static Bot getBotObject(String botID, List<Bot> botList) {
@@ -330,5 +347,15 @@ class CoordActionOutput {
     CoordActionOutput(List<Point> coords, List<Direction> actions) {
         Coordinates = new ArrayList<>(coords);
         Actions = new ArrayList<>(actions);
+    }
+}
+
+class Solution {
+    int Colour;
+    List<Direction> Moves;
+
+    Solution(int colour, List<Direction> moves) {
+        Colour = colour;
+        Moves = moves;
     }
 }
