@@ -263,9 +263,9 @@ public class MainActivity extends Activity {
     public void onClickSend(View view, HashMap<String, Solution> Solution, HashMap<String, BluetoothSocket> sockets) {
 
         for (String address : Solution.keySet()) {
-            String string = Solution.get(address).toString();
-            string.concat("\n");
-
+            String path = Solution.get(address).Moves.toString();
+            int desColour = Solution.get(address).Colour;
+            String message = path + "<"+desColour+">"+"\n";
             try {
                 outputStream = sockets.get(address).getOutputStream();
             } catch (IOException e) {
@@ -280,8 +280,8 @@ public class MainActivity extends Activity {
             }
 
             try {
-                outputStream.write(string.getBytes());
-                System.out.println("Sending message to Device: " + address + " Message is: " + string);
+                outputStream.write(message.getBytes());
+                System.out.println("Sending message to Device: " + address + " Message is: " + message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
