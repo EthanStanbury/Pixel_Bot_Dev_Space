@@ -35,11 +35,10 @@ import static java.lang.Thread.sleep;
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     long startTime = System.currentTimeMillis();
-    HashMap<String, Solution> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
+    HashMap<String, Solution> solutions = PathFinder.getSolutions(UIAdapter.destinationGrid);
     long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
-    HashMap<String, String> botMoves = new HashMap<>();
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
     boolean runThread = true;
@@ -54,11 +53,11 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
         getHolder().addCallback(this);
 
-        for (String key:  Solution.keySet()) {
-            botMoves.put(key, Solution.get(key).toString());
-        }
-
-        createBots(botMoves);
+//        for (String key:  Solution.keySet()) {
+//            botMoves.put(key, Solution.get(key).toString());
+//        }
+        System.out.println("Solutions size: " + solutions.size());
+        createBots(solutions);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -82,10 +81,12 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
+            System.out.println("Unfinished: " + bot.ID);
         }
         for (SimBot bot : finishedBots) {
             paint.setColor(bot.pixel.colour);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
+            System.out.println("Finished: " + bot.ID);
         }
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.STROKE);
@@ -106,17 +107,21 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return output;
     }
 
-    public void createBots(HashMap<String, String> moves) {
-        int botColour;
-        for (String key : moves.keySet()) {
+    public String convertToString(List<Direction> list) {
+        String output = "";
+        for (Direction d : list) {
+            output = output + d;
+        }
+        System.out.println("Full Path: " + output);
+        return output;
+    }
+
+    public void createBots(HashMap<String, Solution> sols) {
+        for (String key : sols.keySet()) {
             Point botLocation;
-
-
-            //TODO this needs to be changed to a variable
-//            for (String id: Swarm.currentSwarm.keySet()) {
-            botColour = Color.MAGENTA;
             botLocation = Swarm.currentSwarm.get(key).Location;
-            SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
+            System.out.println("Starting point: " + botLocation);
+            SimBot newBot = new SimBot(sols.get(key).colour, key, convertToString(sols.get(key).moves), botLocation);
             unfinishedBots.add(newBot);
 
 
@@ -126,13 +131,14 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
 
         }
+        System.out.println("Createbots size: " + unfinishedBots.size());
     }
     // Update the positions of the bots according to the next moves in their strings
     public void nextMoves() {
         for (int i = 0; i < unfinishedBots.size(); i++) {
-            //   System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
-            //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
+            System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
+            System.out.println("I am bot " + unfinishedBots.get(i).ID + " and my path is " + unfinishedBots.get(i).path);
 
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));
