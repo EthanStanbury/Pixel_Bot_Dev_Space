@@ -305,7 +305,7 @@ public class Grid {
 
             if (!(currentDest.equals(pushed) || currentDest.equals(pushing))) {
                 Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
-                System.out.println(pushed + " " + currentDest + " " + score);
+                //System.out.println(pushed + " " + currentDest + " " + score);
                 destScore.put(currentDest, score);
             }
         }

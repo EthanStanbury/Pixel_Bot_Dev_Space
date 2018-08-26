@@ -68,7 +68,9 @@ public class PBCanvas extends SurfaceView {
     LayoutItem rYellow; // #FFD23F
     LayoutItem rGreen; // #0EAD69
     LayoutItem rBlue; //#3BCEAC
-    LayoutItem rPurple; // #540D6E
+    LayoutItem rCyan; // #540D6E Not correct hex values
+    LayoutItem rWhite;
+    LayoutItem rPink;
     LayoutItem rErase; // eraser, transparent
     LayoutItem rColourPicked; // Current colour
     LayoutItem eraseBG;
@@ -103,11 +105,14 @@ public class PBCanvas extends SurfaceView {
         top = new LayoutItem(Color.DKGRAY);
         bottom = new LayoutItem(Color.DKGRAY);
         rErase = new LayoutItem(Color.TRANSPARENT);
-        rRed = new LayoutItem(Color.parseColor("#EE4266")); // -1162650
-        rYellow = new LayoutItem(Color.parseColor("#FFD23F")); // -11713
-        rGreen = new LayoutItem(Color.parseColor("#0EAD69")); // -15815319
-        rBlue = new LayoutItem(Color.parseColor("#3BCEAC")); // -12857684
-        rPurple = new LayoutItem(Color.parseColor("#540D6E")); // -11268754
+        rWhite = new LayoutItem(Color.rgb(255,255,255)); // -1162650 OR #EE4266
+        rYellow = new LayoutItem(Color.rgb(255,255,0)); // -11713 ) OR #FFD23F
+        rPink = new LayoutItem(Color.rgb(255,0,255)); // -15815319 OR #0EAD69
+        rRed = new LayoutItem(Color.rgb(255,0,0)); // -12857684 OR #3BCEAC
+        rCyan = new LayoutItem(Color.rgb(0,255,255)); // -11268754 #540D6E
+        rGreen = new LayoutItem(Color.rgb(0,255,0)); // -11268754 #540D6E
+        rBlue = new LayoutItem(Color.rgb(0,0,255)); // -11268754 #540D6E
+
         rColourPicked = new LayoutItem(Color.WHITE);
         rColourPicked.rect.set(-10,-10,-9,-9);
         eraseBG = new LayoutItem(Color.LTGRAY);
@@ -120,7 +125,9 @@ public class PBCanvas extends SurfaceView {
         LayoutItemList.add(rYellow);
         LayoutItemList.add(rGreen);
         LayoutItemList.add(rBlue);
-        LayoutItemList.add(rPurple);
+        LayoutItemList.add(rPink);
+        LayoutItemList.add(rCyan);
+        LayoutItemList.add(rWhite);
         LayoutItemList.add(rErase);
         LayoutItemList.add(eraseBG);
         LayoutItemList.add(gridBG);
@@ -130,7 +137,9 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rYellow);
         ClickableItems.add(rGreen);
         ClickableItems.add(rBlue);
-        ClickableItems.add(rPurple);
+        ClickableItems.add(rPink);
+        ClickableItems.add(rWhite);
+        ClickableItems.add(rCyan);
 
         selectedColour = Color.parseColor("#EE4266");
     }
@@ -174,14 +183,16 @@ public class PBCanvas extends SurfaceView {
         /* This is for if the screen is landscape, basically */
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
             // Set all the positions of the rectangles on the screen
-            top.rect.set(0,0,300, canvas.getHeight());
-            bottom.rect.set(canvas.getWidth() - 300,0, canvas.getWidth(), canvas.getHeight());
-            rRed.rect.set(70, (canvas.getHeight()/7) - 80, 230, (canvas.getHeight()/7) + 80);
-            rYellow.rect.set(70, 2 * (canvas.getHeight()/7) - 80, 230, 2 * (canvas.getHeight()/7) + 80);
-            rGreen.rect.set(70, 3 * (canvas.getHeight()/7) - 80, 230, 3 * (canvas.getHeight()/7) + 80);
-            rBlue.rect.set(70, 4 * (canvas.getHeight()/7) - 80, 230, 4 * (canvas.getHeight()/7) + 80);
-            rPurple.rect.set(70, 5 * (canvas.getHeight()/7) - 80, 230, 5 * (canvas.getHeight()/7) + 80);
-            rErase.rect.set(70, 6 * (canvas.getHeight()/7) - 80, 230, 6 * (canvas.getHeight()/7) + 80);
+            top.rect.set(0,0,canvas.getWidth()/8, canvas.getHeight());
+            bottom.rect.set(7 * canvas.getWidth()/8,0, canvas.getWidth(), canvas.getHeight());
+            rRed.rect.set(70, (canvas.getHeight()/9) - 80, 230, (canvas.getHeight()/9) + 80);
+            rYellow.rect.set(70, 2 * (canvas.getHeight()/9) - 80, 230, 2 * (canvas.getHeight()/9) + 80);
+            rGreen.rect.set(70, 3 * (canvas.getHeight()/9) - 80, 230, 3 * (canvas.getHeight()/9) + 80);
+            rCyan.rect.set(70, 4 * (canvas.getHeight()/9) - 80, 230, 4 * (canvas.getHeight()/9) + 80);
+            rBlue.rect.set(70, 5 * (canvas.getHeight()/9) - 80, 230, 5 * (canvas.getHeight()/9) + 80);
+            rPink.rect.set(70, 6 * (canvas.getHeight()/9) - 80, 230, 6 * (canvas.getHeight()/9) + 80);
+            rWhite.rect.set(70, 7 * (canvas.getHeight()/9) - 80, 230, 7 * (canvas.getHeight()/9) + 80);
+            rErase.rect.set(70, 8 * (canvas.getHeight()/9) - 80, 230, 8 * (canvas.getHeight()/9) + 80);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top - 4, rErase.rect.right - 4, rErase.rect.bottom + 4);
             eraseBG.rect.set(rErase.rect);
 
@@ -205,12 +216,14 @@ public class PBCanvas extends SurfaceView {
             // Set all the positions of the rectangles on the screen
             top.rect.set(0,0,canvas.getWidth(),300);
             bottom.rect.set(0,canvas.getHeight() - 300,canvas.getWidth(),canvas.getHeight());
-            rRed.rect.set(canvas.getWidth()/7 - 80, 70, canvas.getWidth()/7 + 80, 230);
-            rYellow.rect.set( 2 * (canvas.getWidth()/7) - 80, 70, 2 * (canvas.getWidth()/7) + 80, 230);
-            rGreen.rect.set(3 * (canvas.getWidth()/7) - 80, 70, 3 * (canvas.getWidth()/7) + 80, 230);
-            rBlue.rect.set(4 * (canvas.getWidth()/7) - 80, 70, 4 * (canvas.getWidth()/7) + 80, 230);
-            rPurple.rect.set(5 * (canvas.getWidth()/7) - 80, 70, 5 * (canvas.getWidth()/7) + 80, 230);
-            rErase.rect.set(6 * (canvas.getWidth()/7) - 80, 70, 6 * (canvas.getWidth()/7) + 80, 230);
+            rRed.rect.set(        canvas.getWidth()/9 - 80, 70, canvas.getWidth()/9 + 80, 230);
+            rYellow.rect.set( 2 * (canvas.getWidth()/9) - 80, 70, 2 * (canvas.getWidth()/9) + 80, 230);
+            rGreen.rect.set(3 * (canvas.getWidth()/9) - 80, 70, 3 * (canvas.getWidth()/9) + 80, 230);
+            rCyan.rect.set(4 * (canvas.getWidth()/9) - 80, 70, 4 * (canvas.getWidth()/9) + 80, 230);
+            rBlue.rect.set(5 * (canvas.getWidth()/9) - 80, 70, 5 * (canvas.getWidth()/9) + 80, 230);
+            rPink.rect.set(6 * (canvas.getWidth()/9) - 80, 70, 6 * (canvas.getWidth()/9) + 80, 230);
+            rWhite.rect.set(7 * (canvas.getWidth()/9) - 80, 70, 7 * (canvas.getWidth()/9) + 80, 230);
+            rErase.rect.set(8 * (canvas.getWidth()/9) - 80, 70, 8 * (canvas.getWidth()/9) + 80, 230);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top + 4, rErase.rect.right - 4, rErase.rect.bottom - 4);
             eraseBG.rect.set(rErase.rect);
 
