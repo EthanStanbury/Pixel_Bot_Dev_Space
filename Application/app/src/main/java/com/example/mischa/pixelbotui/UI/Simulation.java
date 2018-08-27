@@ -46,11 +46,12 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     MainThread thread;
 
     Activity activity = (Activity) getContext();
+    int df = Color.TRANSPARENT;
 
-    public Simulation(Context context, HashMap<String, Solution> Solution) {
+    public Simulation(Context context) { //, HashMap<String, Solution> Solution) {
 
         super(context);
-        solutions = Solution;
+        solutions = MainActivity.Solution;
         getHolder().addCallback(this);
 
 //        for (String key:  Solution.keySet()) {
@@ -79,14 +80,14 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         // Draw the bots
         paint.setStyle(Paint.Style.FILL);
         for (SimBot bot : unfinishedBots) {
-            paint.setColor(bot.pixel.colour);
+            paint.setColor(Color.MAGENTA);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
-            System.out.println("Unfinished: " + bot.ID);
+            System.out.println("Unfinished: " + bot.ID + " and " + bot.pixel.colour);
         }
         for (SimBot bot : finishedBots) {
-            paint.setColor(bot.pixel.colour);
+            paint.setColor(Color.MAGENTA);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
-            System.out.println("Finished: " + bot.ID);
+            System.out.println("Bot and colour: " + bot.ID + " and " + bot.pixel.colour);
         }
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.STROKE);

@@ -31,7 +31,7 @@ public class SimActivity extends Activity {
         constraintLayout = (ConstraintLayout) inflater.inflate(R.layout.activity_sim, null);
 
         if (simCanvas == null) {
-            simCanvas = new Simulation(this, Solution);
+            simCanvas = new Simulation(this);
         }
         simCanvas.setBackgroundColor(Color.WHITE);
         constraintLayout.addView(simCanvas);

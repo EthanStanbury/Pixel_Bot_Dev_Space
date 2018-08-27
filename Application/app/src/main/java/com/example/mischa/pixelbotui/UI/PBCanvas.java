@@ -55,7 +55,7 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int selectedColour = Color.TRANSPARENT;
     int whiteBox = 1;
-    private int TotalBots;
+    public int TotalBots = 7;
 
 
     int currentBotAmount;
@@ -83,14 +83,11 @@ public class PBCanvas extends SurfaceView {
 
     public static ArrayList<Pixel> border = new ArrayList<>();
 
-    public PBCanvas(Context context,  int botsTotal) {
+    public PBCanvas(Context context) {//,  int botsTotal) {
         super(context);
         this.context = context;
         paint = new Paint();
         uiGrid = new Pixel[noOfSquares];
-
-        TotalBots = botsTotal;
-
 
 
         if (xDimension < 10 || yDimension < 10){
@@ -141,7 +138,7 @@ public class PBCanvas extends SurfaceView {
         ClickableItems.add(rWhite);
         ClickableItems.add(rCyan);
 
-        selectedColour = Color.parseColor("#EE4266");
+        selectedColour = rRed.colour;
     }
 
     // Clears the grid of any current drawing

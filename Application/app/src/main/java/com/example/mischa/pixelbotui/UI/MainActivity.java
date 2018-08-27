@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
     int[] restoreState;
     ConstraintLayout main_layout;
     public static HashMap<String, Solution> Solution;
-    public int botsTotal = 7;
+    //public int botsTotal = 7;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
         LayoutInflater inflater = getLayoutInflater();
 
         main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
-        canvas = new PBCanvas(this, botsTotal);
+        canvas = new PBCanvas(this); //, botsTotal);
 
         main_layout.addView(canvas);
 
@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                Swarm.SwarmCreate(botsTotal,  devices);
+                Swarm.SwarmCreate(canvas.TotalBots,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
                     System.out.println("id is " + key + "With Path: " + Solution.get(key).Moves + "With Final colour of: " + Solution.get(key).Colour);
