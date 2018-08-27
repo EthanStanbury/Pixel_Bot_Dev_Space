@@ -52,6 +52,9 @@ public class MainActivity extends Activity {
     int[] restoreState;
     public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
     ConstraintLayout main_layout;
+
+    public static HashMap<String, Solution> Solution;
+    public int botsTotal = 7;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
+
+                Swarm.SwarmCreate(botsTotal,  devices);
+                Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
+                for (String key: Solution.keySet()) {
+                    System.out.println("id is " + key + "With Path: " + Solution.get(key).Moves + "With Final colour of: " + Solution.get(key).Colour);
+
+                }
+                if (deviceConnected && BTinit()) {
+                    onClickSend(view, Solution, sockets);
+                }
 
                 // start the new activity
                 Intent intent = new Intent(canvas.context, SimActivity.class);
@@ -237,18 +249,72 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void onClickSend(View view, HashMap<String, Solution> Solution, HashMap<String, BluetoothSocket> sockets) {
 
+        for (String address : Solution.keySet()) {
+            String path = Solution.get(address).moves.toString();
+            int intColour = Solution.get(address).colour;
+            String desColour = intColourLetter(intColour);
 
-    public void onClickSend(View view) {
-        String string = editText.getText().toString();
-        string.concat("\n");
-        try {
-            outputStream.write(string.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+            String message = path +"<"+desColour+ ">";
+            System.out.println("FINAL STRING IS: " + message);
+            try {
+                outputStream = sockets.get(address).getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+                sockets.remove(address);
+            }
+            try {
+                inputStream = sockets.get(address).getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+                sockets.remove(address);
+            }
+
+            try {
+                outputStream.write(message.getBytes());
+                System.out.println("Sending message to Device: " + address + " Message is: " + message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
         textView.append("\nSent Data:"+string+"\n");
 
+    }
+
+    private String intColourLetter(int intColour) {
+        String colour = "N";
+        switch (intColour){
+            case -1162650:
+                colour = "E";
+                break;
+
+            case -16711936: //Green
+                colour =  "G";
+                break;
+
+            case -16776961: //Blue
+                colour = "B";
+                break;
+
+            case -256: //Yellow
+                colour = "Y";
+                break;
+
+            case -16711681: //Cyan
+                colour = "C";
+                break;
+
+            case -65281: //Magenta
+                colour = "M";
+                break;
+
+            case -1: //White
+                colour = "W";
+                break;
+        }
+        return  colour;
     }
 
     public void onClickStop(View view) throws IOException {

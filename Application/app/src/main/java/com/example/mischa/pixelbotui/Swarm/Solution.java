@@ -8,11 +8,11 @@ import java.util.List;
 
 
 public class Solution {
-    public int colour;
-    public List<Direction> moves;
+    public int Colour;
+    public List<Direction> Moves;
 
     Solution(int colour, List<Direction> moves) {
-        this.colour = colour;
-        this.moves = moves;
+        Colour = colour;
+        Moves = moves;
     }
 }

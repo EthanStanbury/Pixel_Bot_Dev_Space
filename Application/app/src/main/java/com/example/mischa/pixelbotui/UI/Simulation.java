@@ -109,6 +109,10 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         int botColour;
         for (String key : moves.keySet()) {
             Point botLocation;
+            botLocation = Swarm.currentSwarm.get(key).Location;
+            System.out.println("Starting point: " + botLocation);
+            SimBot newBot = new SimBot(sols.get(key).Colour, key, convertToString(sols.get(key).Moves), botLocation);
+            unfinishedBots.add(newBot);
 
             botColour = Integer.parseInt(parseColour(key));
             //TODO this needs to be changed to a variable
