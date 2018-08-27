@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
     int[] restoreState;
     ConstraintLayout main_layout;
     public static HashMap<String, Solution> Solution;
-    public int botsTotal = 2;
+    public int botsTotal = 7;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
                 Swarm.SwarmCreate(botsTotal,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
-                    System.out.println("id is " + key + "With Path: " + Solution.get(key));
+                    System.out.println("id is " + key + "With Path: " + Solution.get(key).Moves + "With Final colour of: " + Solution.get(key).Colour);
 
                 }
                 if (deviceConnected && BTinit()) {
@@ -264,8 +264,11 @@ public class MainActivity extends Activity {
 
         for (String address : Solution.keySet()) {
             String path = Solution.get(address).Moves.toString();
-            int desColour = Solution.get(address).Colour;
-            String message = path + "<"+desColour+">"+"\n";
+            int intColour = Solution.get(address).Colour;
+            String desColour = intColourLetter(intColour);
+
+            String message = path +"<"+desColour+ ">";
+            System.out.println("FINAL STRING IS: " + message);
             try {
                 outputStream = sockets.get(address).getOutputStream();
             } catch (IOException e) {
@@ -288,6 +291,40 @@ public class MainActivity extends Activity {
 
         }
 
+    }
+
+    private String intColourLetter(int intColour) {
+        String colour = "N";
+        switch (intColour){
+            case -1162650:
+                colour = "E";
+                break;
+
+            case -16711936: //Green
+                colour =  "G";
+                break;
+
+            case -16776961: //Blue
+                colour = "B";
+                break;
+
+            case -256: //Yellow
+                colour = "Y";
+                break;
+
+            case -16711681: //Cyan
+                colour = "C";
+                break;
+
+            case -65281: //Magenta
+                colour = "M";
+                break;
+
+            case -1: //White
+                colour = "W";
+                break;
+        }
+        return  colour;
     }
 
     public void onClickStop(View view) throws IOException {
