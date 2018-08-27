@@ -1,10 +1,10 @@
 ### Note: This is our GitHub, where all of our code is stored and logged. If you are looking for documetation head over to our [Google Drive Repository](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing)
 
 ## Weekly update
- * The Software team is looking to complete the bluetooth intergration between the app and the bot this week.
- * The Hardware team is finalising and constructing prototype 1 this week.
- * Hopefully by the end of the week the team will be able to test a complete end-end scenario of the bot. 
- * The team will hopefully be meeting with a Questacon UI expert to better develop the UI.
+ * The Bluetooth intergration is now working for 1 bot, awaiting more to test further.
+ * The Hardware team has completed the bot, complete with RGB light and omniDirectional wheels.
+ * The Team has mean with the Questacon UI expert and he has provided insight into changes that the team can make.
+ * With the completed bot and intergration we can now successfully test the end-end scenario for the bot.
 
 ## Background & Questacon's Vision
 Questacon is The National Science and Technology Centre located in Canberra, Australia. The facility, administered within the Australian Government's Department of Industry, Innovation and Science, is home to a range of innovative exhibits, shows, and activities designed appealing to people of all ages.
