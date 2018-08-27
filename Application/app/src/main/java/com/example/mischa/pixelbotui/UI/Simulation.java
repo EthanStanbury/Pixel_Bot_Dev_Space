@@ -20,9 +20,7 @@ import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
-import com.example.mischa.pixelbotui.Swarm.Solution;
 import com.example.mischa.pixelbotui.Swarm.Swarm;
-import com.example.mischa.pixelbotui.Swarm.Solution;
 
 import java.util.List;
 
@@ -35,10 +33,11 @@ import static java.lang.Thread.sleep;
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     long startTime = System.currentTimeMillis();
-    HashMap<String, Solution> solutions = PathFinder.getSolutions(UIAdapter.destinationGrid);
+    HashMap<String, List<Direction>> Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
     long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
+    HashMap<String, String> botMoves = new HashMap<>();
     ArrayList<SimBot> unfinishedBots = new ArrayList<>();
     ArrayList<SimBot> finishedBots = new ArrayList<>();
     boolean runThread = true;
@@ -53,11 +52,12 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
         getHolder().addCallback(this);
 
-//        for (String key:  Solution.keySet()) {
-//            botMoves.put(key, Solution.get(key).toString());
-//        }
-        System.out.println("Solutions size: " + solutions.size());
-        createBots(solutions);
+        for (String key:  Solution.keySet()) {
+            System.out.println(Solution.get(key).toString());
+            botMoves.put(key, Solution.get(key).toString());
+        }
+
+        createBots(botMoves);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -81,12 +81,10 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         for (SimBot bot : unfinishedBots) {
             paint.setColor(bot.pixel.colour);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
-            System.out.println("Unfinished: " + bot.ID);
         }
         for (SimBot bot : finishedBots) {
             paint.setColor(bot.pixel.colour);
             canvas.drawRect(pointToRect(bot.pixel.location), paint);
-            System.out.println("Finished: " + bot.ID);
         }
         for (Pixel p : uiGrid) {
             paint.setStyle(Paint.Style.STROKE);
@@ -107,38 +105,34 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
         return output;
     }
 
-    public String convertToString(List<Direction> list) {
-        String output = "";
-        for (Direction d : list) {
-            output = output + d;
-        }
-        System.out.println("Full Path: " + output);
-        return output;
-    }
-
-    public void createBots(HashMap<String, Solution> sols) {
-        for (String key : sols.keySet()) {
+    public void createBots(HashMap<String, String> moves) {
+        int botColour;
+        for (String key : moves.keySet()) {
             Point botLocation;
-            botLocation = Swarm.currentSwarm.get(key).Location;
-            System.out.println("Starting point: " + botLocation);
-            SimBot newBot = new SimBot(sols.get(key).colour, key, convertToString(sols.get(key).moves), botLocation);
-            unfinishedBots.add(newBot);
+
+            botColour = Integer.parseInt(parseColour(key));
+            //TODO this needs to be changed to a variable
+            for (Integer swarmColour: SwarmAdapter.WholeSwarm.keySet()) {
+                if (swarmColour == botColour) {
+                        botLocation = SwarmAdapter.WholeSwarm.get(swarmColour).SwarmList.get(key).Location;
+                        SimBot newBot = new SimBot(botColour, key, moves.get(key), botLocation);
+                        unfinishedBots.add(newBot);
+                }
 
 
 
-
-//            }
+            }
 
 
         }
-        System.out.println("Createbots size: " + unfinishedBots.size());
     }
+
     // Update the positions of the bots according to the next moves in their strings
     public void nextMoves() {
         for (int i = 0; i < unfinishedBots.size(); i++) {
+         //   System.out.println(unfinishedBots.get(i).path);
             unfinishedBots.get(i).pixel.location = newPos(unfinishedBots.get(i).pixel.location, unfinishedBots.get(i).path.charAt(0));
-            System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
-            System.out.println("I am bot " + unfinishedBots.get(i).ID + " and my path is " + unfinishedBots.get(i).path);
+          //  System.out.println("I am bot " + unfinishedBots.get(i).ID + " and I am at " + unfinishedBots.get(i).pixel.location);
 
             if (unfinishedBots.get(i).path.length() == 1) {
                 finishedBots.add(unfinishedBots.get(i));
@@ -177,9 +171,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             }
             case 'D': {
                 point.y += 1;
-                break;
-            }
-            case 'S': {
                 break;
             }
         }

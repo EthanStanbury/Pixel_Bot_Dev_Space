@@ -23,37 +23,25 @@ import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
 import com.example.mischa.pixelbotui.Swarm.Bot;
-import com.example.mischa.pixelbotui.Swarm.Direction;
-import com.example.mischa.pixelbotui.Swarm.PathFinder;
-import com.example.mischa.pixelbotui.Swarm.Solution;
-import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.zip.Inflater;
 
 public class MainActivity extends Activity {
-    // 98:D3:32:31:7A:19 address
-    // 98:D3:32:31:7A:6D address
-    private final String DEVICE_NAME="HC-05";
+
+    private final String DEVICE_ADDRESS="98:D3:32:31:7A:19";
     private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
-    private LinkedHashMap<String, BluetoothDevice> devices = new LinkedHashMap<>();
-    private HashMap<String, BluetoothSocket> sockets = new LinkedHashMap<>();
     private BluetoothDevice device;
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
     Button clear, connectBT, submit;
-    private ArrayList deviceAddresses = new ArrayList();
     TextView textView;
     EditText editText;
     boolean deviceConnected=false;
@@ -62,9 +50,8 @@ public class MainActivity extends Activity {
     PBCanvas canvas;
     int[] saveState;
     int[] restoreState;
+    public static HashMap<Integer, Integer> BotAmounts = new HashMap<>();
     ConstraintLayout main_layout;
-    public static HashMap<String, Solution> Solution;
-    public int botsTotal = 2;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +60,7 @@ public class MainActivity extends Activity {
         LayoutInflater inflater = getLayoutInflater();
 
         main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
-        canvas = new PBCanvas(this, botsTotal);
+        canvas = new PBCanvas(this);
 
         main_layout.addView(canvas);
 
@@ -83,15 +70,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                Swarm.SwarmCreate(botsTotal,  devices);
-                Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
-                for (String key: Solution.keySet()) {
-                    System.out.println("id is " + key + "With Path: " + Solution.get(key));
-
-                }
-                if (deviceConnected && BTinit()) {
-                    onClickSend(view, Solution, sockets);
-                }
+                SwarmAdapter.SwarmCreate(MainActivity.BotAmounts);
 
                 // start the new activity
                 Intent intent = new Intent(canvas.context, SimActivity.class);
@@ -105,7 +84,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 System.out.println("CONNECT");
-                onClickStart(view);
             }
         });
 
@@ -124,7 +102,12 @@ public class MainActivity extends Activity {
         setContentView(main_layout);
 
         // The amount of bots we have to work with
-
+        BotAmounts.put(-1162650,    70); //Red
+        BotAmounts.put(-11713,      70); //Yellow
+        BotAmounts.put(-15815319,   70); //Green
+        BotAmounts.put(-12857684,   70); //Blue
+        BotAmounts.put(-11268754,   70); //Purple
+        BotAmounts.put(Color.BLACK, 0); //Black
 
 
     }
@@ -154,6 +137,9 @@ public class MainActivity extends Activity {
 
     }
 
+    public void BluetoothConnect(){
+
+    }
 
 
     public boolean BTinit()
@@ -182,12 +168,11 @@ public class MainActivity extends Activity {
         {
             for (BluetoothDevice iterator : bondedDevices)
             {
-
-                if(iterator.getName().equals(DEVICE_NAME))
+                if(iterator.getAddress().equals(DEVICE_ADDRESS))
                 {
-
-                    devices.put(iterator.getAddress(), iterator);
+                    device=iterator;
                     found=true;
+                    break;
                 }
             }
         }
@@ -196,43 +181,30 @@ public class MainActivity extends Activity {
 
     public boolean BTconnect()
     {
-
         boolean connected=true;
-
-        for (String deviceAddress: devices.keySet()) {
-            try{
-                BluetoothSocket tempSock = devices.get(deviceAddress).createRfcommSocketToServiceRecord(PORT_UUID);
-                tempSock.connect();
-                sockets.put(deviceAddress, tempSock);
-            } catch (IOException e){
+        try {
+            socket = device.createRfcommSocketToServiceRecord(PORT_UUID);
+            socket.connect();
+        } catch (IOException e) {
             e.printStackTrace();
-            devices.remove(deviceAddress);
-            }
+            connected=false;
         }
-        if(!devices.isEmpty())
+        if(connected)
         {
-            for (String deviceAddress: sockets.keySet()) {
-                try {
-                    outputStream = sockets.get(deviceAddress).getOutputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    sockets.remove(deviceAddress);
-                }
-                try {
-                    inputStream = sockets.get(deviceAddress).getInputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    sockets.remove(deviceAddress);
-                }
+            try {
+                outputStream=socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inputStream=socket.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-        }else{
-            Toast.makeText(getApplicationContext(),"Please pair a device",Toast.LENGTH_SHORT).show();
         }
 
-        if (sockets.isEmpty()){
-            connected = false;
-        }
+
         return connected;
     }
 
@@ -243,14 +215,21 @@ public class MainActivity extends Activity {
             if(BTconnect())
             {
                 Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+                // setUiEnabled(true);
                 deviceConnected=true;
+                textView.append("\nConnection Opened to these addresses: \n");
+                for (BluetoothDevice iterator : bondedDevices)
+                {
+                    textView.append(iterator.getAddress() + "\n");
+                    textView.append(iterator.getName()+ "\n");
+                }
 
-                Context context = getApplicationContext();
-                CharSequence text = "Connected to: " + devices.size()+ " Device(s)";
-                int duration = Toast.LENGTH_SHORT;
+                try {
+                    outputStream.write("test".getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
 
 
             }
@@ -260,33 +239,15 @@ public class MainActivity extends Activity {
 
 
 
-    public void onClickSend(View view, HashMap<String, Solution> Solution, HashMap<String, BluetoothSocket> sockets) {
-
-        for (String address : Solution.keySet()) {
-            String string = Solution.get(address).toString();
-            string.concat("\n");
-
-            try {
-                outputStream = sockets.get(address).getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-                sockets.remove(address);
-            }
-            try {
-                inputStream = sockets.get(address).getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-                sockets.remove(address);
-            }
-
-            try {
-                outputStream.write(string.getBytes());
-                System.out.println("Sending message to Device: " + address + " Message is: " + string);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+    public void onClickSend(View view) {
+        String string = editText.getText().toString();
+        string.concat("\n");
+        try {
+            outputStream.write(string.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        textView.append("\nSent Data:"+string+"\n");
 
     }
 
