@@ -15,15 +15,19 @@ Questacon seeks to promote awareness and interests in science and technology wit
 ## Introduction
 The project is to build an interactive picture drawing display for Questacon’s upcoming AI and Robotics exhibit. This will be done to highlight and emphasize swarm mechanics to an audience. The way that this exhibit will adhere to Questacon’s educational values will be by creating a picture made up of bots in front of the user, based on a picture drawn by the user. The pattern can be multi-coloured with a pixel art style. Once completed we hope to create an effect that could almost be considered ‘the picture coming to life’, due to the fast movement required to assemble the picture. With these features combined, it will create a fun and interactive display for people to use and enjoy.
 
-## Team Members and Communications
+## Software Team Members and Communications
 | Name       |       Role     | Responsiblities  |
 | ---------------|-------------| --------------|
-|Ethan Stanbury| <ul><li>Tech lead</li><li>Software Team</li><li>Integrationspecialist</li><li>Hardware team liaison</li></ul> |<ul><li>Creating software to allow for the integration/communication  between the robot and the App and the robots with themselves</li><li>Communicate with hardware team about updates</li><li>Interfacing between hardware and software</li></ul>|
-|Mischa Rippon|<ul><li>Software Team</li><li>UI Specialist</li></ul>|<ul> <li>UI Development</li><li>Interfacing between UI and code</li></ul>|
-|Daniel Jang| <ul><li>Software Team</li><li>Pathfinding Specialist</li> </ul>|<ul> <li>Pathfinding and Anti-Collision algorithm Development</li><li> Ensure proper integration with UI</li><li> Overseeing the interaction between the pathfinding algorithm and the physical bots</li></ul>|
-|Namisha Chabbra | </ul><li>Hardware Team</li><li>Electronics Specialist</li><li>Secretary and Project Manager</li> <ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design charging/power sub system</li><li> Keep repository and landing page updated </li><li>Document project and systems engineering processes </li></ul>|
-|Liam Highmore |<ul> <li>Hardware Team</li><li>Materials and Mechanics Specialist</li><li>Secretary and Project Manager</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Take meeting minutes</li><li>Client Liaison</li><li>Document project and systems engineering processes</li></ul>|
-|Misha Petkovic|<ul> <li>Hardware Team</li><li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
+|Ethan Stanbury| <ul><li>Tech lead</li><li>Integrationspecialist</li><li>Hardware team liaison</li></ul> |<ul><li>Creating software to allow for the integration/communication  between the robot and the App and the robots with themselves</li><li>Communicate with hardware team about updates</li><li>Interfacing between hardware and software</li></ul>|
+|Mischa Rippon|<ul><li>UI Specialist</li></ul>|<ul> <li>UI Development</li><li>Interfacing between UI and code</li></ul>|
+|Daniel Jang| <ul><li>Pathfinding Specialist</li> </ul>|<ul> <li>Pathfinding and Anti-Collision algorithm Development</li><li> Ensure proper integration with UI</li><li> Overseeing the interaction between the pathfinding algorithm and the physical bots</li></ul>|
+
+## Hardwarea Team Members and Communications
+| Name       |       Role     | Responsiblities  |
+| ---------------|-------------| --------------|
+|Namisha Chabbra | </ul><li>Electronics Specialist</li><li>Secretary and Project Manager</li> <ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design charging/power sub system</li><li> Keep repository and landing page updated </li><li>Document project and systems engineering processes </li></ul>|
+|Liam Highmore |<ul> <li>Materials and Mechanics Specialist</li><li>Secretary and Project Manager</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Take meeting minutes</li><li>Client Liaison</li><li>Document project and systems engineering processes</li></ul>|
+|Misha Petkovic|<ul> <li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
 
 ## Team Work Items
 You can check out what we are working on here: (https://docs.google.com/spreadsheets/d/1nI-3kYul25-Fhbc1EoQdR72bFK5e49feOA_yQ-Pt9R8/edit?usp=sharing)
