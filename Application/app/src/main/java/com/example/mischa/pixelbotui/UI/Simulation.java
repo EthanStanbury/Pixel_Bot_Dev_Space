@@ -35,7 +35,7 @@ import static java.lang.Thread.sleep;
 
 public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     long startTime = System.currentTimeMillis();
-    HashMap<String, Solution> solutions = PathFinder.getSolutions(UIAdapter.destinationGrid);
+    HashMap<String, Solution> solutions;
     long endTime = System.currentTimeMillis();
 
     Paint paint = new Paint();
@@ -47,10 +47,10 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
 
     Activity activity = (Activity) getContext();
 
-    public Simulation(Context context) {
+    public Simulation(Context context, HashMap<String, Solution> Solution) {
 
         super(context);
-
+        solutions = Solution;
         getHolder().addCallback(this);
 
 //        for (String key:  Solution.keySet()) {
@@ -125,9 +125,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
             unfinishedBots.add(newBot);
 
 
-
-
-//            }
 
 
         }
