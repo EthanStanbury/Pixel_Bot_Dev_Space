@@ -259,8 +259,8 @@ public class PathFinder {
                 }
             }
         }
-        // return new CoordActionOutput(new ArrayList<Point>(), new ArrayList<Direction>());
-        return null;
+        return new CoordActionOutput(new ArrayList<Point>(), new ArrayList<Direction>());
+        //return null;
     }
 
     // Returns the node with the lowest known f_value.
