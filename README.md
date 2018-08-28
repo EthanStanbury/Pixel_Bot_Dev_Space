@@ -7,7 +7,7 @@ This is our GitHub, where all of our code is stored and logged. If you are looki
  * We met with a Questacon UI expert and he has provided insight into changes that can be made.
  * With the completed bot and integration we can now successfully begin testinh the end-end scenario for the bot.
 
-![alt text](https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/IMG_1332.jpg)
+![alt text](https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype.png)
 
 ## Background & Questacon's Vision
 Questacon is The National Science and Technology Centre located in Canberra, Australia. The facility, administered within the Australian Government's Department of Industry, Innovation and Science, is home to a range of innovative exhibits, shows, and activities designed appealing to people of all ages.
@@ -48,9 +48,9 @@ All our schematics, decision tracking, and systems engineering documents are sto
 ## Tools for software development 
 The software development tools in use are:
 
-* Android Studio <https://developer.android.com/studio/index.html>
-* Platformio <https://platformio.org>
-* Github <https://github.com>
+* [Android Studio](https://developer.android.com/studio/index.html)
+* [Platformio](https://platformio.org)
+* [Github](https://github.com)
 
 ## Contact
 If you have any questions please contact Ethan Stanbury (ethan.1998@live.com.au) or Liam Highmore (liam.highmore@anu.edu.au).
