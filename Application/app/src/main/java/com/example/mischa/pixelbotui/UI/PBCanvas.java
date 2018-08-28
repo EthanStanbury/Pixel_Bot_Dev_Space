@@ -53,7 +53,7 @@ public class PBCanvas extends SurfaceView {
     int excessSpace;
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
-    int selectedColour = Color.TRANSPARENT;
+    int selectedColour;
     int whiteBox = 1;
     public int TotalBots = 7;
 
@@ -83,7 +83,7 @@ public class PBCanvas extends SurfaceView {
 
     public static ArrayList<Pixel> border = new ArrayList<>();
 
-    public PBCanvas(Context context) {//,  int botsTotal) {
+    public PBCanvas(Context context) {  //,  int botsTotal) {
         super(context);
         this.context = context;
         paint = new Paint();

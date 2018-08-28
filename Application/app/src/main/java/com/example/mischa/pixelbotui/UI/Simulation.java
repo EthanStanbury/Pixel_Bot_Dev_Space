@@ -46,7 +46,6 @@ public class Simulation extends SurfaceView implements SurfaceHolder.Callback {
     MainThread thread;
 
     Activity activity = (Activity) getContext();
-    int df = Color.TRANSPARENT;
 
     public Simulation(Context context) { //, HashMap<String, Solution> Solution) {
 
