@@ -7,7 +7,7 @@ This is our GitHub, where all of our code is stored and logged. If you are looki
  * We met with a Questacon UI expert and he has provided insight into changes that can be made.
  * With the completed bot and integration we can now successfully begin testinh the end-end scenario for the bot.
 <p align="center"> 
-<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype.png" width="600" height="798"/>
+<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype.png" width="300" height="399"/>
 </p>
 
 ## Background & Questacon's Vision
