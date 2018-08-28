@@ -7,7 +7,7 @@ This is our GitHub, where all of our code is stored and logged. If you are looki
  * We met with a Questacon UI expert and he has provided insight into changes that can be made.
  * With the completed bot and integration we can now successfully begin testinh the end-end scenario for the bot.
 
-<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype.png" width="200" height="200" />
+<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype.png" .center-image width="600" height="798" />
 
 ## Background & Questacon's Vision
 Questacon is The National Science and Technology Centre located in Canberra, Australia. The facility, administered within the Australian Government's Department of Industry, Innovation and Science, is home to a range of innovative exhibits, shows, and activities designed appealing to people of all ages.
