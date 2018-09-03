@@ -167,7 +167,7 @@ public class PathFinder {
             }
 
 
-            if (timeStep > 20)
+            if (timeStep > 50) // Artificial cap for step-by-step so that app doesn't hang if checks get stuck.
                 break;
         }
 
