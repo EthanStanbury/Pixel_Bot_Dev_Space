@@ -359,6 +359,10 @@ public class Grid {
         }
     }
 
+    public void updateIsPushableFlag(Point pos, boolean flagValue) {
+        Grid[pos.x][pos.y].IsPushable = flagValue;
+    }
+
 
     //-------------------------
     //-----Private Methods-----

@@ -122,7 +122,10 @@ public class PathFinder {
                             System.out.println("PUSHED BOT " + pushedBotID + " AT POS: " + pushBotPosList.get(indexOfLastEvent));
 
                             Problem.removeOccupation(pushBotPosList.get(indexOfLastEvent), timeStep);
-                            // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
+
+                            // Initially set it false, so that the new destination pairing doesn't try to pair bots to one of the other pushing bots' destinations.
+                            // This will be set to true once all pairing has completed.
+                            Problem.updateBoard(currentPos, timeStep, currentBotID, false);
                         }
                     }
                 }
@@ -144,6 +147,10 @@ public class PathFinder {
                 allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
                 System.out.println(allBotsPositions.get(pushedID).get(allBotsPositions.get(pushedID).size() - 1));
                 System.out.println(aStarOutput.Coordinates.size());
+            }
+
+            for (int j = 0; j < pushingBots.size(); j++) {
+                //Problem.updateIsPushableFlag(pushingBots.get(j), true);
             }
 
             if (pushingBots.size() == 0) {
