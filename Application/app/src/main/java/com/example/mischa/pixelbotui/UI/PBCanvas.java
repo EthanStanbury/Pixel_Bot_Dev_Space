@@ -68,7 +68,7 @@ public class PBCanvas extends SurfaceView {
     LayoutItem rYellow; // #FFD23F
     LayoutItem rGreen; // #0EAD69
     LayoutItem rBlue; //#3BCEAC
-    LayoutItem rCyan; // #540D6E Not correct hex values
+    LayoutItem rCyan; // #540D6E Old correct hex values
     LayoutItem rWhite;
     LayoutItem rPink;
     LayoutItem rErase; // eraser, transparent
@@ -190,7 +190,7 @@ public class PBCanvas extends SurfaceView {
             rPink.rect.set(70, 6 * (canvas.getHeight()/9) - 80, 230, 6 * (canvas.getHeight()/9) + 80);
             rWhite.rect.set(70, 7 * (canvas.getHeight()/9) - 80, 230, 7 * (canvas.getHeight()/9) + 80);
             rErase.rect.set(70, 8 * (canvas.getHeight()/9) - 80, 230, 8 * (canvas.getHeight()/9) + 80);
-            eraser.setBounds(rErase.rect.left + 4, rErase.rect.top - 4, rErase.rect.right - 4, rErase.rect.bottom + 4);
+            eraser.setBounds(rErase.rect.left, rErase.rect.top, rErase.rect.right, rErase.rect.bottom);
             eraseBG.rect.set(rErase.rect);
 
 

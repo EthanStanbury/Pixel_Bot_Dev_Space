@@ -48,5 +48,13 @@
         app:layout_constraintTop_toTopOf="@+id/bConnect"
         app:layout_constraintVertical_bias="0.875" />
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_preferences"
+        tools:layout_editor_absoluteX="324dp"
+        tools:layout_editor_absoluteY="7dp" />
+
 
 </android.support.constraint.ConstraintLayout>
