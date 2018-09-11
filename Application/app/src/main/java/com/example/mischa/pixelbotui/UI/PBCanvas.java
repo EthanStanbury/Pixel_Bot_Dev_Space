@@ -180,22 +180,22 @@ public class PBCanvas extends SurfaceView {
         /* This is for if the screen is landscape, basically */
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
             // Set all the positions of the rectangles on the screen
-            top.rect.set(0,0,canvas.getWidth()/8, canvas.getHeight());
+            top.rect.set(0,0,canvas.getWidth()/6, canvas.getHeight());
             bottom.rect.set(7 * canvas.getWidth()/8,0, canvas.getWidth(), canvas.getHeight());
-            rRed.rect.set(70, (canvas.getHeight()/9) - 80, 230, (canvas.getHeight()/9) + 80);
-            rYellow.rect.set(70, 2 * (canvas.getHeight()/9) - 80, 230, 2 * (canvas.getHeight()/9) + 80);
-            rGreen.rect.set(70, 3 * (canvas.getHeight()/9) - 80, 230, 3 * (canvas.getHeight()/9) + 80);
-            rCyan.rect.set(70, 4 * (canvas.getHeight()/9) - 80, 230, 4 * (canvas.getHeight()/9) + 80);
-            rBlue.rect.set(70, 5 * (canvas.getHeight()/9) - 80, 230, 5 * (canvas.getHeight()/9) + 80);
-            rPink.rect.set(70, 6 * (canvas.getHeight()/9) - 80, 230, 6 * (canvas.getHeight()/9) + 80);
-            rWhite.rect.set(70, 7 * (canvas.getHeight()/9) - 80, 230, 7 * (canvas.getHeight()/9) + 80);
-            rErase.rect.set(70, 8 * (canvas.getHeight()/9) - 80, 230, 8 * (canvas.getHeight()/9) + 80);
+            rRed.rect.set(top.rect.width()/9, (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, (canvas.getHeight()/9) + 80);
+            rYellow.rect.set(5 * top.rect.width()/9, 2 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 2 * (canvas.getHeight()/9) + 80);
+            rGreen.rect.set(top.rect.width()/9, 3 * (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, 3 * (canvas.getHeight()/9) + 80);
+            rCyan.rect.set(5 * top.rect.width()/9, 4 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 4 * (canvas.getHeight()/9) + 80);
+            rBlue.rect.set(top.rect.width()/9, 5 * (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, 5 * (canvas.getHeight()/9) + 80);
+            rPink.rect.set(5 * top.rect.width()/9, 6 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 6 * (canvas.getHeight()/9) + 80);
+            rWhite.rect.set(top.rect.width()/9, 7 * (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, 7 * (canvas.getHeight()/9) + 80);
+            rErase.rect.set(5 * top.rect.width()/9, 8 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 8 * (canvas.getHeight()/9) + 80);
             eraser.setBounds(rErase.rect.left, rErase.rect.top, rErase.rect.right, rErase.rect.bottom);
             eraseBG.rect.set(rErase.rect);
 
 
             // Setting all the pixels' bounds, as well as the width of them
-            squareWidth = (canvas.getHeight() - 200)/yDimWOBorder;
+            squareWidth = (canvas.getHeight() - (top.rect.width() + bottom.rect.width())/2)/yDimWOBorder;
             excessSpace = canvas.getWidth() - (xDimWOBorder * squareWidth);
             for (int i = 1; i < yDimension - 1; i++) {
                 for (int j = 1; j < xDimension - 1; j++) {
@@ -206,7 +206,8 @@ public class PBCanvas extends SurfaceView {
                     uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+            gridBG.rect.set(((bottom.rect.left - top.rect.right)/2 + top.rect.width()) - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), ((bottom.rect.left - top.rect.right)/2 + top.rect.width()) + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+            //gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
         }
         /* This is for if the screen is portrait */
         else {
@@ -236,7 +237,7 @@ public class PBCanvas extends SurfaceView {
                     uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), (bottom.rect.top - top.rect.bottom)/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), bottom.rect.top - top.rect.bottom/2 + (yDimWOBorder * squareWidth/2));
         }
 
         rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 10, ClickableItems.get(whiteBox).rect.top - 10, ClickableItems.get(whiteBox).rect.right + 10, ClickableItems.get(whiteBox).rect.bottom + 10);
