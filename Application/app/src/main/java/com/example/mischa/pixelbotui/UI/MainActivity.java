@@ -323,6 +323,9 @@ public class MainActivity extends Activity {
             case -1: //White
                 colour = "W";
                 break;
+            case 0:
+                colour = "M";
+                break;
         }
         return  colour;
     }
