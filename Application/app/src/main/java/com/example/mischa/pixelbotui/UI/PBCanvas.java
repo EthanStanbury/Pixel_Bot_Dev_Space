@@ -237,7 +237,7 @@ public class PBCanvas extends SurfaceView {
                     uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), (bottom.rect.top - top.rect.bottom)/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), bottom.rect.top - top.rect.bottom/2 + (yDimWOBorder * squareWidth/2));
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), ((bottom.rect.top - top.rect.bottom)/2 + top.rect.height()) - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), (((bottom.rect.top - top.rect.bottom)/2) + top.rect.height()) + (yDimWOBorder * squareWidth/2));
         }
 
         rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 10, ClickableItems.get(whiteBox).rect.top - 10, ClickableItems.get(whiteBox).rect.right + 10, ClickableItems.get(whiteBox).rect.bottom + 10);

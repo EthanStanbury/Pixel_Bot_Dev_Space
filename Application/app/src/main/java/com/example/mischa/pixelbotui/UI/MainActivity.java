@@ -1,21 +1,26 @@
 package com.example.mischa.pixelbotui.UI;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,7 @@ public class MainActivity extends Activity {
     private OutputStream outputStream;
     private InputStream inputStream;
     Button clear, connectBT, submit;
+    ImageButton menu;
     private ArrayList deviceAddresses = new ArrayList();
     TextView textView;
     EditText editText;
@@ -64,13 +70,15 @@ public class MainActivity extends Activity {
     int[] restoreState;
     ConstraintLayout main_layout;
     public static HashMap<String, Solution> Solution;
+    Context context = this;
+    private final String password = "1337";
     //public int botsTotal = 7;
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LayoutInflater inflater = getLayoutInflater();
+        final LayoutInflater inflater = getLayoutInflater();
 
         main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
         canvas = new PBCanvas(this); //, botsTotal);
@@ -117,6 +125,61 @@ public class MainActivity extends Activity {
                 canvas.clear();
             }
         });
+
+        menu = main_layout.findViewById(R.id.menu);
+        menu.bringToFront();
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, menu);
+                popupMenu.getMenuInflater().inflate(R.menu.popupmenu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch ((String) menuItem.getTitle()) {
+                            case "Admin":
+                                View passwordPopup = inflater.inflate(R.layout.password_popup, null);
+
+                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                                alertDialogBuilder.setView(passwordPopup);
+                                final EditText inputPassword = passwordPopup.findViewById(R.id.userInput);
+
+                                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (inputPassword.getText().toString().equals(password)) {
+                                            Intent intent = new Intent(context, AdminActivity.class);
+                                            context.startActivity(intent);
+                                        } else {
+                                            dialogInterface.cancel();
+                                        }
+                                    }
+                                });
+                                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                    }
+                                });
+
+                                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                                alertDialog.show();
+
+                                break;
+
+                            case "Reset":
+                                //RESET ALL BOTS (REMOVE PICTURE FROM WALL)
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+
 
 //        main_layout.addView(frame);
 
