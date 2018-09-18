@@ -57,11 +57,10 @@ public class MainActivity extends Activity {
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Button clear, connectBT, submit;
+    Button clear, submit;
     ImageButton menu;
     private ArrayList deviceAddresses = new ArrayList();
     TextView textView;
-    EditText editText;
     boolean deviceConnected=false;
     boolean stopThread;
     BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
@@ -72,7 +71,7 @@ public class MainActivity extends Activity {
     public static HashMap<String, Solution> Solution;
     Context context = this;
     private final String password = "1337";
-    //public int botsTotal = 7;
+
     // Called when activity is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,16 +103,6 @@ public class MainActivity extends Activity {
                 // start the new activity
                 Intent intent = new Intent(canvas.context, SimActivity.class);
                 canvas.context.startActivity(intent);
-            }
-        });
-
-        connectBT = main_layout.findViewById(R.id.bConnect);
-        connectBT.bringToFront();
-        connectBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("CONNECT");
-                onClickStart(view);
             }
         });
 

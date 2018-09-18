@@ -193,21 +193,30 @@ public class PBCanvas extends SurfaceView {
             eraser.setBounds(rErase.rect.left, rErase.rect.top, rErase.rect.right, rErase.rect.bottom);
             eraseBG.rect.set(rErase.rect);
 
-
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getHeight() - (top.rect.width() + bottom.rect.width())/2)/yDimWOBorder;
             excessSpace = canvas.getWidth() - (xDimWOBorder * squareWidth);
+            gridBG.rect.set(((bottom.rect.left - top.rect.right)/2 + top.rect.width()) - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), ((bottom.rect.left - top.rect.right)/2 + top.rect.width()) + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+
             for (int i = 1; i < yDimension - 1; i++) {
                 for (int j = 1; j < xDimension - 1; j++) {
-                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + ((j - 1) * squareWidth),
-                            100 + (i - 1) * squareWidth,
-                            (excessSpace / 2) + ((j - 1) * squareWidth) + squareWidth,
-                            100 + ((i - 1) * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].rect.set(gridBG.rect.left + ((j - 1) * squareWidth),
+                            gridBG.rect.top + (i - 1) * squareWidth,
+                            gridBG.rect.left + ((j - 1) * squareWidth) + squareWidth,
+                            gridBG.rect.top + ((i - 1) * squareWidth) + squareWidth);
                     uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(((bottom.rect.left - top.rect.right)/2 + top.rect.width()) - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), ((bottom.rect.left - top.rect.right)/2 + top.rect.width()) + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
-            //gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+//            for (int i = 1; i < yDimension - 1; i++) {
+//                for (int j = 1; j < xDimension - 1; j++) {
+//                    uiGrid[i * xDimension + j].rect.set((excessSpace / 2) + ((j - 1) * squareWidth),
+//                            100 + (i - 1) * squareWidth,
+//                            (excessSpace / 2) + ((j - 1) * squareWidth) + squareWidth,
+//                            100 + ((i - 1) * squareWidth) + squareWidth);
+//                    uiGrid[i * xDimension + j].location.set(j,i);
+//                }
+//            }
+
         }
         /* This is for if the screen is portrait */
         else {
@@ -228,16 +237,17 @@ public class PBCanvas extends SurfaceView {
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimWOBorder;
             excessSpace = canvas.getHeight() - (yDimWOBorder * squareWidth);
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), ((bottom.rect.top - top.rect.bottom)/2 + top.rect.height()) - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), (((bottom.rect.top - top.rect.bottom)/2) + top.rect.height()) + (yDimWOBorder * squareWidth/2));
+
             for (int i = 1; i < yDimension - 1; i++) {
                 for (int j = 1; j < xDimension - 1; j++) {
-                    uiGrid[i * xDimension + j].rect.set(100 + (j - 1) * squareWidth,
-                            (excessSpace / 2) + ((i - 1) * squareWidth),
-                            100 + ((j - 1) * squareWidth) + squareWidth,
-                            (excessSpace / 2) + ((i - 1) * squareWidth) + squareWidth);
+                    uiGrid[i * xDimension + j].rect.set(gridBG.rect.left + ((j - 1) * squareWidth),
+                            gridBG.rect.top + (i - 1) * squareWidth,
+                            gridBG.rect.left + ((j - 1) * squareWidth) + squareWidth,
+                            gridBG.rect.top + ((i - 1) * squareWidth) + squareWidth);
                     uiGrid[i * xDimension + j].location.set(j,i);
                 }
             }
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), ((bottom.rect.top - top.rect.bottom)/2 + top.rect.height()) - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), (((bottom.rect.top - top.rect.bottom)/2) + top.rect.height()) + (yDimWOBorder * squareWidth/2));
         }
 
         rColourPicked.rect.set(ClickableItems.get(whiteBox).rect.left - 10, ClickableItems.get(whiteBox).rect.top - 10, ClickableItems.get(whiteBox).rect.right + 10, ClickableItems.get(whiteBox).rect.bottom + 10);
