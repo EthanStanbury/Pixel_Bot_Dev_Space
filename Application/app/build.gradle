@@ -4,8 +4,8 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.mischa.pixelbotui"
-        minSdkVersion 23
-        targetSdkVersion 23
+        minSdkVersion 15
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,8 +17,6 @@ android {
         }
     }
     buildToolsVersion '28.0.2'
-    productFlavors {
-    }
 }
 
 dependencies {
@@ -29,5 +27,3 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
-
-

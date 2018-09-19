@@ -160,6 +160,10 @@ public class PathFinder {
                 //Problem.updateIsPushableFlag(pushingBots.get(j), true);
             }
 
+            for (int j = 0; j < pushingBots.size(); j++) {
+                //Problem.updateIsPushableFlag(pushingBots.get(j), true);
+            }
+
             if (pushingBots.size() == 0) {
                 /*
                 for (int i = 0; i < pairedBotList.size(); i++) {
