@@ -57,8 +57,8 @@ public class MainActivity extends Activity {
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Button clear, submit;
-    ImageButton menu;
+    Button sdfclear, submit;
+    ImageButton menu, paintBrush, red, yellow, green, cyan, blue, magenta, white, eraser, clear;
     private ArrayList deviceAddresses = new ArrayList();
     TextView textView;
     boolean deviceConnected=false;
@@ -68,9 +68,12 @@ public class MainActivity extends Activity {
     int[] saveState;
     int[] restoreState;
     ConstraintLayout main_layout;
+    public ConstraintLayout top, bottom;
     public static HashMap<String, Solution> Solution;
     Context context = this;
     private final String password = "1337";
+
+
 
     // Called when activity is created
     @Override
@@ -83,6 +86,16 @@ public class MainActivity extends Activity {
         canvas = new PBCanvas(this); //, botsTotal);
 
         main_layout.addView(canvas);
+
+        top = main_layout.findViewById(R.id.top);
+        top.bringToFront();
+        canvas.topSize[0] = top.getWidth();
+        canvas.topSize[1] = top.getHeight();
+
+        bottom = main_layout.findViewById(R.id.bottom);
+        bottom.bringToFront();
+        canvas.bottomSize[0] = bottom.getWidth();
+        canvas.bottomSize[1] = bottom.getHeight();
 
         submit = main_layout.findViewById(R.id.bSubmit);
         submit.bringToFront();
@@ -169,8 +182,80 @@ public class MainActivity extends Activity {
             }
         });
 
+        red = main_layout.findViewById(R.id.bRed);
+        red.bringToFront();
+        red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.RED;
+            }
+        });
 
-//        main_layout.addView(frame);
+        yellow = main_layout.findViewById(R.id.bYellow);
+        yellow.bringToFront();
+        yellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.YELLOW;
+            }
+        });
+
+        green = main_layout.findViewById(R.id.bGreen);
+        green.bringToFront();
+        green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.GREEN;
+            }
+        });
+
+        cyan = main_layout.findViewById(R.id.bCyan);
+        cyan.bringToFront();
+        cyan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.CYAN;
+            }
+        });
+
+        blue = main_layout.findViewById(R.id.bBlue);
+        blue.bringToFront();
+        blue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.BLUE;
+            }
+        });
+
+        magenta = main_layout.findViewById(R.id.bMagenta);
+        magenta.bringToFront();
+        magenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.MAGENTA;
+            }
+        });
+
+        white = main_layout.findViewById(R.id.bWhite);
+        white.bringToFront();
+        white.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.WHITE;
+            }
+        });
+
+        paintBrush = main_layout.findViewById(R.id.bPaintBrush);
+        paintBrush.bringToFront();
+
+        eraser = main_layout.findViewById(R.id.bEraser);
+        eraser.bringToFront();
+        eraser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                canvas.selectedColour = Color.TRANSPARENT;
+            }
+        });
 
         canvas.setBackgroundColor(Color.WHITE);
         setContentView(main_layout);
@@ -395,8 +480,6 @@ public class MainActivity extends Activity {
     public void onClickClear(View view) {
         textView.setText("");
     }
-
-
 
 
 }

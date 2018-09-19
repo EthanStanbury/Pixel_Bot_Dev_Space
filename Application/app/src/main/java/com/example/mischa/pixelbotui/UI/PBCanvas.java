@@ -57,6 +57,8 @@ public class PBCanvas extends SurfaceView {
     int whiteBox = 1;
     public int TotalBots = 7;
 
+    int[] topSize = new int[2];
+    int[] bottomSize = new int[2];
 
     int currentBotAmount;
 
@@ -176,13 +178,12 @@ public class PBCanvas extends SurfaceView {
         super.onDraw(canvas);
         paint.setStrokeWidth(5);
         updateBotAmount();
-
         /* This is for if the screen is landscape, basically */
         if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
             // Set all the positions of the rectangles on the screen
-            top.rect.set(0,0,canvas.getWidth()/6, canvas.getHeight());
-            bottom.rect.set(7 * canvas.getWidth()/8,0, canvas.getWidth(), canvas.getHeight());
-            rRed.rect.set(top.rect.width()/9, (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, (canvas.getHeight()/9) + 80);
+            top.rect.set(0,0,0, canvas.getHeight());
+            bottom.rect.set(0,0,0,canvas.getHeight());
+            /*rRed.rect.set(top.rect.width()/9, (canvas.getHeight()/9), 4 * top.rect.width()/9, (canvas.getHeight()/9));
             rYellow.rect.set(5 * top.rect.width()/9, 2 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 2 * (canvas.getHeight()/9) + 80);
             rGreen.rect.set(top.rect.width()/9, 3 * (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, 3 * (canvas.getHeight()/9) + 80);
             rCyan.rect.set(5 * top.rect.width()/9, 4 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 4 * (canvas.getHeight()/9) + 80);
@@ -191,12 +192,12 @@ public class PBCanvas extends SurfaceView {
             rWhite.rect.set(top.rect.width()/9, 7 * (canvas.getHeight()/9) - 80, 4 * top.rect.width()/9, 7 * (canvas.getHeight()/9) + 80);
             rErase.rect.set(5 * top.rect.width()/9, 8 * (canvas.getHeight()/9) - 80, 8 * top.rect.width()/9, 8 * (canvas.getHeight()/9) + 80);
             eraser.setBounds(rErase.rect.left, rErase.rect.top, rErase.rect.right, rErase.rect.bottom);
-            eraseBG.rect.set(rErase.rect);
+            eraseBG.rect.set(rErase.rect);*/
 
             // Setting all the pixels' bounds, as well as the width of them
-            squareWidth = (canvas.getHeight() - (top.rect.width() + bottom.rect.width())/2)/yDimWOBorder;
+            squareWidth = (canvas.getHeight() - (topSize[0] + bottomSize[0])/2)/yDimWOBorder;
             excessSpace = canvas.getWidth() - (xDimWOBorder * squareWidth);
-            gridBG.rect.set(((bottom.rect.left - top.rect.right)/2 + top.rect.width()) - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), ((bottom.rect.left - top.rect.right)/2 + top.rect.width()) + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
+            gridBG.rect.set((((canvas.getWidth() - bottomSize[0]) - topSize[0])/2 + topSize[0]) - (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 - (yDimWOBorder * squareWidth/2), (((canvas.getWidth() - bottomSize[0]) - topSize[0])/2 + topSize[0]) + (xDimWOBorder * squareWidth/2), canvas.getHeight()/2 + (yDimWOBorder * squareWidth/2));
 
             for (int i = 1; i < yDimension - 1; i++) {
                 for (int j = 1; j < xDimension - 1; j++) {
@@ -221,9 +222,9 @@ public class PBCanvas extends SurfaceView {
         /* This is for if the screen is portrait */
         else {
             // Set all the positions of the rectangles on the screen
-            top.rect.set(0,0,canvas.getWidth(),300);
-            bottom.rect.set(0,canvas.getHeight() - 300,canvas.getWidth(),canvas.getHeight());
-            rRed.rect.set(        canvas.getWidth()/9 - 80, 70, canvas.getWidth()/9 + 80, 230);
+            top.rect.set(0,0,canvas.getWidth(),0);
+            bottom.rect.set(0, 0,canvas.getWidth(),0);
+            /*rRed.rect.set(        canvas.getWidth()/9 - 80, 70, canvas.getWidth()/9 + 80, 230);
             rYellow.rect.set( 2 * (canvas.getWidth()/9) - 80, 70, 2 * (canvas.getWidth()/9) + 80, 230);
             rGreen.rect.set(3 * (canvas.getWidth()/9) - 80, 70, 3 * (canvas.getWidth()/9) + 80, 230);
             rCyan.rect.set(4 * (canvas.getWidth()/9) - 80, 70, 4 * (canvas.getWidth()/9) + 80, 230);
@@ -232,12 +233,12 @@ public class PBCanvas extends SurfaceView {
             rWhite.rect.set(7 * (canvas.getWidth()/9) - 80, 70, 7 * (canvas.getWidth()/9) + 80, 230);
             rErase.rect.set(8 * (canvas.getWidth()/9) - 80, 70, 8 * (canvas.getWidth()/9) + 80, 230);
             eraser.setBounds(rErase.rect.left + 4, rErase.rect.top + 4, rErase.rect.right - 4, rErase.rect.bottom - 4);
-            eraseBG.rect.set(rErase.rect);
+            eraseBG.rect.set(rErase.rect);*/
 
             // Setting all the pixels' bounds, as well as the width of them
             squareWidth = (canvas.getWidth() - 200)/xDimWOBorder;
             excessSpace = canvas.getHeight() - (yDimWOBorder * squareWidth);
-            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), ((bottom.rect.top - top.rect.bottom)/2 + top.rect.height()) - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), (((bottom.rect.top - top.rect.bottom)/2) + top.rect.height()) + (yDimWOBorder * squareWidth/2));
+            gridBG.rect.set(canvas.getWidth()/2 - (xDimWOBorder * squareWidth/2), (((canvas.getHeight() - bottomSize[1]) - topSize[1])/2 + topSize[1]) - (yDimWOBorder * squareWidth/2), canvas.getWidth()/2 + (xDimWOBorder * squareWidth/2), (((canvas.getHeight() - bottomSize[1]) - topSize[1])/2 + topSize[1]) + (yDimWOBorder * squareWidth/2));
 
             for (int i = 1; i < yDimension - 1; i++) {
                 for (int j = 1; j < xDimension - 1; j++) {
@@ -266,13 +267,13 @@ public class PBCanvas extends SurfaceView {
         paint.setColor(Color.WHITE);
         paint.setTextSize(75);
         // If the screen is landscape
-        if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
-            canvas.drawText(currentBotAmount + "", bottom.rect.exactCenterX(), 4 * bottom.rect.exactCenterY() / 3 - 50, paint);
-            canvas.drawText("bots left", bottom.rect.exactCenterX(), 4 * bottom.rect.exactCenterY() / 3 + 50, paint);
-        } else { // If the screen is portrait
-            canvas.drawText(currentBotAmount + "", 2 * bottom.rect.exactCenterX() / 3, bottom.rect.exactCenterY() - 50, paint);
-            canvas.drawText("bots left", 2 * bottom.rect.exactCenterX() / 3, bottom.rect.exactCenterY() + 50, paint);
-        }
+//        if ((float) canvas.getWidth()/canvas.getHeight() > (float) xDimWOBorder/yDimWOBorder) {
+//            canvas.drawText(currentBotAmount + "", bottom.rect.exactCenterX(), 4 * bottom.rect.exactCenterY() / 3 - 50, paint);
+//            canvas.drawText("bots left", bottom.rect.exactCenterX(), 4 * bottom.rect.exactCenterY() / 3 + 50, paint);
+//        } else { // If the screen is portrait
+//            canvas.drawText(currentBotAmount + "", 2 * bottom.rect.exactCenterX() / 3, bottom.rect.exactCenterY() - 50, paint);
+//            canvas.drawText("bots left", 2 * bottom.rect.exactCenterX() / 3, bottom.rect.exactCenterY() + 50, paint);
+//        }
 
         // Drawing all the Pixels
         for (Pixel p : uiGrid) {
