@@ -72,6 +72,7 @@ public class MainActivity extends Activity {
     public static HashMap<String, Solution> Solution;
     Context context = this;
     private final String password = "1337";
+    FrameLayout holder;
 
 
 
@@ -83,19 +84,15 @@ public class MainActivity extends Activity {
         final LayoutInflater inflater = getLayoutInflater();
 
         main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
-        canvas = new PBCanvas(this); //, botsTotal);
-
-        main_layout.addView(canvas);
+        canvas = new PBCanvas(this);
+        holder = main_layout.findViewById(R.id.holder);
+        holder.addView(canvas);
 
         top = main_layout.findViewById(R.id.top);
         top.bringToFront();
-        canvas.topSize[0] = top.getWidth();
-        canvas.topSize[1] = top.getHeight();
 
         bottom = main_layout.findViewById(R.id.bottom);
         bottom.bringToFront();
-        canvas.bottomSize[0] = bottom.getWidth();
-        canvas.bottomSize[1] = bottom.getHeight();
 
         submit = main_layout.findViewById(R.id.bSubmit);
         submit.bringToFront();
