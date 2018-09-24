@@ -130,8 +130,11 @@ public class Grid {
                     lowestManDistIndex = j; // Save the index
                 }
             }
+            Point destinationCoord = Destinations.get(lowestManDistIndex);
 
-            BotDestPairs.put(currentBot, Destinations.get(lowestManDistIndex));
+            BotDestPairs.put(currentBot, destinationCoord);
+
+            Grid[destinationCoord.x][destinationCoord.y].SetAsDestinationHistory.add(currentBot.BotID);
         }
 
         /* -----------------OLD CODE (match each bot to unique destination with colour matching---------------
@@ -290,7 +293,7 @@ public class Grid {
         return Grid[position.x][position.y].lastOccupiedID;
     }
 
-    public Point determineNewDestination(Point pushing, Point pushed, int timeStep) {
+    public Point determineNewDestination(Point pushing, Point pushed, String pushingBotID, String pushedBotID, int timeStep) {
         Position pushingPos = Grid[pushing.x][pushing.y];
         Position pushedPos = Grid[pushed.x][pushed.y];
 
@@ -300,10 +303,13 @@ public class Grid {
         // Create Hashmap with all the destination points minus the pushed bot's position (and pushing bot's, if applicable) with scores
         HashMap<Point, Integer> destScore = new HashMap<>();
 
+        if (checkIfAllDestVisited(pushedBotID))
+            System.out.println("RIPPPPPP " + pushedBotID);
+
         for (int i = 0; i < Destinations.size(); i++) {
             Point currentDest = Destinations.get(i);
 
-            if (!(currentDest.equals(pushed) || currentDest.equals(pushing))) {
+            if (!(currentDest.equals(pushed) || currentDest.equals(pushing)) && !Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID)) {
                 Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
                 //System.out.println(pushed + " " + currentDest + " " + score);
                 destScore.put(currentDest, score);
@@ -328,7 +334,9 @@ public class Grid {
         }
 
         // Currently, it is set to return the first item in the list
-        return destWithLowestScores.get(0);
+        Point destToSet = destWithLowestScores.get(0);
+        Grid[destToSet.x][destToSet.y].SetAsDestinationHistory.add(pushedBotID);
+        return destToSet;
     }
 
     public int getColourFromPos(Point pos) {
@@ -421,6 +429,14 @@ public class Grid {
         return  coordPosObj.OccupiedTimeSteps.containsKey(timeStep) && !coordPosObj.IsPushable;
     }
 
+    private boolean checkIfAllDestVisited(String botID) {
+        for (int i = 0; i < Destinations.size(); i++) {
+            if (!Grid[Destinations.get(i).x][Destinations.get(i).y].SetAsDestinationHistory.contains(botID))
+                return false;
+        }
+        return true;
+    }
+
 }
 
 // For every position on the grid, it will have a type and a colour.
@@ -435,6 +451,10 @@ class Position {
     HashMap<Integer, String> OccupiedTimeSteps = new HashMap<>();
     String lastOccupiedID;
     int lastOccupiedTimeStep;
+
+    // Stores the history of bots that has set the current coordinate as its destination.
+    // Idea is that once the bot string is listed here, and gets pushed away, this destination can't be set again.
+    List<String> SetAsDestinationHistory = new ArrayList<>();
 
     boolean IsPushable = false; // Initially, bot is unpushable. It changes to true when the bot is resting.
 
