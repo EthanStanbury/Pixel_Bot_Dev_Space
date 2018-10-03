@@ -135,6 +135,7 @@ public class Grid {
             BotDestPairs.put(currentBot, destinationCoord);
 
             Grid[destinationCoord.x][destinationCoord.y].SetAsDestinationHistory.add(currentBot.BotID);
+            Grid[destinationCoord.x][destinationCoord.y].IsDestinationSet = true;
         }
 
         /* -----------------OLD CODE (match each bot to unique destination with colour matching---------------
@@ -310,7 +311,7 @@ public class Grid {
             Point currentDest = Destinations.get(i);
 
             if (!(currentDest.equals(pushed) || currentDest.equals(pushing)) && !Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID)) {
-                Integer score = getManhattanDist(pushed, currentDest) + (isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
+                Integer score = getManhattanDist(pushed, currentDest) + 2*(Grid[currentDest.x][currentDest.y].IsDestinationSet ? 1 : 0); //(isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
                 //System.out.println(pushed + " " + currentDest + " " + score);
                 destScore.put(currentDest, score);
             }
@@ -336,6 +337,7 @@ public class Grid {
         // Currently, it is set to return the first item in the list
         Point destToSet = destWithLowestScores.get(0);
         Grid[destToSet.x][destToSet.y].SetAsDestinationHistory.add(pushedBotID);
+        Grid[destToSet.x][destToSet.y].IsDestinationSet = true;
         return destToSet;
     }
 
@@ -451,6 +453,7 @@ class Position {
     HashMap<Integer, String> OccupiedTimeSteps = new HashMap<>();
     String lastOccupiedID;
     int lastOccupiedTimeStep;
+    boolean IsDestinationSet;
 
     // Stores the history of bots that has set the current coordinate as its destination.
     // Idea is that once the bot string is listed here, and gets pushed away, this destination can't be set again.
