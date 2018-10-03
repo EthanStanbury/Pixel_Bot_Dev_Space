@@ -311,7 +311,7 @@ public class Grid {
             Point currentDest = Destinations.get(i);
 
             if (!(currentDest.equals(pushed) || currentDest.equals(pushing)) && !Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID)) {
-                Integer score = getManhattanDist(pushed, currentDest) + 2*(Grid[currentDest.x][currentDest.y].IsDestinationSet ? 1 : 0); //(isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
+                Integer score = getManhattanDist(pushed, currentDest) + 2*(Grid[currentDest.x][currentDest.y].IsDestinationSet ? 1 : 0) + 2*findClosestFreeDestDist(currentDest); //(isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
                 //System.out.println(pushed + " " + currentDest + " " + score);
                 destScore.put(currentDest, score);
             }
@@ -437,6 +437,18 @@ public class Grid {
                 return false;
         }
         return true;
+    }
+
+    private int findClosestFreeDestDist(Point candidateCoord) {
+        int lowestDistValue = Integer.MAX_VALUE;
+        for (int i = 0; i < Destinations.size(); i++) {
+            Point currentDestCoord = Destinations.get(i);
+            Position currentDest = Grid[currentDestCoord.x][currentDestCoord.y];
+
+            if (!currentDest.IsDestinationSet)
+                lowestDistValue = Math.min(lowestDistValue, getManhattanDist(candidateCoord, currentDestCoord));
+        }
+        return lowestDistValue;
     }
 
 }
