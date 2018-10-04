@@ -134,7 +134,7 @@ public class PathFinder {
 
                             // Initially set it false, so that the new destination pairing doesn't try to pair bots to one of the other pushing bots' destinations.
                             // This will be set to true once all pairing has completed.
-                            Problem.updateBoard(currentPos, timeStep, currentBotID, true);
+                            Problem.updateBoard(currentPos, timeStep, currentBotID, false);
                         }
                     }
                 }
@@ -157,7 +157,7 @@ public class PathFinder {
             }
 
             for (int j = 0; j < pushingBots.size(); j++) {
-                //Problem.updateIsPushableFlag(pushingBots.get(j), true);
+                // Problem.updateIsPushableFlag(pushingBots.get(j), true);
             }
 
             if (pushingBots.size() == 0) {

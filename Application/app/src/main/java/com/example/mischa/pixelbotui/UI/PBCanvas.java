@@ -56,7 +56,7 @@ public class PBCanvas extends SurfaceView {
     int squareWidth;
     int selectedColour;
     int whiteBox = 1;
-    public int TotalBots = 7;
+    public int TotalBots = 50;
 
     int currentBotAmount;
     int port, land;

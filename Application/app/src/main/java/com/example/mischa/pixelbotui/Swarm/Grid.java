@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.FactoryConfigurationError;
 
@@ -110,6 +111,58 @@ public class Grid {
     // Pairs all bots to their individual destinations based on distance.
     // The bot that is closest to a certain destination will be chosen as bot-dest pair.
     public void mapBotToDest() {
+        HashMap<Bot, Point> closestDestPoints = new HashMap<>();
+        HashMap<Bot, Integer> closestDestDist = new HashMap<>();
+
+        // 20.a: for every bot, determine closest destination
+        for (int i = 0; i < Bots.size(); i++) {
+            Bot currentBot = Bots.get(i);
+            Point botCoord = Bots.get(i).Location;
+            closestDestDist.put(currentBot, Integer.MAX_VALUE);
+            for (int j = 0; j < Destinations.size(); j++) {
+                Point destCoord = Destinations.get(j);
+                int calcuatedDistance = getManhattanDist(botCoord, destCoord);
+                if (calcuatedDistance < closestDestDist.get(currentBot)) {
+                    closestDestDist.put(currentBot, calcuatedDistance);
+                    closestDestPoints.put(currentBot, destCoord);
+                }
+            }
+        }
+
+        // Admittedly, this is an inefficient method in the worst case scenario (O(n^2) time complexity if all bots were selected) to pair the x amount of bots with lowest distances.
+        for (int i = 0; i < Destinations.size(); i++) {
+            int lowestDest = Integer.MAX_VALUE;
+            Bot lowestDestBotObj = Bots.get(0); // A temp measure, so that we avoid 'may not have been init' error below.
+
+            // 20.c: pick the first x bots in the sorted list.
+            for (HashMap.Entry<Bot, Integer> pair : closestDestDist.entrySet()) {
+                int dist = pair.getValue();
+                System.out.println(pair.getKey().BotID + " has distance: " + dist);
+                if (dist < lowestDest) {
+                    lowestDestBotObj = pair.getKey();
+                    lowestDest = dist;
+                }
+            }
+
+            Point destinationCoord = closestDestPoints.get(lowestDestBotObj);
+
+            closestDestDist.remove(lowestDestBotObj); // Once extracted, delete this object from the hashmap
+            closestDestPoints.remove(lowestDestBotObj);
+
+            BotDestPairs.put(lowestDestBotObj, destinationCoord);
+
+            Grid[destinationCoord.x][destinationCoord.y].SetAsDestinationHistory.add(lowestDestBotObj.BotID);
+            Grid[destinationCoord.x][destinationCoord.y].IsDestinationSet = true;
+
+            // 20.d: add +1 to dist for all other bot dest pairs that have the same coordinates as the one that just got matched.
+            for (HashMap.Entry<Bot, Point> pair : closestDestPoints.entrySet()) {
+                if (pair.getValue().equals(destinationCoord)) {
+                    closestDestDist.put(pair.getKey(), closestDestDist.get(pair.getKey()) + 1);
+                }
+            }
+        }
+
+        /* A dumb method of initially pairing the bots. Had this prior to the current version.
         // Pair the same number of bots as there are number of destinations.
         for (int i = 0; i < Destinations.size(); i++) {
             Bot currentBot = Bots.get(i);
@@ -136,7 +189,7 @@ public class Grid {
 
             Grid[destinationCoord.x][destinationCoord.y].SetAsDestinationHistory.add(currentBot.BotID);
             Grid[destinationCoord.x][destinationCoord.y].IsDestinationSet = true;
-        }
+        } */
 
         /* -----------------OLD CODE (match each bot to unique destination with colour matching---------------
 
@@ -310,8 +363,9 @@ public class Grid {
         for (int i = 0; i < Destinations.size(); i++) {
             Point currentDest = Destinations.get(i);
 
-            if (!(currentDest.equals(pushed) || currentDest.equals(pushing)) && !Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID)) {
-                Integer score = getManhattanDist(pushed, currentDest) + 2*(Grid[currentDest.x][currentDest.y].IsDestinationSet ? 1 : 0) + 2*findClosestFreeDestDist(currentDest); //(isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
+            // Checking history is temporarily disabled.
+            if (!(currentDest.equals(pushed) || currentDest.equals(pushing))) { // && !Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID)) {
+                Integer score = 10*getManhattanDist(pushed, currentDest) + 0*(Grid[currentDest.x][currentDest.y].IsDestinationSet ? 1 : 0) + 4*findClosestFreeDestDist(currentDest); //(isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
                 //System.out.println(pushed + " " + currentDest + " " + score);
                 destScore.put(currentDest, score);
             }
