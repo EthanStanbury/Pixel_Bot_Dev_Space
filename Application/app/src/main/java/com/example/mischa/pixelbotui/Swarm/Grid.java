@@ -356,15 +356,19 @@ public class Grid {
 
         // Create Hashmap with all the destination points minus the pushed bot's position (and pushing bot's, if applicable) with scores
         HashMap<Point, Integer> destScore = new HashMap<>();
+        Boolean visitedAll = false;
 
-        if (checkIfAllDestVisited(pushedBotID))
-            System.out.println("RIPPPPPP " + pushedBotID);
+        if (checkIfAllDestVisited(pushedBotID)) {
+            System.out.println("Visited All Flag raised " + pushedBotID);
+            visitedAll = true;
+        }
 
         for (int i = 0; i < Destinations.size(); i++) {
             Point currentDest = Destinations.get(i);
 
-            // Checking history is temporarily disabled.
-            if (!(currentDest.equals(pushed) || currentDest.equals(pushing))) { // && !Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID)) {
+            // Checking history is enabled again (item number 19.e), but also added another 'or' statement - if every destination was 'visited', then obviously the pushed bot will have nowhere to go.
+            // To avoid crashing, disable the destination history checking if that is the case.
+            if (!(currentDest.equals(pushed) || currentDest.equals(pushing)) && (!Grid[currentDest.x][currentDest.y].SetAsDestinationHistory.contains(pushedBotID) || visitedAll)) {
                 Integer score = 10*getManhattanDist(pushed, currentDest) + 0*(Grid[currentDest.x][currentDest.y].IsDestinationSet ? 1 : 0) + 4*findClosestFreeDestDist(currentDest); //(isOccupied(currentDest, timeStep) ? 1 : 0) + 5*(isOccupiedButUnpushable(currentDest, timeStep) ? 1 : 0);
                 //System.out.println(pushed + " " + currentDest + " " + score);
                 destScore.put(currentDest, score);
