@@ -1,6 +1,11 @@
 ﻿### Note: 
 This is our GitHub, where all of our code is stored and logged. If you are looking for documentation head over to our [Google Drive repository](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing).
 
+## Week 10 update
+ * Second prototype bot completed, this one with many improvements (PCB, wider and flatter, battery holder updated).
+ * UI completed, shown to client.
+ * Updated Bluetooth module almost working - can handle over a hundred bots compared to just 7 that the previous could.
+
 ## Week 6 update
  * Bluetooth integration is now working for one bot, awaiting more to test further.
  * The hardware team has completed a prototype bot, complete with RGB light and omni-directional wheels.
