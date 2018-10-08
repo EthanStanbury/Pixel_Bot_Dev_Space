@@ -5,6 +5,7 @@ This is our GitHub, where all of our code is stored and logged. If you are looki
  * Second prototype bot completed, this one with many improvements (PCB, wider and flatter, battery holder updated).
  * UI completed, shown to client.
  * Updated Bluetooth module almost working - can handle over a hundred bots compared to just 7 that the previous could.
+ * Pathfinding algorithm can handle more bots, but a few bugs.
 
 ## Week 6 update
  * Bluetooth integration is now working for one bot, awaiting more to test further.
