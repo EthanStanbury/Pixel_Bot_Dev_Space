@@ -4,10 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_layout"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.mischa.pixelbotui.UI.MainActivity">
 
+<<<<<<< HEAD
     <Button
         android:id="@+id/bSubmit"
         android:layout_width="wrap_content"
@@ -47,6 +49,244 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bConnect"
         app:layout_constraintVertical_bias="0.875" />
+=======
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/top"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="560dp"
+        android:background="#031930"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/bMagenta"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/magenta"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bCyan"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bCyan"
+            app:layout_constraintTop_toTopOf="@+id/bCyan"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageButton
+            android:id="@+id/bRed"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/red"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bPaintBrush"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bPaintBrush"
+            app:layout_constraintTop_toBottomOf="@+id/bPaintBrush" />
+
+        <ImageButton
+            android:id="@+id/bBlue"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/blue"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bGreen"
+            app:layout_constraintStart_toEndOf="@+id/bGreen"
+            app:layout_constraintTop_toTopOf="@+id/bGreen"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageButton
+            android:id="@+id/bYellow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/yellow"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bPaintBrush"
+            app:layout_constraintStart_toEndOf="@+id/bPaintBrush"
+            app:layout_constraintTop_toTopOf="@+id/bPaintBrush"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageButton
+            android:id="@+id/bEraser"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/tool_button_feedback"
+            android:scaleType="fitXY"
+            android:src="@drawable/eraserpic"
+            app:layout_constraintBottom_toBottomOf="@+id/top"
+            app:layout_constraintEnd_toEndOf="@+id/top"
+            app:layout_constraintHorizontal_bias="0.979"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/top"
+            app:layout_constraintTop_toTopOf="@+id/top"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/bWhite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/white"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bBlue"
+            app:layout_constraintStart_toEndOf="@+id/bBlue"
+            app:layout_constraintTop_toBottomOf="@+id/bCyan"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/bCyan"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/cyan"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bYellow"
+            app:layout_constraintStart_toEndOf="@+id/bYellow"
+            app:layout_constraintTop_toTopOf="@+id/bYellow"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ImageButton
+            android:id="@+id/bGreen"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/green"
+            android:scaleType="fitXY"
+            android:src="@drawable/button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bRed"
+            app:layout_constraintStart_toEndOf="@+id/bRed"
+            app:layout_constraintTop_toBottomOf="@+id/bPaintBrush"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/bPaintBrush"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="false"
+            android:background="@android:color/transparent"
+            android:cropToPadding="false"
+            android:scaleType="fitXY"
+            android:src="@drawable/paintbrushwhiteoutline"
+            app:layout_constraintBottom_toBottomOf="@+id/top"
+            app:layout_constraintEnd_toEndOf="@+id/top"
+            app:layout_constraintHorizontal_bias="0.043"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/top"
+            app:layout_constraintTop_toTopOf="@+id/top"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/bClear"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/tool_button_feedback"
+            android:scaleType="fitXY"
+            android:src="@drawable/redo2"
+            app:layout_constraintEnd_toEndOf="@+id/bEraser"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/bEraser"
+            app:layout_constraintTop_toBottomOf="@+id/bEraser" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/bottom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="608dp"
+        android:background="#031930"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/bSubmit"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Submit"
+            android:background="@drawable/text_button_feedback"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom"
+            app:layout_constraintEnd_toEndOf="@+id/bottom"
+            app:layout_constraintHorizontal_bias="0.963"
+            app:layout_constraintStart_toStartOf="@+id/bottom"
+            app:layout_constraintTop_toTopOf="@+id/bottom"
+            app:layout_constraintVertical_bias="0.23" />
+
+        <ImageButton
+            android:id="@+id/menu"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/cog2"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom"
+            app:layout_constraintEnd_toEndOf="@+id/bottom"
+            app:layout_constraintHorizontal_bias="0.022"
+            app:layout_constraintStart_toStartOf="@+id/bottom"
+            app:layout_constraintTop_toTopOf="@+id/bottom"
+            app:layout_constraintVertical_bias="0.538" />
+    </android.support.constraint.ConstraintLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/holder"
+        app:layout_constraintBottom_toTopOf="@+id/bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        app:layout_constraintVertical_bias="0.0">
+
+    </FrameLayout>
+>>>>>>> Bugfixn'
 
 
 </android.support.constraint.ConstraintLayout>

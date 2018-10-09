@@ -4,6 +4,17 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
+<<<<<<< HEAD
+=======
+    <uses-feature android:name="android.hardware.bluetooth" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
+
+>>>>>>> Bugfixn'
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,9 +29,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".UI.SimActivity"
             android:screenOrientation="locked">
         </activity>
+=======
+        <activity
+            android:name=".UI.SimActivity"
+            android:screenOrientation="locked"></activity>
+        <activity android:name=".UI.AdminActivity"></activity>
+>>>>>>> Bugfixn'
     </application>
 
 </manifest>
