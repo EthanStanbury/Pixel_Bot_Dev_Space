@@ -24,7 +24,7 @@ public class PathFinder {
         // For every bot in the bot -> dest pairs, solve for a solution with the A* algorithm.
         Problem = problem;      // Grid with all the bots and destinations are defined as the 'Problem' that needs solving.
         Problem.mapBotToDest(); // When getSolutions() method was called, it is assumed that all bots and destinations were added.
-                                // Hence, it is now acceptable to link all destinations to a bot.
+        // Hence, it is now acceptable to link all destinations to a bot.
 
         // Save the bot-dest pair hashmap to a local variable.
         HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
@@ -64,7 +64,7 @@ public class PathFinder {
         int timeStep = 1; // Ignore saving the initial step, as it is already done (during bot initialisation)
         while (anyStepsLeft) {
             anyStepsLeft = false;   // Assume that there are no actions left, unless found.
-           // System.out.println("TIME STEP: " + timeStep);
+            // System.out.println("TIME STEP: " + timeStep);
 
             List<String> pushingBotsID = new ArrayList<>();
             List<Point> pushingBots = new ArrayList<>();
@@ -84,10 +84,11 @@ public class PathFinder {
                 */
                 if (timeStep < currentBotPositions.size()) {
                     anyStepsLeft = true;
+                    int tmpcount = 0;
 
                     Point currentPos = currentBotPositions.get(timeStep);
                     // Check if position at time step x is free:
-                    boolean posAvailable = Problem.checkAvailability(currentPos, timeStep);
+                    boolean posAvailable = Problem.checkAvailability(currentPos, currentBotID, timeStep);
                     // System.out.println(currentBotID + " : " + currentBotPositions.get(timeStep));
                     boolean reachedDestination = timeStep == currentBotPositions.size() - 1;
                     //System.out.println(reachedDestination);
@@ -98,7 +99,7 @@ public class PathFinder {
 //                        pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
                         allBotsColour.put(currentBotID, Problem.getColourFromPos(currentPos));
                     } else {
-                       // System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " " + currentPos + " AT TIME STEP " + timeStep);
+                        // System.out.println("COLLISION DETECTED FOR BOT: " + currentBotID + " " + currentPos + " AT TIME STEP " + timeStep);
 
                         // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
                         if (!Problem.getPushableStatus(currentPos)) {
@@ -106,58 +107,64 @@ public class PathFinder {
                             //System.out.println("Adding a 'stop' command in the sequence at this timestep(" + timeStep + ")...");
                             currentBotPositions.add(timeStep, currentBotPositions.get(timeStep - 1));
                             currentBotPath.add(timeStep, S);
-                        } else { // A temporary solution - until the 'push' method is implemented, the bot should just walk over other bots that have stopped to prevent the program from 'hanging'.
+                        } else {
                             // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
-
+                            tmpcount ++;
+                            System.out.println(tmpcount);
                             // Match the sequence length of the pushing and pushed bot so they are in sync (in the right time step).
                             String pushedBotID = Problem.returnPushableBotID(currentPos);
-                            int indexOfLastEvent = allBotsPositions.get(pushedBotID).size() - 1;
-                            int catchupsCounter = (timeStep - 1) - indexOfLastEvent;
-                            List<Point> pushBotPosList = allBotsPositions.get(pushedBotID);
-                            List<Direction> pushBotPathList = allBotsSolutions.get(pushedBotID);
+                            if (!pushedBotID.equals(currentBotID)) {
+                                int indexOfLastEvent = allBotsPositions.get(pushedBotID).size() - 1;
+                                int catchupsCounter = (timeStep - 1) - indexOfLastEvent;
+                                List<Point> pushBotPosList = allBotsPositions.get(pushedBotID);
+                                List<Direction> pushBotPathList = allBotsSolutions.get(pushedBotID);
 
-                            while (catchupsCounter > 0) {
-                                pushBotPosList.add(pushBotPosList.get(indexOfLastEvent));
-                                pushBotPathList.add(S);
-                                Problem.updateBoard(pushBotPosList.get(indexOfLastEvent), (timeStep - catchupsCounter), pushedBotID, true);
-                                catchupsCounter -= 1;
+                                while (catchupsCounter > 0) {
+                                    pushBotPosList.add(pushBotPosList.get(indexOfLastEvent));
+                                    pushBotPathList.add(S);
+                                    Problem.updateBoard(pushBotPosList.get(indexOfLastEvent), (timeStep - catchupsCounter), pushedBotID, true);
+                                    catchupsCounter -= 1;
+                                }
+
+
+                                pushingBotsID.add(currentBotID);
+                                pushingBots.add(currentBotPositions.get(timeStep - 1));
+                                pushedBotsID.add(pushedBotID);
+                                pushedBotsPos.add(new Point(pushBotPosList.get(timeStep - 1)));
+
+                                // System.out.println("PUSHED BOT " + pushedBotID + " AT POS: " + pushBotPosList.get(indexOfLastEvent));
+
+                                Problem.removeOccupation(pushBotPosList.get(indexOfLastEvent), timeStep);
+
+                                // Initially set it false, so that the new destination pairing doesn't try to pair bots to one of the other pushing bots' destinations.
+                                // This will be set to true once all pairing has completed.
+                                Problem.updateBoard(currentPos, timeStep, currentBotID, false);
                             }
-
-                            pushingBotsID.add(currentBotID);
-                            pushingBots.add(currentBotPositions.get(timeStep - 1));
-                            pushedBotsID.add(pushedBotID);
-                            pushedBotsPos.add(new Point(pushBotPosList.get(timeStep - 1)));
-
-                           // System.out.println("PUSHED BOT " + pushedBotID + " AT POS: " + pushBotPosList.get(indexOfLastEvent));
-
-                            Problem.removeOccupation(pushBotPosList.get(indexOfLastEvent), timeStep);
-
-                            // Initially set it false, so that the new destination pairing doesn't try to pair bots to one of the other pushing bots' destinations.
-                            // This will be set to true once all pairing has completed.
-                            Problem.updateBoard(currentPos, timeStep, currentBotID, false);
                         }
                     }
                 }
             }
 
             for (int j = 0; j < pushingBots.size(); j++) {
-                String pushedID = pushedBotsID.get(j);
-                Point newTarget = Problem.determineNewDestination(pushingBots.get(j), pushedBotsPos.get(j), pushingBotsID.get(j), pushedBotsID.get(j), timeStep);
-                Bot pushedBot = getBotObject(pushedID, botDuplicates);
+                if (!pushingBotsID.get(j).equals(pushedBotsID.get(j))) {
+                    String pushedID = pushedBotsID.get(j);
+                    Point newTarget = Problem.determineNewDestination(pushingBots.get(j), pushedBotsPos.get(j), pushingBotsID.get(j), pushedBotsID.get(j), timeStep);
+                    Bot pushedBot = getBotObject(pushedID, botDuplicates);
 
-                CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
-                pushedBot.Location = pushedBotsPos.get(j);
-             //   System.out.println(pushedBot.Location);
-              //  System.out.println(newTarget);
+                    CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
+                    pushedBot.Location = pushedBotsPos.get(j);
+                    //   System.out.println(pushedBot.Location);
+                    //  System.out.println(newTarget);
 
-                allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
-                allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
-              //  System.out.println(allBotsPositions.get(pushedID).get(allBotsPositions.get(pushedID).size() - 1));
-              //  System.out.println(aStarOutput.Coordinates.size());
+                    allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
+                    allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
+                    //  System.out.println(allBotsPositions.get(pushedID).get(allBotsPositions.get(pushedID).size() - 1));
+                    //  System.out.println(aStarOutput.Coordinates.size());
+                }
             }
 
             for (int j = 0; j < pushingBots.size(); j++) {
-                // Problem.updateIsPushableFlag(pushingBots.get(j), true);
+                //Problem.updateIsPushableFlag(pushingBots.get(j), true);
             }
 
             if (pushingBots.size() == 0) {
@@ -182,7 +189,7 @@ public class PathFinder {
             String currentBotID = pair.getKey();
             List<Direction> currentBotPathSequence = pair.getValue();
             int currentBotColour = allBotsColour.get(currentBotID);
-
+            System.out.println("FINAL COLOUR IS: " + currentBotColour);
             Solution colourMovePair = new Solution(currentBotColour, currentBotPathSequence);
 
             finalSolution.put(currentBotID, colourMovePair);

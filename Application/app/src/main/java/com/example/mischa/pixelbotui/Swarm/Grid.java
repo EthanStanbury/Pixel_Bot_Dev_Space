@@ -325,15 +325,20 @@ public class Grid {
     }
 
     // Checks if a certain position is available to be occupied at a certain time step.
-    public boolean checkAvailability(Point position, int timeStep) {
+    public boolean checkAvailability(Point position, String requestingBotID, int timeStep) {
         Position pos = Grid[position.x][position.y];
 
         if (pos.Type == OFF_GRID)
             return false;
         else {
             // Return false if it is occupied. OR a bot has reached its destination and is resting at that spot (can be determined by the value of IsPushable).
-            if (pos.OccupiedTimeSteps.containsKey(timeStep) || (timeStep > pos.lastOccupiedTimeStep && pos.IsPushable))
-                return false;
+            if (pos.OccupiedTimeSteps.containsKey(timeStep) || (timeStep > pos.lastOccupiedTimeStep && pos.IsPushable)) {
+                // Obviously it is true if a bot is occupying its own spot.
+                if (pos.OccupiedTimeSteps.containsKey(timeStep) && pos.OccupiedTimeSteps.get(timeStep).equals(requestingBotID))
+                    return true;
+                else
+                    return false;
+            }
             else
                 return true;
         }
@@ -359,7 +364,7 @@ public class Grid {
         Boolean visitedAll = false;
 
         if (checkIfAllDestVisited(pushedBotID)) {
-            System.out.println("Visited All Flag raised " + pushedBotID);
+            System.out.println("Visited All Flag raised " + pushingBotID + " pushing: " + pushedBotID);
             visitedAll = true;
         }
 
@@ -386,7 +391,7 @@ public class Grid {
 
                 lowestScore = pair.getValue(); // update the lowest known score
 
-            // If equal, then simply append the destination coordinate to the existing list of coordinates with same score.
+                // If equal, then simply append the destination coordinate to the existing list of coordinates with same score.
             } else if (pair.getValue() == lowestScore) {
                 destWithLowestScores.add(pair.getKey());
             }
@@ -540,4 +545,3 @@ enum Type {
     GRID,
     OFF_GRID,
 }
-
