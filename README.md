@@ -38,7 +38,7 @@ The project is to build an interactive picture drawing display for Questacon’s
 |Liam Highmore |<ul> <li>Materials and Mechanics Specialist</li><li>Secretary and Project Manager</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Take meeting minutes</li><li>Client Liaison</li><li>Document project and systems engineering processes</li></ul>|
 |Misha Petkovic|<ul> <li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
 
-## Timeline and Work Breadown Structure
+## Timeline and Work Breakdown Structure
 <img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/ProjectSchedule whole semester progress -1.jpg"/>
 </p>
 
