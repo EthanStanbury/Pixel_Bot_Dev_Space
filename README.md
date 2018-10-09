@@ -39,9 +39,8 @@ The project is to build an interactive picture drawing display for Questacon’s
 |Misha Petkovic|<ul> <li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
 
 ## Timeline and Work Breadown Structure
-![alt text](
-        Pixel_Bot_Dev_Space/ProjectSchedule whole semester progress -1.jpg
-      )
+<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/ProjectSchedule whole semester progress -1.jpg"/>
+</p>
 
 ## Documentation
 
