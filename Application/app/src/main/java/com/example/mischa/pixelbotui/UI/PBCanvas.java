@@ -54,12 +54,8 @@ public class PBCanvas extends SurfaceView {
     int noOfSquares = yDimension * xDimension;
     int squareWidth;
     int selectedColour;
-<<<<<<< HEAD
-    int whiteBox = 1;
+
     public int TotalBots = 50;
-=======
-    public int TotalBots = 7;
->>>>>>> Bugfixn'
 
     int currentBotAmount;
     LayoutItem gridBG;
