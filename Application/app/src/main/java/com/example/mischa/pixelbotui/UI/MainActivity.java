@@ -184,6 +184,7 @@ public class MainActivity extends Activity {
         red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushred);
                 canvas.selectedColour = Color.RED;
             }
         });
@@ -193,6 +194,7 @@ public class MainActivity extends Activity {
         yellow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushyellow);
                 canvas.selectedColour = Color.YELLOW;
             }
         });
@@ -202,6 +204,7 @@ public class MainActivity extends Activity {
         green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushgreen);
                 canvas.selectedColour = Color.GREEN;
             }
         });
@@ -211,6 +214,7 @@ public class MainActivity extends Activity {
         cyan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushcyan);
                 canvas.selectedColour = Color.CYAN;
             }
         });
@@ -220,6 +224,7 @@ public class MainActivity extends Activity {
         blue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushblue);
                 canvas.selectedColour = Color.BLUE;
             }
         });
@@ -229,6 +234,7 @@ public class MainActivity extends Activity {
         magenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushmagenta);
                 canvas.selectedColour = Color.MAGENTA;
             }
         });
@@ -238,6 +244,7 @@ public class MainActivity extends Activity {
         white.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushwhite);
                 canvas.selectedColour = Color.WHITE;
             }
         });
@@ -250,6 +257,7 @@ public class MainActivity extends Activity {
         eraser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                paintBrush.setImageResource(R.drawable.paintbrushwhiteoutline);
                 canvas.selectedColour = Color.TRANSPARENT;
             }
         });
@@ -271,8 +279,8 @@ public class MainActivity extends Activity {
             state.putInt("" + i, saveState[i]);
         }
         state.putInt("colour", canvas.selectedColour);
-        System.out.println("Save: " + canvas.whiteBox);
-        state.putInt("whiteBox", canvas.whiteBox);
+        //System.out.println("Save: " + canvas.whiteBox);
+        //state.putInt("whiteBox", canvas.whiteBox);
     }
 
     // Get the saved state of the grid from the Bundle
@@ -282,7 +290,7 @@ public class MainActivity extends Activity {
             restoreState[i] = state.getInt("" + i);
         }
         canvas.selectedColour = state.getInt("colour");
-        canvas.whiteBox = state.getInt("whiteBox");
+        //canvas.whiteBox = state.getInt("whiteBox");
         canvas.giveRestoreState(restoreState);
 
 
