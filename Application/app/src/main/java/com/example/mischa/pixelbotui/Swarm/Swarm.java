@@ -1,21 +1,16 @@
 package com.example.mischa.pixelbotui.Swarm;
 
-import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 
 import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
-import com.example.mischa.pixelbotui.UI.MainActivity;
 import com.example.mischa.pixelbotui.UI.PBCanvas;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Ethan on 16/03/2018.
@@ -24,7 +19,7 @@ import java.util.Set;
 // This Class will be used to build a swarm which consists of individual pixels.
 
 public class Swarm {
-    public static HashMap<String, Bot> currentSwarm = new HashMap<>();
+    public HashMap<String, Bot> SwarmList;
     // @param Colour, is the colour of the swarm that you are creating, each swarm is unique by its colour if a bot is the same as the colour as a swarm it should be in that swarm
     // @param NumberOfBots, This is the numberOfBots that you want to add to the swarm
     // Each bot is uniquely made for each swarm
@@ -34,14 +29,13 @@ public class Swarm {
     //adds the bot to the current swarm
     // adds the bot to the Grid
 
-    public static void SwarmCreate(Integer numberOfBots, LinkedHashMap<String, BluetoothDevice> devices){
-        LinkedHashMap<String, BluetoothDevice> deviceList = devices;
-//        if (numberOfBots > devices.size()){
-//            throw new IllegalStateException("FATAL ERROR: The number of bots you have spawned do not match the physical bots that are connected");
-//        }
+    public Swarm(Integer Colour, Integer numberOfBots){
 
         HashMap<String, Bot> thisSwarmList = new HashMap<>();
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 10a7993... Merge branch 'Bugfixn''
         int side = 1;
         int counter = 0;
 
@@ -93,6 +87,11 @@ public class Swarm {
 
 
         }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> parent of 10a7993... Merge branch 'Bugfixn''
         this.SwarmList = thisSwarmList;
 
 
