@@ -7,7 +7,7 @@ This is our GitHub, where all of our code is stored and logged. If you are looki
  * Updated Bluetooth module almost working - can handle over a hundred bots compared to just 7 that the previous could.
  * Pathfinding algorithm can handle more bots, but a few bugs.
 <p align="center"> 
-<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype_2.png" width="300" height="399"/>
+<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype_2.jpg" width="300" height="399"/>
 </p>
 
 ## Week 6 update
