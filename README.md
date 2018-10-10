@@ -1,5 +1,5 @@
 ﻿### Note: 
-This is our GitHub, where all of our code is stored and logged. If you are looking for documentation head over to our [Google Drive repository](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing).
+This is our GitHub, where our code and technical files are stored and logged. If you are looking for documentation head over to our [Google Drive repository](https://drive.google.com/drive/folders/16jXwYcN4NbzW0Ln2P1bCA10uX1lFQW0Q?usp=sharing).
 
 ## Week 10 update
  * Second prototype bot completed, this one with many improvements (PCB, wider and flatter, battery holder updated).
