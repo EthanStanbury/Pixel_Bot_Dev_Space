@@ -1,0 +1,69 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=PixelBotPCB_V2_Final
+*Date=23:36:33
+*CreatedBy=Fritzing 0.9.3b.04.19.5c895d327c44a3114e5fcc9d8260daf0cbb52806
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;1µF;100 mil [THT, electrolytic];42.0565;-74.8868;90;Bottom;EC1
+2;;;62.3458;-19.5993;0;Bottom;TXT9
+3;;;72.5364;-73.6169;0;Bottom;Hole3
+4;;;62.3524;-55.2606;0;Bottom;TXT9
+5;;;64.9076;-19.6747;0;Bottom;TXT9
+6;;;78.8289;-4.46782;0;Bottom;IMG1
+7;;;64.9598;-33.4903;0;Bottom;TXT9
+8;1µF;100 mil [THT, electrolytic];36.9765;-19.0068;90;Bottom;EC4
+9;;THT;58.5665;-35.5168;-90;Bottom;MTR-U
+10;;5 mm [THT];14.1165;-55.4528;90;Bottom;RGB
+11;;;52.2198;-55.1463;0;Bottom;TXT9
+12;;;57.26;-55.1692;0;Bottom;TXT9
+13;;cap-pth-small2;44.5965;-29.1668;90;Bottom;C3
+14;;;59.8513;-33.4903;0;Bottom;TXT9
+15;1µF;100 mil [THT, electrolytic];77.6165;-59.6468;-90;Bottom;EC2
+16;;THT;58.5665;-26.6268;-90;Bottom;L293D-B
+17;;;72.5364;-10.1169;0;Bottom;Hole2
+18;;;10.7883;-2.89563;0;Bottom;IMG2
+19;;;49.7049;-74.1433;0;Bottom;TXT9
+20;;cap-pth-small2;72.5365;-59.6468;-90;Bottom;C2
+21;;;40.5042;-53.2968;0;Bottom;Hole5
+22;;;57.4482;-19.5993;0;Bottom;TXT9
+23;;;54.797;-55.209;0;Bottom;TXT9
+24;;;52.1684;-33.4352;0;Bottom;TXT9
+25;;;52.1692;-19.6783;0;Bottom;TXT9
+26;;;59.7751;-74.1289;0;Bottom;TXT9
+27;;diode-1n4001;6.49647;-25.3568;90;Bottom;D2
+28;;THT;56.0265;-64.7268;-90;Bottom;L293D-A
+29;;;49.7229;-55.1551;0;Bottom;TXT9
+30;;cap-pth-small2;44.5965;-16.4668;90;Bottom;C4
+31;;;57.3525;-33.5061;0;Bottom;TXT9
+32;;;62.3566;-33.4903;0;Bottom;TXT9
+33;;power_jack_slot;26.1772;-10.0826;-90;Bottom;DC
+34;;;52.1751;-74.1619;0;Bottom;TXT9
+35;;;59.8304;-19.6222;0;Bottom;TXT9
+36;;THT;58.5665;-17.7368;90;Bottom;MTR-D
+37;;THT;56.0265;-76.1568;-90;Bottom;MTR-R
+38;;cap-pth-small2;36.9765;-72.3468;-90;Bottom;C1
+39;;;54.8052;-74.1557;0;Bottom;TXT9
+40;;diode-1n4001;11.5765;-20.2768;0;Bottom;D1
+41;;;44.3065;-2.62322;0;Bottom;TXT8
+42;;;25.5465;-52.6618;-90;Bottom;HC-05
+43;;;9.03635;-73.6169;0;Bottom;Hole4
+44;;;54.7851;-33.4539;0;Bottom;TXT9
+45;;;9.03635;-10.1169;0;Bottom;Hole1
+46;1µF;100 mil [THT, electrolytic];36.9765;-26.6268;-90;Bottom;EC3
+47;;THT;56.0265;-53.2968;90;Bottom;MTR-L
+48;;;62.3823;-74.1404;0;Bottom;TXT9
+49;;;54.7033;-19.6783;0;Bottom;TXT9
+50;;;57.3333;-74.1557;0;Bottom;TXT9
+51;;;24.2765;-45.6855;180;Bottom;NANO
+52;;;59.8736;-55.2318;0;Bottom;TXT9
+53;5V;to-220-alt;66.5929;-45.6768;-90;Bottom;7805
+54;;THT;3.26723;-44.48;180;Bottom;MPU

@@ -6,6 +6,9 @@ This is our GitHub, where all of our code is stored and logged. If you are looki
  * UI completed, shown to client.
  * Updated Bluetooth module almost working - can handle over a hundred bots compared to just 7 that the previous could.
  * Pathfinding algorithm can handle more bots, but a few bugs.
+<p align="center"> 
+<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/pixelbot_prototype_2.png" width="300" height="399"/>
+</p>
 
 ## Week 6 update
  * Bluetooth integration is now working for one bot, awaiting more to test further.
@@ -39,7 +42,7 @@ The project is to build an interactive picture drawing display for Questacon’s
 |Misha Petkovic|<ul> <li>Mechatronics Specialist</li><li>Software team liaison</li></ul>|<ul><li>Manufacturing / Prototyping</li> <li>Research and Design physical mechanical and material subsystem</li><li>Communicate with software team about updates </li><li>Interfacing between hardware and software</li></ul>|
 
 ## Timeline and Work Breakdown Structure
-<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/ProjectSchedule whole semester progress -1.jpg"/>
+<img src="https://github.com/EthanStanbury/Pixel_Bot_Dev_Space/blob/master/Images/ProjectSchedule whole semester progress -1.jpg"/>
 </p>
 
 ## Documentation
