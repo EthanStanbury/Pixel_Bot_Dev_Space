@@ -18,30 +18,189 @@ import static com.example.mischa.pixelbotui.Swarm.Direction.*;
 
 public class PathFinder {
     private static Grid Problem;
-    private static Point CurrentDest;
+    // private static Point CurrentDest;
 
-    public static HashMap<String, List<Direction>> getSolutions(Grid problem) {
+    public static HashMap<String, Solution> getSolutions(Grid problem) {
         // For every bot in the bot -> dest pairs, solve for a solution with the A* algorithm.
         Problem = problem;      // Grid with all the bots and destinations are defined as the 'Problem' that needs solving.
         Problem.mapBotToDest(); // When getSolutions() method was called, it is assumed that all bots and destinations were added.
-                                // Hence, it is now acceptable to link all destinations to a bot.
+        // Hence, it is now acceptable to link all destinations to a bot.
 
         // Save the bot-dest pair hashmap to a local variable.
         HashMap<Bot, Point> BotDestPairs = Problem.BotDestPairs;
 
-        // Stores all bot-dest pair solutions into this hashmap
+        // Saves a list of all bots that have been paired to a destination.
+        List<Bot> pairedBotList = new ArrayList<>();
+        // Saves a virtual copy of the bots, so that we can perform push functionality
+        List<Bot> botDuplicates = new ArrayList<>();
+
+        // Stores the solution (which contains colour and sequence of moves).
+        HashMap<String, Solution> finalSolution = new HashMap<>();
+        // Stores the moves history of each bots (that are moving).
         HashMap<String, List<Direction>> allBotsSolutions = new HashMap<>();
+        // Stores the position history of each bots (that are moving).
+        HashMap<String, List<Point>> allBotsPositions = new HashMap<>();
+        // Stores the colour of each bot.
+        HashMap<String, Integer> allBotsColour = new HashMap<>();
+
         for (HashMap.Entry<Bot, Point> pair : BotDestPairs.entrySet()) {
 
             Bot bot = pair.getKey();
-            CurrentDest = pair.getValue();
-            allBotsSolutions.put(bot.BotID, solve(bot));
+            Bot botCopy = new Bot(bot.BotID, bot.Location);
+
+            pairedBotList.add(bot);
+            botDuplicates.add(botCopy);
+
+            CoordActionOutput aStarOutput = solve(bot, pair.getValue());
+
+            allBotsSolutions.put(bot.BotID, aStarOutput.Actions);
+            allBotsPositions.put(bot.BotID, aStarOutput.Coordinates);
+            allBotsColour.put(bot.BotID, 0); // Set all bots' colour to 0 for now. This will be changed in the step-by-step analysis.
+            // May not even be necessary.
         }
 
-        return allBotsSolutions;
+        // This is a step by step checker: it checks the bots' positions for any collisions and resolves them.
+        boolean anyStepsLeft = true;
+        int timeStep = 1; // Ignore saving the initial step, as it is already done (during bot initialisation)
+        while (anyStepsLeft) {
+            anyStepsLeft = false;   // Assume that there are no actions left, unless found.
+
+            List<String> pushingBotsID = new ArrayList<>();
+            List<Point> pushingBots = new ArrayList<>();
+            List<String> pushedBotsID = new ArrayList<>();
+            List<Point> pushedBotsPos = new ArrayList<>();
+
+            for (int i = 0; i < pairedBotList.size(); i++) {
+                String currentBotID = pairedBotList.get(i).BotID;
+                // Don't simply copy the contents of the lists, but instead enable direct editing to the list that is about to be sent.
+                List<Point> currentBotPositions = allBotsPositions.get(currentBotID);
+                List<Direction> currentBotPath = allBotsSolutions.get(currentBotID);
+
+                // Proceed with the checking process if the current timestep is less than the number of moves of this particular bot.
+                if (timeStep < currentBotPositions.size()) {
+                    anyStepsLeft = true;
+                    int tmpcount = 0;
+
+                    Point currentPos = currentBotPositions.get(timeStep);
+                    // Check if position at time step x is free:
+                    boolean posAvailable = Problem.checkAvailability(currentPos, currentBotID, timeStep);
+                    boolean reachedDestination = timeStep == currentBotPositions.size() - 1;
+
+                    if (posAvailable) {
+                        Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
+                        botDuplicates.get(i).Location = currentPos;
+                        allBotsColour.put(currentBotID, Problem.getColourFromPos(currentPos));
+                    } else {
+
+                        // If the bot in the way is not 'resting', then simply add an extra stop in the path sequence.
+                        if (!Problem.getPushableStatus(currentPos)) {
+                            // Add an additional step to the bot's path sequence (stop for 1 time step)
+                            currentBotPositions.add(timeStep, currentBotPositions.get(timeStep - 1));
+                            currentBotPath.add(timeStep, S);
+                        } else {
+                            // Problem.updateBoard(currentPos, timeStep, currentBotID, reachedDestination);
+                            tmpcount ++;
+                            System.out.println(tmpcount);
+                            // Match the sequence length of the pushing and pushed bot so they are in sync (in the right time step).
+                            String pushedBotID = Problem.returnPushableBotID(currentPos);
+                            if (!pushedBotID.equals(currentBotID)) {
+                                int indexOfLastEvent = allBotsPositions.get(pushedBotID).size() - 1;
+                                int catchupsCounter = (timeStep - 1) - indexOfLastEvent;
+                                List<Point> pushBotPosList = allBotsPositions.get(pushedBotID);
+                                List<Direction> pushBotPathList = allBotsSolutions.get(pushedBotID);
+
+                                // Add all the 'stop' commands and the last position it occupied.
+                                while (catchupsCounter > 0) {
+                                    pushBotPosList.add(pushBotPosList.get(indexOfLastEvent));
+                                    pushBotPathList.add(S);
+                                    Problem.updateBoard(pushBotPosList.get(indexOfLastEvent), (timeStep - catchupsCounter), pushedBotID, true);
+                                    catchupsCounter -= 1;
+                                }
+
+                                // Add the pushing and pushed bots' ID and their positions to a list,
+                                // so that after checking the collision of the current bot, it can start the 'push' process.
+                                pushingBotsID.add(currentBotID);
+                                pushingBots.add(currentBotPositions.get(timeStep - 1));
+                                pushedBotsID.add(pushedBotID);
+                                pushedBotsPos.add(new Point(pushBotPosList.get(timeStep - 1)));
+
+                                Problem.removeOccupation(pushBotPosList.get(indexOfLastEvent), timeStep);
+
+                                // Initially set it false, so that the new destination pairing doesn't try to pair bots to one of the other pushing bots' destinations.
+                                // This will be set to true once all pairing has completed.
+                                Problem.updateBoard(currentPos, timeStep, currentBotID, false);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Start the 'push' process for every bot that is pushed.
+            for (int j = 0; j < pushingBots.size(); j++) {
+                // Proceed if the pushing and pushed bot isn't the same.
+                if (!pushingBotsID.get(j).equals(pushedBotsID.get(j))) {
+                    String pushedID = pushedBotsID.get(j);
+                    // Find the new target for the pushed bot.
+                    Point newTarget = Problem.determineNewDestination(pushingBots.get(j), pushedBotsPos.get(j), pushingBotsID.get(j), pushedBotsID.get(j), timeStep);
+                    Bot pushedBot = getBotObject(pushedID, botDuplicates);
+
+                    // Now that we know the new target, solve the new path for the pushed bot
+                    CoordActionOutput aStarOutput = solve(pushedBot, newTarget);
+                    pushedBot.Location = pushedBotsPos.get(j);
+
+                    // Append the output of the algorithm to the existing sequence of moves, so that the step-by-step checker can contiue.
+                    allBotsPositions.get(pushedID).addAll(aStarOutput.Coordinates);
+                    allBotsSolutions.get(pushedID).addAll(aStarOutput.Actions);
+                }
+            }
+
+            for (int j = 0; j < pushingBots.size(); j++) {
+                //Problem.updateIsPushableFlag(pushingBots.get(j), true);
+            }
+
+            if (pushingBots.size() == 0) {
+                /*
+                for (int i = 0; i < pairedBotList.size(); i++) {
+                    String currentBotID = pairedBotList.get(i).BotID;
+                    List<Point> currentBotPositions = allBotsPositions.get(currentBotID);
+                    Point currentPos = currentBotPositions.get(currentBotPositions.size() - 1);
+                    botDuplicates.get(i).Location = currentPos;
+                    pairedBotList.get(i).Colour = Problem.getColourFromPos(currentPos);
+                }
+                */
+                timeStep += 1;
+            }
+
+
+            if (timeStep > 65) // Artificial cap for step-by-step so that app doesn't hang if checks get stuck.
+                break;
+        }
+
+        // This is building the output hashmap, with the bot id, colour and the move sequences for every bot.
+        for (HashMap.Entry<String, List<Direction>> pair : allBotsSolutions.entrySet()) {
+            String currentBotID = pair.getKey();
+            List<Direction> currentBotPathSequence = pair.getValue();
+
+            int currentBotColour = allBotsColour.get(currentBotID);
+            // Save the relevant solution information about each bot into a single object so that it can be added to the solution hashmap.
+            Solution colourMovePair = new Solution(currentBotColour, currentBotPathSequence);
+
+            finalSolution.put(currentBotID, colourMovePair);
+        }
+
+        return finalSolution;
     }
 
-    private static List<Direction> solve(Bot bot) {
+    private static Bot getBotObject(String botID, List<Bot> botList) {
+        for (int i = 0; i < botList.size(); i++) {
+            if (botList.get(i).BotID.equals(botID)) {
+                return botList.get(i);
+            }
+        }
+        return null; // If no match is found
+    }
+
+    private static CoordActionOutput solve(Bot bot, Point dest) {
         // Create the initial node
         Node currentNode = new Node(bot.Location, NA, 0);
 
@@ -61,7 +220,7 @@ public class PathFinder {
         // Store estimated costs to the goal (f = g + h).
         // For the first node, the f value is entirely heuristic.
         HashMap<Point, Integer> f_values = new HashMap<>();
-        f_values.put(currentNode.Coord, heuristic(currentNode.Coord));
+        f_values.put(currentNode.Coord, heuristic(currentNode.Coord, dest));
         // Store the current cost so far to get to the current location
         HashMap<Point, Integer> g_values = new HashMap<>();
         g_values.put(currentNode.Coord, 0);
@@ -79,7 +238,7 @@ public class PathFinder {
                 // If successor node is not explored yet AND is not already in the frontier,
                 if (!explored.contains(succNode.Coord) && (!frontier.contains(succNode))) {
                     // If goal is found (landed on destination),
-                    if (succNode.Coord.equals(CurrentDest)) {
+                    if (succNode.Coord.equals(dest)) {
                         // Add this final goal state for backtracking
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
                         return derive_move_seq(bot.Location, succNode.Coord, back_track);
@@ -102,12 +261,13 @@ public class PathFinder {
                         back_track.put(succNode.Coord, new BackTrack(currentNode.Coord, succNode.Action));
 
                         g_values.put(succNode.Coord, temp_g_value);
-                        f_values.put(succNode.Coord, (g_values.get(succNode.Coord) + heuristic(succNode.Coord)));
+                        f_values.put(succNode.Coord, (g_values.get(succNode.Coord) + heuristic(succNode.Coord, dest)));
                     }
                 }
             }
         }
-        return null;
+        return new CoordActionOutput(new ArrayList<Point>(), new ArrayList<Direction>());
+        //return null;
     }
 
     // Returns the node with the lowest known f_value.
@@ -133,26 +293,29 @@ public class PathFinder {
     // Heuristic is an estimate of the most optimistic (lowest) cost that the solver should expect.
     // This way, the solver doesn't try moves that veer away from the goal.
     // This calculates the Manhattan distance from given position to the target destination.
-    private static Integer heuristic(Point pos) {
-        return Math.abs(pos.x - CurrentDest.x) + Math.abs(pos.y - CurrentDest.y);
+    private static Integer heuristic(Point pos, Point dest) {
+        return Math.abs(pos.x - dest.x) + Math.abs(pos.y - dest.y);
     }
 
     // The idea to to reverse engineer the sequence of moves to get to the destination came from:
     // https://en.wikipedia.org/wiki/A*_search_algorithm (function called 'reconstruct_path')
-    private static List<Direction> derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+    private static CoordActionOutput derive_move_seq(Point initial_coord, Point state_coord, HashMap<Point, BackTrack> back_track) {
+        List<Point> pos = new ArrayList<>();
         List<Direction> sequence = new ArrayList<>();
 
         // Keep searching until we have determined the link from the finish to the start and its sequence of moves.
         // Saved in reverse order though, since we are searching from finish to start.
         while (!state_coord.equals(initial_coord)) {
             BackTrack prev = back_track.get(state_coord);
+            pos.add(state_coord);
             state_coord = prev.Coord;
             sequence.add(prev.Action);
         }
 
         // Reverse the reversed sequence
+        Collections.reverse(pos);
         Collections.reverse(sequence);
-        return sequence;
+        return new CoordActionOutput(pos, sequence);
     }
 
 }
@@ -180,5 +343,16 @@ class BackTrack {
     BackTrack(Point coord, Direction action) {
         Coord = coord;
         Action = action;
+    }
+}
+
+// Saves both the positions and actions the bot will take.
+class CoordActionOutput {
+    List<Point> Coordinates;
+    List<Direction> Actions;
+
+    CoordActionOutput(List<Point> coords, List<Direction> actions) {
+        Coordinates = new ArrayList<>(coords);
+        Actions = new ArrayList<>(actions);
     }
 }
