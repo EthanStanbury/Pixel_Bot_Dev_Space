@@ -111,6 +111,7 @@ public class Grid {
     // Pairs all bots to their individual destinations based on distance.
     // The bot that is closest to a certain destination will be chosen as bot-dest pair.
     public void mapBotToDest() {
+        // For every bot, save the closest destination points along with the distance to it.
         HashMap<Bot, Point> closestDestPoints = new HashMap<>();
         HashMap<Bot, Integer> closestDestDist = new HashMap<>();
 
@@ -119,9 +120,11 @@ public class Grid {
             Bot currentBot = Bots.get(i);
             Point botCoord = Bots.get(i).Location;
             closestDestDist.put(currentBot, Integer.MAX_VALUE);
+
             for (int j = 0; j < Destinations.size(); j++) {
                 Point destCoord = Destinations.get(j);
                 int calcuatedDistance = getManhattanDist(botCoord, destCoord);
+
                 if (calcuatedDistance < closestDestDist.get(currentBot)) {
                     closestDestDist.put(currentBot, calcuatedDistance);
                     closestDestPoints.put(currentBot, destCoord);
@@ -134,7 +137,7 @@ public class Grid {
             int lowestDest = Integer.MAX_VALUE;
             Bot lowestDestBotObj = Bots.get(0); // A temp measure, so that we avoid 'may not have been init' error below.
 
-            // 20.c: pick the first x bots in the sorted list.
+            // 20.c: pick the first x bots in the sorted list. The idea is to only move the number of bots that is equal to the number of pixels the user has drawn.
             for (HashMap.Entry<Bot, Integer> pair : closestDestDist.entrySet()) {
                 int dist = pair.getValue();
                 System.out.println(pair.getKey().BotID + " has distance: " + dist);
@@ -149,6 +152,7 @@ public class Grid {
             closestDestDist.remove(lowestDestBotObj); // Once extracted, delete this object from the hashmap
             closestDestPoints.remove(lowestDestBotObj);
 
+            // Officially add the bot dest pair to this hashmap to calculate the path for.
             BotDestPairs.put(lowestDestBotObj, destinationCoord);
 
             Grid[destinationCoord.x][destinationCoord.y].SetAsDestinationHistory.add(lowestDestBotObj.BotID);
@@ -309,7 +313,6 @@ public class Grid {
         return successors;
     }
 
-    // Not implemented yet, but will be for A* 'Stage 4' (anti collision features)
     // Basic idea is to save the time step of the bots' locations
     // so that it could be used to make that coordinate inaccessible at certain time steps.
     public void updateBoard(Point currentPos, int timeStep, String botID, boolean reachedDestFlag) {
@@ -483,7 +486,7 @@ public class Grid {
     private int getManhattanDist(Point a, Point b) {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     }
-
+    /* Unused parts of code that became redundant as I updated the code. May or may not need them again, so I am keeping it here.
     private boolean isOccupied(Point coord, int timeStep) {
         Position coordPosObj = Grid[coord.x][coord.y];
         return  coordPosObj.OccupiedTimeSteps.containsKey(timeStep) || coordPosObj.IsPushable;
@@ -493,7 +496,7 @@ public class Grid {
         Position coordPosObj = Grid[coord.x][coord.y];
         return  coordPosObj.OccupiedTimeSteps.containsKey(timeStep) && !coordPosObj.IsPushable;
     }
-
+    */
     private boolean checkIfAllDestVisited(String botID) {
         for (int i = 0; i < Destinations.size(); i++) {
             if (!Grid[Destinations.get(i).x][Destinations.get(i).y].SetAsDestinationHistory.contains(botID))
@@ -502,6 +505,7 @@ public class Grid {
         return true;
     }
 
+    // Simply loops through all destinations and returns the distance value of the closest destination.
     private int findClosestFreeDestDist(Point candidateCoord) {
         int lowestDistValue = Integer.MAX_VALUE;
         for (int i = 0; i < Destinations.size(); i++) {
