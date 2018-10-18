@@ -10,12 +10,17 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.mischa.pixelbotui.R;
+import com.example.mischa.pixelbotui.Swarm.Solution;
+
+import java.util.HashMap;
 
 public class SimActivity extends Activity {
 
     Simulation simCanvas;
     ConstraintLayout constraintLayout;
     Button backButton;
+    public  static HashMap<String, Solution> Solution  = MainActivity.Solution;
+
 
     // Called when activity is created
     @Override
