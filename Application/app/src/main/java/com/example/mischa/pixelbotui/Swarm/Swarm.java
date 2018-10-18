@@ -32,10 +32,7 @@ public class Swarm {
     public Swarm(Integer Colour, Integer numberOfBots){
 
         HashMap<String, Bot> thisSwarmList = new HashMap<>();
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of 10a7993... Merge branch 'Bugfixn''
         int side = 1;
         int counter = 0;
 
@@ -87,11 +84,7 @@ public class Swarm {
 
 
         }
-<<<<<<< HEAD
-=======
 
-
->>>>>>> parent of 10a7993... Merge branch 'Bugfixn''
         this.SwarmList = thisSwarmList;
 
 
