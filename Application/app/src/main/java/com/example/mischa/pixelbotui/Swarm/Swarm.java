@@ -1,21 +1,13 @@
 package com.example.mischa.pixelbotui.Swarm;
 
 import android.bluetooth.BluetoothDevice;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.location.Location;
 
-import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
-import com.example.mischa.pixelbotui.UI.MainActivity;
 import com.example.mischa.pixelbotui.UI.PBCanvas;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Ethan on 16/03/2018.
@@ -25,20 +17,10 @@ import java.util.Set;
 
 public class Swarm {
     public static HashMap<String, Bot> currentSwarm = new HashMap<>();
-    // @param Colour, is the colour of the swarm that you are creating, each swarm is unique by its colour if a bot is the same as the colour as a swarm it should be in that swarm
-    // @param NumberOfBots, This is the numberOfBots that you want to add to the swarm
-    // Each bot is uniquely made for each swarm
 
-    //@param {Bot} add // for each bot create an ID that is based on the colour of the bot, how many bots have been created.
-    // Create a location for each bot. It is incremented for Y for each Bot as a Bot of the same colour cannot be spawned on the same square.
-    //adds the bot to the current swarm
-    // adds the bot to the Grid
 
     public static void SwarmCreate(Integer numberOfBots, LinkedHashMap<String, BluetoothDevice> devices){
         LinkedHashMap<String, BluetoothDevice> deviceList = devices;
-//        if (numberOfBots > devices.size()){
-//            throw new IllegalStateException("FATAL ERROR: The number of bots you have spawned do not match the physical bots that are connected");
-//        }
 
         int side = 1;
         int counter = 0;

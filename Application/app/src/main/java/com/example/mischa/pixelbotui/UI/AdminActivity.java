@@ -9,9 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
+import com.example.mischa.pixelbotui.Swarm.PathFinder;
+import com.example.mischa.pixelbotui.Swarm.Swarm;
 
 public class AdminActivity extends Activity {
+
+    Button connectBT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +27,15 @@ public class AdminActivity extends Activity {
 
         ConstraintLayout admin_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_admin, null);
 
-        Button connectBT = admin_layout.findViewById(R.id.connectBT);
+
+        connectBT = admin_layout.findViewById(R.id.connectBT);
         connectBT.bringToFront();
         connectBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println("CONNECT");
-                //onClickStart(view);
+//                MainActivity activity = new MainActivity();
+//                activity.onClickStart();
             }
         });
     }

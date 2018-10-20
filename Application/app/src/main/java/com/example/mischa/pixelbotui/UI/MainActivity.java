@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
-import com.example.mischa.pixelbotui.Swarm.Bot;
-import com.example.mischa.pixelbotui.Swarm.Direction;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
 import com.example.mischa.pixelbotui.Swarm.Solution;
 import com.example.mischa.pixelbotui.Swarm.Swarm;
@@ -37,29 +32,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.zip.Inflater;
 
 public class MainActivity extends Activity {
+    public static MainActivity instance = null;
+
     // 98:D3:32:31:7A:19 address
     // 98:D3:32:31:7A:6D address
     private final String DEVICE_NAME="HC-05";
     private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
     private LinkedHashMap<String, BluetoothDevice> devices = new LinkedHashMap<>();
     private HashMap<String, BluetoothSocket> sockets = new LinkedHashMap<>();
-    private BluetoothDevice device;
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Button sdfclear, submit;
+    Button  submit;
     ImageButton menu, paintBrush, red, yellow, green, cyan, blue, magenta, white, eraser, clear;
-    private ArrayList deviceAddresses = new ArrayList();
     TextView textView;
     boolean deviceConnected=false;
     boolean stopThread;
@@ -130,6 +121,7 @@ public class MainActivity extends Activity {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                onClickStart();
                 PopupMenu popupMenu = new PopupMenu(MainActivity.this, menu);
                 popupMenu.getMenuInflater().inflate(R.menu.popupmenu, popupMenu.getMenu());
 
@@ -378,7 +370,7 @@ public class MainActivity extends Activity {
         return connected;
     }
 
-    public void onClickStart(View view) {
+    public void onClickStart() {
         System.out.println("Tried to send test to the HC");
         if(BTinit())
         {
@@ -438,7 +430,7 @@ public class MainActivity extends Activity {
     private String intColourLetter(int intColour) {
         String colour = "N";
         switch (intColour){
-            case -1162650:
+            case -65536:
                 colour = "E";
                 break;
 
@@ -482,9 +474,17 @@ public class MainActivity extends Activity {
         textView.append("\nConnection Closed!\n");
     }
 
-    public void onClickClear(View view) {
-        textView.setText("");
+
+    static public MainActivity getInstance() {
+
+        if (instance == null) {
+            instance = new MainActivity();
+            return instance;
+        } else {
+            return instance;
+        }
     }
+
 
 
 }

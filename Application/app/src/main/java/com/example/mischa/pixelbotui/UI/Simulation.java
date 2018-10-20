@@ -8,22 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.time.Clock;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.example.mischa.pixelbotui.Intergration.SwarmAdapter;
-import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.Swarm.Direction;
-import com.example.mischa.pixelbotui.Swarm.PathFinder;
 import com.example.mischa.pixelbotui.Swarm.Solution;
 import com.example.mischa.pixelbotui.Swarm.Swarm;
-import com.example.mischa.pixelbotui.Swarm.Solution;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.mischa.pixelbotui.UI.PBCanvas.uiGrid;
