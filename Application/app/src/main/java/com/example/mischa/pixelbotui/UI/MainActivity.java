@@ -176,6 +176,8 @@ public class MainActivity extends Activity {
         red.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("Mischy Moo");
+
                 paintBrush.setImageResource(R.drawable.paintbrushred);
                 canvas.selectedColour = Color.RED;
             }

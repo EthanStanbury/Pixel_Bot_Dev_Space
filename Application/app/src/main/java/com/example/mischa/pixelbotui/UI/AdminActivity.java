@@ -30,13 +30,18 @@ public class AdminActivity extends Activity {
 
         connectBT = admin_layout.findViewById(R.id.connectBT);
         connectBT.bringToFront();
-        connectBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("CONNECT");
-//                MainActivity activity = new MainActivity();
+//        connectBT.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                test();
+//
+//            }
+//        });
+        //                MainActivity activity = new MainActivity();
 //                activity.onClickStart();
-            }
-        });
+    }
+
+    public void bluetoothStart(View view) {
+        System.out.println("Mischy Moo");
     }
 }
