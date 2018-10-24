@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    Button  submit;
+    Button  submit, BT;
     ImageButton menu, paintBrush, red, yellow, green, cyan, blue, magenta, white, eraser, clear;
     TextView textView;
     boolean deviceConnected=false;
@@ -74,8 +74,8 @@ public class MainActivity extends Activity {
 
         final LayoutInflater inflater = getLayoutInflater();
 
-        main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null);
-        canvas = new PBCanvas(this);
+        main_layout = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null); // The UI elements
+        canvas = new PBCanvas(this); // The grid
         holder = main_layout.findViewById(R.id.holder);
         holder.addView(canvas);
 
@@ -85,11 +85,14 @@ public class MainActivity extends Activity {
         bottom = main_layout.findViewById(R.id.bottom);
         bottom.bringToFront();
 
+        //This is where all the buttons are created
+
         submit = main_layout.findViewById(R.id.bSubmit);
         submit.bringToFront();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Initialise the sending of information
                 UIAdapter.createGridWpixel(canvas.uiGrid);
                 Swarm.SwarmCreate(canvas.TotalBots,  devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
@@ -116,7 +119,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        menu = main_layout.findViewById(R.id.menu);
+        menu = main_layout.findViewById(R.id.menu); //The menu is the settings button
         menu.bringToFront();
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +174,16 @@ public class MainActivity extends Activity {
             }
         });
 
+        BT = main_layout.findViewById(R.id.bBT);
+        BT.bringToFront();
+        BT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ETHAN PUT YOUR CODE HERE
+            }
+        });
+
+        // These are all the colour buttons
         red = main_layout.findViewById(R.id.bRed);
         red.bringToFront();
         red.setOnClickListener(new View.OnClickListener() {
@@ -194,7 +207,7 @@ public class MainActivity extends Activity {
         });
 
         green = main_layout.findViewById(R.id.bGreen);
-        green.bringToFront();
+        green.bringToFront(); //asdas
         green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

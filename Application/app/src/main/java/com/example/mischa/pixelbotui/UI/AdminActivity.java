@@ -42,6 +42,6 @@ public class AdminActivity extends Activity {
     }
 
     public void bluetoothStart(View view) {
-        System.out.println("Mischy Moo");
+        //This is the method that gets called when the bluetooth button in AdminActivity is called
     }
 }
