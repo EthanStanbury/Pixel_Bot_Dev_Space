@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mischa.pixelbotui.Intergration.Bluetooth.BluetoothUtil;
 import com.example.mischa.pixelbotui.Intergration.UIAdapter;
 import com.example.mischa.pixelbotui.R;
 import com.example.mischa.pixelbotui.Swarm.PathFinder;
@@ -38,23 +40,19 @@ import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends Activity {
-    public static MainActivity instance = null;
 
-    // 98:D3:32:31:7A:19 address
-    // 98:D3:32:31:7A:6D address
-    private final String DEVICE_NAME="HC-05";
-    private final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");//Serial Port Service ID
-    private LinkedHashMap<String, BluetoothDevice> devices = new LinkedHashMap<>();
-    private HashMap<String, BluetoothSocket> sockets = new LinkedHashMap<>();
-    private BluetoothSocket socket;
-    private OutputStream outputStream;
-    private InputStream inputStream;
+
     Button  submit;
     ImageButton menu, paintBrush, red, yellow, green, cyan, blue, magenta, white, eraser, clear;
     TextView textView;
-    boolean deviceConnected=false;
     boolean stopThread;
-    BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
+    IBinder mBTU;
+    Activity activity = this;
+
+    public  final static String SER_KEY = "com.example.mischa.pixelbotui.UI.ser";
+
+    public static final String ON_CLICK =  "ON_CLICK";
+
     PBCanvas canvas;
     int[] saveState;
     int[] restoreState;
@@ -62,8 +60,17 @@ public class MainActivity extends Activity {
     public ConstraintLayout top, bottom;
     public static HashMap<String, Solution> Solution;
     Context context = this;
-    private final String password = "1337";
+    private final String password = ""; //1337
     FrameLayout holder;
+
+    public void startService(View view) {
+        Intent intent = new Intent(getBaseContext(), BluetoothUtil.class);
+        startService(intent);
+    }
+
+    public void stopService(View view) {
+        stopService(new Intent(getBaseContext(), BluetoothUtil.class));
+    }
 
 
 
@@ -71,6 +78,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        startService(main_layout.findViewById(R.id.holder));
+        BluetoothUtil.onBind;
+        mBTU.giveActivity(this);
 
         final LayoutInflater inflater = getLayoutInflater();
 
@@ -91,14 +102,14 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 UIAdapter.createGridWpixel(canvas.uiGrid);
-                Swarm.SwarmCreate(canvas.TotalBots,  devices);
+                Swarm.SwarmCreate(canvas.TotalBots,  mBTU.devices);
                 Solution = PathFinder.getSolutions(UIAdapter.destinationGrid);
                 for (String key: Solution.keySet()) {
                     System.out.println("id is " + key + "With Path: " + Solution.get(key).Moves + "With Final colour of: " + Solution.get(key).Colour);
 
                 }
-                if (deviceConnected && BTinit()) {
-                    onClickSend(view, Solution, sockets);
+                if (mBTU.deviceConnected && mBTU.BTinit()) {
+                    mBTU.onClickSend(Solution);
                 }
 
                 // start the new activity
@@ -141,7 +152,7 @@ public class MainActivity extends Activity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         if (inputPassword.getText().toString().equals(password)) {
                                             Intent intent = new Intent(context, AdminActivity.class);
-                                            context.startActivity(intent);
+                                           startActivity(intent);
                                         } else {
                                             dialogInterface.cancel();
                                         }
@@ -292,192 +303,11 @@ public class MainActivity extends Activity {
 
 
 
-    public boolean BTinit()
-    {
-        boolean found=false;
 
-        if (bluetoothAdapter == null) {
-            Toast.makeText(getApplicationContext(),"Device doesnt Support Bluetooth",Toast.LENGTH_SHORT).show();
-        }
-        if(!bluetoothAdapter.isEnabled())
-        {
-            Intent enableAdapter = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableAdapter, 0);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-        if(bondedDevices.isEmpty())
-        {
-            Toast.makeText(getApplicationContext(),"Please Pair the Device first",Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            for (BluetoothDevice iterator : bondedDevices)
-            {
-
-                if(iterator.getName().equals(DEVICE_NAME))
-                {
-
-                    devices.put(iterator.getAddress(), iterator);
-                    found=true;
-                }
-            }
-        }
-        return found;
-    }
-
-    public boolean BTconnect()
-    {
-
-        boolean connected=true;
-
-        for (String deviceAddress: devices.keySet()) {
-            try{
-                BluetoothSocket tempSock = devices.get(deviceAddress).createRfcommSocketToServiceRecord(PORT_UUID);
-                tempSock.connect();
-                sockets.put(deviceAddress, tempSock);
-            } catch (IOException e){
-            e.printStackTrace();
-            devices.remove(deviceAddress);
-            }
-        }
-        if(!devices.isEmpty())
-        {
-            for (String deviceAddress: sockets.keySet()) {
-                try {
-                    outputStream = sockets.get(deviceAddress).getOutputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    sockets.remove(deviceAddress);
-                }
-                try {
-                    inputStream = sockets.get(deviceAddress).getInputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    sockets.remove(deviceAddress);
-                }
-            }
-
-        }else{
-            Toast.makeText(getApplicationContext(),"Please pair a device",Toast.LENGTH_SHORT).show();
-        }
-
-        if (sockets.isEmpty()){
-            connected = false;
-        }
-        return connected;
-    }
-
-    public void onClickStart() {
-        System.out.println("Tried to send test to the HC");
-        if(BTinit())
-        {
-            if(BTconnect())
-            {
-                Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
-                deviceConnected=true;
-
-                Context context = getApplicationContext();
-                CharSequence text = "Connected to: " + devices.size()+ " Device(s)";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
-
-            }
-
-        }
-    }
-
-
-
-    public void onClickSend(View view, HashMap<String, Solution> Solution, HashMap<String, BluetoothSocket> sockets) {
-
-        for (String address : Solution.keySet()) {
-            String path = Solution.get(address).Moves.toString();
-            int intColour = Solution.get(address).Colour;
-            String desColour = intColourLetter(intColour);
-
-            String message = path +"<"+desColour+ ">";
-            System.out.println("FINAL STRING IS: " + message);
-            try {
-                outputStream = sockets.get(address).getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-                sockets.remove(address);
-            }
-            try {
-                inputStream = sockets.get(address).getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-                sockets.remove(address);
-            }
-
-            try {
-                outputStream.write(message.getBytes());
-                System.out.println("Sending message to Device: " + address + " Message is: " + message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
-
-    private String intColourLetter(int intColour) {
-        String colour = "N";
-        switch (intColour){
-            case -65536:
-                colour = "E";
-                break;
-
-            case -16711936: //Green
-                colour =  "G";
-                break;
-
-            case -16776961: //Blue
-                colour = "B";
-                break;
-
-            case -256: //Yellow
-                colour = "Y";
-                break;
-
-            case -16711681: //Cyan
-                colour = "C";
-                break;
-
-            case -65281: //Magenta
-                colour = "M";
-                break;
-
-            case -1: //White
-                colour = "W";
-                break;
-            case 0:
-                colour = "M";
-                break;
-        }
-        return  colour;
-    }
-
-    public void onClickStop(View view) throws IOException {
-        stopThread = true;
-        outputStream.close();
-        inputStream.close();
-        socket.close();
-//        setUiEnabled(false);
-        deviceConnected=false;
-        textView.append("\nConnection Closed!\n");
-    }
 
 
     static public MainActivity getInstance() {
+        MainActivity instance = null;
 
         if (instance == null) {
             instance = new MainActivity();
@@ -487,6 +317,14 @@ public class MainActivity extends Activity {
         }
     }
 
-
-
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == 1){
+//            onClickStart();
+//
+//        }
+//        finish();
+//    }
 }
